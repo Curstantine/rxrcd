@@ -12,11 +12,37 @@
 	},
 	"tauri": {
 		"allowlist": {
-			"all": false
+			"window": {
+				"close": true,
+				"create": true,
+				"hide": true,
+				"show": true,
+
+				"setClosable": true,
+				"setCursorGrab": true,
+				"setCursorIcon": true,
+
+				"maximize": true,
+				"minimize": true,
+				"unmaximize": true,
+				"unminimize": true,
+
+				"startDragging": true
+			},
+			"fs": {
+				"readDir": true,
+				"readFile": true,
+				"removeFile": true,
+				"writeFile": true
+			},
+			"protocol": {
+				"asset": true,
+				"assetScope": ["$APPDATA/**"]
+			}
 		},
 		"bundle": {
 			"active": true,
-			"category": "DeveloperTool",
+			"category": "Utility",
 			"copyright": "",
 			"deb": {
 				"depends": []
@@ -48,18 +74,22 @@
 			}
 		},
 		"security": {
-			"csp": null
+			"csp": "default-src 'self'; img-src 'self' asset: https://asset.localhost"
 		},
 		"updater": {
 			"active": false
 		},
 		"windows": [
 			{
-				"fullscreen": false,
+				"width": 800,
 				"height": 600,
+				"minWidth": 500,
+				"minHeight": 500,
 				"resizable": true,
-				"title": "rxrcd",
-				"width": 800
+				"decorations": false,
+
+				"visible": true,
+				"focus": true
 			}
 		]
 	}
