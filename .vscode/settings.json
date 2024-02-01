@@ -1,0 +1,16 @@
+{
+	"editor.defaultFormatter": "dprint.dprint",
+	"eslint.validate": ["svelte"],
+	"eslint.workingDirectories": [
+		{
+			"directory": "app",
+			"changeProcessCWD": true
+		}
+	],
+
+	"files.exclude": {
+		"**/node_modules": true,
+		"**/target": true,
+		"**/dist": true
+	}
+}
