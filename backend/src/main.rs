@@ -6,15 +6,17 @@ use std::{thread, time::Duration};
 use tauri::WindowEvent;
 
 #[cfg(any(windows, target_os = "macos"))]
-use window_shadows::set_shadow;
+use {tauri::Manager, window_shadows::set_shadow};
 
 fn main() {
+    #[allow(unused_variables)]
     tauri::Builder::default()
         .setup(|app| {
-            let window = app.get_window("main").unwrap();
-
             #[cfg(any(windows, target_os = "macos"))]
-            set_shadow(&window, true).unwrap();
+            {
+                let window = app.get_window("main").unwrap();
+                set_shadow(&window, true).unwrap();
+            }
 
             Ok(())
         })

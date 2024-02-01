@@ -12,5 +12,8 @@
 		"**/node_modules": true,
 		"**/target": true,
 		"**/dist": true
-	}
+	},
+	"cSpell.words": [
+		"tauri"
+	]
 }
