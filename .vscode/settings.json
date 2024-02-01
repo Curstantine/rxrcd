@@ -8,6 +8,10 @@
 		}
 	],
 
+	"unocss.root": [
+		"./app"
+	],
+
 	"files.exclude": {
 		"**/node_modules": true,
 		"**/target": true,

@@ -3,12 +3,15 @@
 
 use std::{thread, time::Duration};
 
-use tauri::WindowEvent;
+use {tauri::WindowEvent, tracing::info};
 
 #[cfg(any(windows, target_os = "macos"))]
 use {tauri::Manager, window_shadows::set_shadow};
 
 fn main() {
+    tracing_subscriber::fmt::init();
+    info!("Starting application");
+
     #[allow(unused_variables)]
     tauri::Builder::default()
         .setup(|app| {

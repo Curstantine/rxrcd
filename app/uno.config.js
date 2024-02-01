@@ -4,7 +4,6 @@ import {
 	presetIcons,
 	presetTypography,
 	presetUno,
-	presetWebFonts,
 	transformerDirectives,
 	transformerVariantGroup,
 } from "unocss";
@@ -26,11 +25,6 @@ export default defineConfig({
 				symbols: importIconCollection("material-symbols"),
 			},
 		}),
-		presetWebFonts({
-			fonts: {
-				sans: { name: "Inter", weights: [400, 500] },
-			},
-		}),
 	],
 	transformers: [
 		transformerDirectives(),
@@ -38,6 +32,10 @@ export default defineConfig({
 	],
 	extractors: [extractorSvelte()],
 	theme: {
+		fontFamily: {
+			system:
+				"system-ui, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
+		},
 		easing: {
 			emphasized: "cubic-bezier(0.4, 0.0, 0.2, 1.0)",
 			standard: "cubic-bezier(0.2, 0.0, 0, 1.0)",
