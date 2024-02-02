@@ -2,6 +2,9 @@
 	"name": "rxrcd",
 	"author": "Curstantine",
 	"license": "MIT",
+	"scripts": {
+		"dev:app": "pnpm --filter app run dev"
+	},
 	"devDependencies": {
 		"@tauri-apps/cli": "^1.5.9",
 		"dprint": "^0.45.0",

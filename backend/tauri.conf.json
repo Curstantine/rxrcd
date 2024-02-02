@@ -86,10 +86,12 @@
 				"minWidth": 500,
 				"minHeight": 500,
 				"resizable": true,
-				"decorations": false,
+				"decorations": true,
 
-				"visible": true,
-				"focus": true
+				"visible": false,
+				"focus": false,
+
+				"title": "rxrcd"
 			}
 		]
 	}

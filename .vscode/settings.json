@@ -18,6 +18,7 @@
 		"**/dist": true
 	},
 	"cSpell.words": [
+		"rxrcd",
 		"tauri"
 	]
 }
