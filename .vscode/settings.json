@@ -18,6 +18,8 @@
 		"**/dist": true
 	},
 	"cSpell.words": [
+		"Deezer",
+		"reqwest",
 		"rxrcd",
 		"tauri"
 	]
