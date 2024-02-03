@@ -8,7 +8,13 @@ use {tauri::WindowEvent, tracing::info};
 #[cfg(any(windows, target_os = "macos"))]
 use {tauri::Manager, window_shadows::set_shadow};
 
+use crate::state::{AppState, DirectoriesState};
+
 mod commands;
+mod errors;
+mod models;
+mod state;
+mod utils;
 
 fn main() {
 	tracing_subscriber::fmt::init();
@@ -31,6 +37,8 @@ fn main() {
 				thread::sleep(Duration::from_nanos(1));
 			}
 		})
+		.manage(AppState::default())
+		.manage(DirectoriesState::default())
 		.invoke_handler(tauri::generate_handler![commands::setup,])
 		.run(tauri::generate_context!())
 		.expect("error while running tauri application");
