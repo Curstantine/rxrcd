@@ -17,8 +17,8 @@ pub async fn get_album(client: &Client, id: u64) -> Result<Album> {
 	Ok(body)
 }
 
-pub async fn search_albums(client: &Client, options: SearchOptions<'_>) -> Result<AlbumSearch> {
-	let url = options.make_url("search/album");
+pub async fn search_albums(client: &Client, options: &SearchOptions<'_>) -> Result<AlbumSearch> {
+	let url = options.create_url("search/album");
 	let req = client.get(url).send().await?;
 	let body = req.json::<AlbumSearch>().await?;
 
@@ -65,8 +65,20 @@ mod tests {
 	#[tokio::test]
 	async fn test_search_albums() -> Result<()> {
 		let client = Client::default();
-		let out = super::search_albums(&client, SearchOptions::new("Draft Punk", None, None)).await?;
-		println!("{out:#?}");
+		let options = SearchOptions::new("Draft Punk", None, None);
+
+		let out = super::search_albums(&client, &options).await?;
+		let mut index = out.total.clamp(0, 25);
+		println!("First fetch: {out:#?}");
+
+		if out.total > index {
+			let fetch = super::search_albums(&client, &options.with_index(index)).await?;
+			println!("Second paginated test: {index} : {fetch:#?}");
+
+			index += fetch.data.len() as u32;
+		}
+
+		println!("Index: {index},  total: {}", out.total);
 
 		Ok(())
 	}

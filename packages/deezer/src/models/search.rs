@@ -7,11 +7,13 @@ use crate::{
 
 pub type Search = DeezerPaginatedList<SearchData>;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Copy, Default)]
 pub struct SearchOptions<'a> {
 	query: &'a str,
 	order: Option<SearchOrder>,
 	strict: Option<bool>,
+	limit: Option<u32>,
+	index: Option<u32>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -39,10 +41,26 @@ pub enum SearchOrder {
 
 impl<'a> SearchOptions<'a> {
 	pub fn new(query: &'a str, order: Option<SearchOrder>, strict: Option<bool>) -> Self {
-		Self { query, order, strict }
+		Self {
+			query,
+			order,
+			strict,
+			index: Some(0),
+			limit: Some(25),
+		}
 	}
 
-	pub fn make_url(self, path: &'static str) -> String {
+	pub fn with_limit(mut self, limit: u32) -> Self {
+		self.limit = Some(limit);
+		self
+	}
+
+	pub fn with_index(mut self, index: u32) -> Self {
+		self.index = Some(index);
+		self
+	}
+
+	pub fn create_url(&self, path: &'static str) -> String {
 		let mut url = format!("{DEEZER_API_URL}/{path}?q={}", self.query);
 
 		if let Some(ord) = self.order {
@@ -51,6 +69,14 @@ impl<'a> SearchOptions<'a> {
 
 		if self.strict.unwrap_or(false) {
 			url.push_str("&strict=on");
+		}
+
+		if let Some(limit) = self.limit {
+			url.push_str(&format!("&limit={limit}"));
+		}
+
+		if let Some(index) = self.index {
+			url.push_str(&format!("&index={index}"));
 		}
 
 		url

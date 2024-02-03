@@ -17,8 +17,8 @@ pub async fn get_artist(client: &Client, id: u64) -> Result<Artist> {
 	Ok(body)
 }
 
-pub async fn search_artists(client: &Client, options: SearchOptions<'_>) -> Result<ArtistSearch> {
-	let url = options.make_url("search/artist");
+pub async fn search_artists(client: &Client, options: &SearchOptions<'_>) -> Result<ArtistSearch> {
+	let url = options.create_url("search/artist");
 	let req = client.get(url).send().await?;
 	let body = req.json::<ArtistSearch>().await?;
 
@@ -65,8 +65,22 @@ mod tests {
 	#[tokio::test]
 	async fn test_search_artists() -> Result<()> {
 		let client = Client::default();
-		let out = super::search_artists(&client, SearchOptions::new("Draft Punk", None, None)).await?;
-		println!("{out:#?}");
+		let options = SearchOptions::new("A", None, None);
+
+		let out = super::search_artists(&client, &options).await?;
+		let mut index = out.total.clamp(0, 25);
+
+		println!("First fetch: {out:#?}");
+
+		// We don't need to read through the whole tree. Checking if pagination actually works is enough.
+		if out.total > index {
+			let fetch = super::search_artists(&client, &options.with_index(index)).await?;
+			println!("Second paginated test: {index} : {fetch:#?}");
+
+			index += fetch.data.len() as u32;
+		}
+
+		println!("Index: {index},  total: {}", out.total);
 
 		Ok(())
 	}

@@ -4,11 +4,12 @@ use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct DeezerList<T> {
-	data: Vec<T>,
+	pub data: Vec<T>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct DeezerPaginatedList<T> {
-	data: Vec<T>,
-	total: u64,
+	pub data: Vec<T>,
+	pub total: u32,
+	pub next: Option<String>,
 }
