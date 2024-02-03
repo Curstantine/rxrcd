@@ -1,8 +1,14 @@
 use std::fmt::Debug;
 
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct DeezerList<T> {
 	data: Vec<T>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct DeezerPaginatedList<T> {
+	data: Vec<T>,
+	total: u64,
 }
