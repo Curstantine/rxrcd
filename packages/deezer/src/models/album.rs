@@ -7,7 +7,7 @@ use super::{
 	track::Track,
 };
 
-pub type AlbumSearch = DeezerPaginatedList<RelSearchAlbum>;
+pub type AlbumSearch = DeezerPaginatedList<SearchRelAlbum>;
 
 #[derive(Debug, Deserialize)]
 pub struct Album {
@@ -22,7 +22,7 @@ pub struct Album {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct RelSearchAlbum {
+pub struct SearchRelAlbum {
 	pub id: u32,
 	pub title: String,
 	pub link: String,

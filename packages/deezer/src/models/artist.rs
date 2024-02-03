@@ -1,6 +1,6 @@
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct Artist {
 	pub id: u32,
 	pub name: String,
@@ -11,7 +11,7 @@ pub struct Artist {
 	pub nb_fan: u64,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct AlbumRelArtist {
 	pub id: u32,
 	pub name: String,
@@ -19,7 +19,7 @@ pub struct AlbumRelArtist {
 	pub picture_big: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct TrackRelArtist {
 	pub id: u32,
 	pub name: String,
