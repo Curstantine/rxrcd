@@ -17,7 +17,7 @@ pub async fn get_album(client: &Client, id: u64) -> Result<Album> {
 	Ok(body)
 }
 
-pub async fn search_album(client: &Client, options: SearchOptions<'_>) -> Result<AlbumSearch> {
+pub async fn search_albums(client: &Client, options: SearchOptions<'_>) -> Result<AlbumSearch> {
 	let url = options.make_url("search/album");
 	let req = client.get(url).send().await?;
 	let body = req.json::<AlbumSearch>().await?;
@@ -46,8 +46,8 @@ mod tests {
 	}
 
 	#[test]
-	fn test_deserialize_album_search() {
-		let file = std::fs::read_to_string("./samples/search-album.json").unwrap();
+	fn test_deserialize_albums_search() {
+		let file = std::fs::read_to_string("./samples/search-albums.json").unwrap();
 		let search: AlbumSearch = serde_json::from_str(&file).expect("Failed to deserialize JSON");
 
 		println!("{search:#?}");
@@ -63,9 +63,9 @@ mod tests {
 	}
 
 	#[tokio::test]
-	async fn test_search_album() -> Result<()> {
+	async fn test_search_albums() -> Result<()> {
 		let client = Client::default();
-		let out = super::search_album(&client, SearchOptions::new("Draft Punk", None, None)).await?;
+		let out = super::search_albums(&client, SearchOptions::new("Draft Punk", None, None)).await?;
 		println!("{out:#?}");
 
 		Ok(())

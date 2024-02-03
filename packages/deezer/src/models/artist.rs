@@ -1,5 +1,9 @@
 use serde::Deserialize;
 
+use super::generic::DeezerPaginatedList;
+
+pub type ArtistSearch = DeezerPaginatedList<Artist>;
+
 #[derive(Debug, Deserialize)]
 pub struct Artist {
 	pub id: u32,
