@@ -10,10 +10,11 @@ use {
 
 use super::directories;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Configuration {
 	pub download: ConfigurationDownload,
 	pub covers: ConfigurationCovers,
+	pub appearance: ConfigurationAppearance,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
@@ -23,19 +24,24 @@ pub enum DownloadQuality {
 	Mp3_128,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ConfigurationDownload {
 	pub concurrent: u8,
 	pub path: PathBuf,
 	pub quality: DownloadQuality,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ConfigurationCovers {
 	pub save_covers: bool,
 	pub embed_covers: bool,
 	pub cover_resolution: u16,
 	pub cover_embed_resolution: u16,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct ConfigurationAppearance {
+	pub theme: String,
 }
 
 impl Configuration {
@@ -72,6 +78,9 @@ impl Default for Configuration {
 				embed_covers: true,
 				cover_resolution: 1200,
 				cover_embed_resolution: 1000,
+			},
+			appearance: ConfigurationAppearance {
+				theme: "system".to_string(),
 			},
 		}
 	}

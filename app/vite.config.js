@@ -5,6 +5,9 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
 	plugins: [unocss(), svelte()],
+	server: {
+		strictPort: true,
+	},
 	resolve: {
 		alias: [
 			{

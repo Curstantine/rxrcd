@@ -20,6 +20,9 @@ importers:
 
   app:
     dependencies:
+      '@tauri-apps/api':
+        specifier: ^1.5.3
+        version: 1.5.3
       bits-ui:
         specifier: ^0.16.0
         version: 0.16.0(svelte@4.2.9)
@@ -992,6 +995,11 @@ packages:
     resolution: {integrity: sha512-FaruWX6KdudYloq1AHD/4nU+UsMTdNE8CKyrseXWEcgjDAbvkwJg2QGPAnfIJLIWsjZOSPLOAykK6fuYp4vp4A==}
     dependencies:
       tslib: 2.6.2
+    dev: false
+
+  /@tauri-apps/api@1.5.3:
+    resolution: {integrity: sha512-zxnDjHHKjOsrIzZm6nO5Xapb/BxqUq1tc7cGkFXsFkGTsSWgCPH1D8mm0XS9weJY2OaR73I3k3S+b7eSzJDfqA==}
+    engines: {node: '>= 14.6.0', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
     dev: false
 
   /@tauri-apps/cli-darwin-arm64@1.5.9:

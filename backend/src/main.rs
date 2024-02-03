@@ -39,7 +39,10 @@ fn main() {
 		})
 		.manage(AppState::default())
 		.manage(DirectoriesState::default())
-		.invoke_handler(tauri::generate_handler![commands::setup,])
+		.invoke_handler(tauri::generate_handler![
+			commands::setup,
+			commands::config::config_get_appearance
+		])
 		.run(tauri::generate_context!())
 		.expect("error while running tauri application");
 }

@@ -1,14 +1,14 @@
-use tracing::info;
-
 use {
 	tauri::{AppHandle, Manager, Runtime},
-	tracing::debug,
+	tracing::{debug, info},
 };
 
 use crate::{
 	errors::CommandResult,
 	state::{AppState, ConfigurationState, DirectoriesState},
 };
+
+pub mod config;
 
 #[tauri::command]
 #[tracing::instrument(skip_all, err(Debug))]
