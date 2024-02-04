@@ -1,10 +1,16 @@
 <script>
 	import { invoke } from "@tauri-apps/api";
+	import { appWindow } from "@tauri-apps/api/window";
 	import { onMount } from "svelte";
+
+	import { initialize_theme } from "@/utils/theme";
 
 	onMount(async () => {
 		await invoke("setup");
-		// const config_appearance = await invoke("config_get_appearance");
+		await initialize_theme();
+
+		appWindow.show();
+		appWindow.setFocus();
 	});
 </script>
 
