@@ -4,7 +4,7 @@
 
 <nav class="max-h-full w-10 flex flex-col border-r-(1 border solid)">
 	<NavItem href="/" icon="i-symbols-home-rounded" />
-	<NavItem href="/search" icon="i-symbols-search-rounded" />
+	<NavItem href="/advance_search" icon="i-symbols-search-rounded" />
 
 	<div class="flex-1" />
 

@@ -7,6 +7,9 @@
 	import { initialize_theme } from "@/utils/theme";
 
 	import Nav from "@/components/Nav.svelte";
+	import Home from "@/routes/Home.svelte";
+	import Settings from "@/routes/Settings.svelte";
+	import AdvanceSearch from "@/routes/AdvanceSearch.svelte";
 
 	onMount(async () => {
 		await invoke("setup");
@@ -22,7 +25,7 @@
 <Router {url}>
 	<Nav />
 
-	<Route path="/">
-		<span>hai :3</span>
-	</Route>
+	<Route path="/" component={Home} />
+	<Route path="/settings" component={Settings} />
+	<Route path="/advance_search" component={AdvanceSearch} />
 </Router>
