@@ -4,7 +4,7 @@ use std::{
 };
 
 use {
-	anyhow::Result,
+	anyhow::{Context, Result},
 	serde::{Deserialize, Serialize},
 };
 
@@ -54,7 +54,15 @@ impl Configuration {
 				let config = Configuration::default();
 				let config_str = toml::to_string_pretty(&config)?;
 
-				tokio::fs::write(&config_path, config_str).await?;
+				let parent = config_path.parent().unwrap();
+
+				tokio::fs::create_dir_all(parent)
+					.await
+					.with_context(move || format!("Failed to create config parent at {parent:?}"))?;
+
+				tokio::fs::write(&config_path, config_str)
+					.await
+					.with_context(move || format!("Failed to create config at {config_path:?}"))?;
 
 				config
 			}

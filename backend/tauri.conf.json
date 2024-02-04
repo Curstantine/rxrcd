@@ -55,7 +55,7 @@
 				"icons/icon.icns",
 				"icons/icon.ico"
 			],
-			"identifier": "com.tauri.dev",
+			"identifier": "moe.curstantine.rxrcd",
 			"longDescription": "",
 			"macOS": {
 				"entitlements": null,
