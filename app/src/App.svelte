@@ -2,8 +2,11 @@
 	import { invoke } from "@tauri-apps/api";
 	import { appWindow } from "@tauri-apps/api/window";
 	import { onMount } from "svelte";
+	import { Route, Router } from "svelte-routing";
 
 	import { initialize_theme } from "@/utils/theme";
+
+	import Nav from "@/components/Nav.svelte";
 
 	onMount(async () => {
 		await invoke("setup");
@@ -12,6 +15,14 @@
 		appWindow.show();
 		appWindow.setFocus();
 	});
+
+	export let url = "";
 </script>
 
-<span> hai :3 </span>
+<Router {url}>
+	<Nav />
+
+	<Route path="/">
+		<span>hai :3</span>
+	</Route>
+</Router>

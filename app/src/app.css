@@ -7,8 +7,20 @@
 	--at-apply: font-system;
 }
 
+html {
+	--at-apply: w-screen h-screen;
+}
+
 body {
-	--at-apply: bg-background text-foreground;
+	--at-apply: contents;
+}
+
+#app {
+	--at-apply: bg-background text-foreground m-0 h-full max-h-screen flex;
+}
+
+:root {
+	--radius: 0.3rem;
 }
 
 .light {
@@ -31,7 +43,6 @@ body {
 	--border: 240 5.9% 90%;
 	--input: 240 5.9% 90%;
 	--ring: 240 5.9% 10%;
-	--radius: 0.3rem;
 }
 
 .dark {
