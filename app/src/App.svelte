@@ -9,7 +9,6 @@
 	import Nav from "@/components/Nav.svelte";
 	import Home from "@/routes/Home.svelte";
 	import Settings from "@/routes/Settings.svelte";
-	import AdvancedSearch from "@/routes/AdvancedSearch.svelte";
 
 	onMount(async () => {
 		await invoke("setup");
@@ -27,5 +26,4 @@
 
 	<Route path="/" component={Home} />
 	<Route path="/settings" component={Settings} />
-	<Route path="/advanced_search" component={AdvancedSearch} />
 </Router>
