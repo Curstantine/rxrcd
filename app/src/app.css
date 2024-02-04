@@ -16,7 +16,7 @@ body {
 }
 
 #app {
-	--at-apply: bg-background text-foreground m-0 h-full max-h-screen flex;
+	--at-apply: bg-background text-foreground m-0 h-full max-h-screen overflow-y-auto;
 }
 
 :root {

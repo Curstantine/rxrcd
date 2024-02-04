@@ -98,5 +98,9 @@ export default defineConfig({
 	shortcuts: {
 		"use-transition-standard": "duration-standard ease-standard",
 		"use-transition-emphasized": "duration-emphasized ease-emphasized",
+
+		"icon-button-layout":
+			"inline-flex items-center justify-center rounded transition-colors use-transition-standard",
+		"ghost-button": "text-muted-foreground hover:(bg-secondary text-foreground)",
 	},
 });

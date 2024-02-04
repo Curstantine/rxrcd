@@ -5,7 +5,7 @@
 
 <input
 	{...$$props}
-	class="h-8 w-md inline-flex items-center border-(1 border solid) rounded bg-background px-3 text-sm transition-colors use-transition-standard"
+	class="{$$props.class} h-8 inline-flex items-center border-(1 border solid) rounded bg-background px-3 text-sm transition-colors use-transition-standard"
 	bind:value={input}
 />
 
