@@ -5,11 +5,15 @@
 
 <input
 	{...$$props}
-	class="{$$props.class} h-8 inline-flex items-center border-(1 border solid) rounded bg-background px-3 text-sm transition-colors use-transition-standard"
+	class="{$$props.class} h-8 inline-flex items-center border-(1 border solid) rounded px-3 text-sm transition-colors use-transition-standard"
 	bind:value={input}
 />
 
 <style>
+	input {
+		--at-apply: bg-transparent;
+	}
+
 	input:active,
 	input:focus {
 		outline: 0;
