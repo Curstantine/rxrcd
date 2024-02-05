@@ -101,6 +101,7 @@ export default defineConfig({
 
 		"icon-button-layout":
 			"inline-flex items-center justify-center rounded transition-colors use-transition-standard",
-		"ghost-button": "text-muted-foreground hover:(bg-secondary text-foreground)",
+		"ghost-button":
+			"text-muted-foreground hover:(bg-secondary text-foreground) disabled:(opacity-50 hover:(bg-transparent text-muted-foreground))",
 	},
 });
