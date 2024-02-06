@@ -9,17 +9,14 @@ import { derived, get, writable } from "svelte/store";
  * @returns {[[ReadableBool, ReadableBool], { back: VoidFunction, forward: VoidFunction }]} [[back_disabled, forward_disabled], { back, forward }]
  */
 export function extort_nav_state() {
+	/** @type {string[]} */
+	const stack = [];
 	let internal = false;
 
-	/** @type {import("svelte/store").Writable<string[]>} */
-	const history_stack = writable([]);
 	const current_index = writable(0);
 
-	const back_disabled = derived(current_index, ($current_index) => $current_index === 0);
-	const forward_disabled = derived(
-		[history_stack, current_index],
-		([$history_stack, $current_index]) => $current_index === $history_stack.length - 1,
-	);
+	const back_disabled = derived(current_index, (idx) => idx === 0);
+	const forward_disabled = derived(current_index, (idx) => idx === stack.length - 1);
 
 	/**
 	 * We need to check if the url change is from a back/forward action.
@@ -28,7 +25,6 @@ export function extort_nav_state() {
 	 * If not, we need to check if the user has pressed "back" before and remove the future tree from that index accordingly.
 	 */
 	const un_sub = location.subscribe((url) => {
-		const stack = get(history_stack);
 		const index = get(current_index);
 
 		// We don't want to mutate history_stack if the action comes from a internal back/forth change.
@@ -54,8 +50,6 @@ export function extort_nav_state() {
 			stack.push(url);
 			current_index.update((index) => index + 1);
 		}
-
-		return history_stack.set(stack);
 	});
 
 	const back = async () => {
