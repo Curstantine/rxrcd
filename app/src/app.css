@@ -23,6 +23,10 @@ body {
 	--radius: 0.3rem;
 }
 
+* {
+	--at-apply: select-none;
+}
+
 .light {
 	--background: 0 0% 100%;
 	--foreground: 240 10% 3.9%;

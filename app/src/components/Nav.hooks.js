@@ -1,6 +1,6 @@
 import { onDestroy, tick } from "svelte";
 import { location, pop } from "svelte-spa-router";
-import { derived, get, writable } from "svelte/store";
+import { derived, get, readonly, writable } from "svelte/store";
 
 /**
  * @typedef {import("svelte/store").Readable<boolean>} ReadableBool
@@ -66,7 +66,59 @@ export function extort_nav_state() {
 		window.history.forward();
 	};
 
-	onDestroy(() => un_sub());
+	onDestroy(un_sub);
 
 	return [[back_disabled, forward_disabled], { back, forward }];
+}
+
+/**
+ * @typedef {import("svelte/store").Writable<string>} WritableString
+ * @typedef {import("svelte/store").Writable<import("@/types/search").SearchEntries>} WritableSearchEntries
+ * @typedef {import("svelte/store").Readable<import("@/types/search").SearchEntries>} ReadableSearchEntries
+ *
+ * @returns {[[ReadableBool, ReadableBool, WritableString], ReadableSearchEntries]}
+ */
+export function extort_search_state() {
+	const search = writable("");
+	const loading = writable(true);
+	const show = writable(false);
+
+	/** @type {WritableSearchEntries} */
+	const entries = writable([]);
+
+	const un_sub = search.subscribe((str) => {
+		let timeout;
+
+		if (get(show) && str.length === 0) show.set(false);
+		if (!get(show) && str.length >= 3) show.set(true);
+
+		if (str.length > 3) {
+			loading.set(true);
+
+			timeout = setTimeout(() => {
+				entries.set([
+					["Artists", [
+						{ title: "Daft Punk", href: "/aoe" },
+						{ title: "Blume Popo", href: "/aoe" },
+						{ title: "High Velocity", href: "/aoe" },
+					]],
+					["Albums", [
+						{ title: "SILENT PLANET: RELOADED", subtitle: "TeddyLoid", href: "/aoe" },
+						{ title: "SILENT PLANET", subtitle: "TeddyLoid", href: "/aoe" },
+						{ title: "SILENT PLANET 2", subtitle: "TeddyLoid feat. IA", href: "/aoe" },
+					]],
+				]);
+
+				loading.set(false);
+			}, 1000);
+		}
+
+		return () => {
+			clearTimeout(timeout);
+		};
+	});
+
+	onDestroy(un_sub);
+
+	return [[readonly(show), readonly(loading), search], readonly(entries)];
 }

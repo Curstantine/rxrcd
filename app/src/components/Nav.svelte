@@ -2,12 +2,12 @@
 	import { location } from "svelte-spa-router";
 
 	import Input from "@/components/Input.svelte";
-	import { extort_nav_state } from "./Nav.hooks.js";
+	import SearchCombo from "@/components/search_combo/SearchCombo.svelte";
 
-	/** @type {string} */
-	let search;
+	import { extort_nav_state, extort_search_state } from "./Nav.hooks.js";
 
 	const [[back_disabled, forward_disabled], { back, forward }] = extort_nav_state();
+	const [[show, loading, search], entries] = extort_search_state();
 </script>
 
 <div class="sticky inset-x-0 top-0 flex bg-background/95 px-4 py-2 backdrop-blur-xl space-x-4">
@@ -24,7 +24,13 @@
 		</button>
 	</div>
 
-	<Input bind:input={search} placeholder="Search" class="flex-1" />
+	<div class="relative flex-1">
+		<Input bind:input={$search} placeholder="Search" class="w-full" />
+
+		{#if $show}
+			<SearchCombo loading={$loading} data={$entries} on:blur={() => ($show = false)} />
+		{/if}
+	</div>
 
 	<a href="#/settings" class="h-8 w-8 icon-button-layout ghost-button">
 		<div class="i-symbols-settings-rounded h-5 w-5" class:text-foreground={$location === "/settings"} />
