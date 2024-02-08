@@ -3,6 +3,7 @@ use std::{
 	sync::{Mutex, MutexGuard},
 };
 
+use reqwest::Client;
 use tauri::PathResolver;
 
 use crate::utils::{configuration::Configuration, directories::Directories};
@@ -15,6 +16,9 @@ pub struct DirectoriesState(pub Mutex<Option<Directories>>);
 
 #[derive(Debug, Default)]
 pub struct ConfigurationState(pub Mutex<Option<Configuration>>);
+
+#[derive(Debug, Default)]
+pub struct NetworkClientState(pub Mutex<Option<reqwest::Client>>);
 
 #[derive(Debug, Default)]
 pub struct App {
@@ -49,14 +53,38 @@ impl DirectoriesState {
 
 impl ConfigurationState {
 	pub async fn initialize(&self, config_dir: &Path) -> anyhow::Result<()> {
-		let db = Configuration::initialize(config_dir).await?;
-		self.get().replace(db);
+		let conf = Configuration::initialize(config_dir).await?;
+		self.get().replace(conf);
 
 		Ok(())
 	}
 
 	#[inline(always)]
 	pub fn get(&self) -> MutexGuard<'_, Option<Configuration>> {
+		self.0.lock().unwrap()
+	}
+}
+
+impl NetworkClientState {
+	pub fn initialize(&self) -> anyhow::Result<()> {
+		let mut headers = reqwest::header::HeaderMap::new();
+
+		headers
+			.insert(reqwest::header::CONTENT_TYPE, "json".parse().unwrap())
+			.unwrap();
+
+		let client = reqwest::ClientBuilder::new()
+			.https_only(true)
+			.default_headers(headers)
+			.build()?;
+
+		self.get().replace(client);
+
+		Ok(())
+	}
+
+	#[inline(always)]
+	pub fn get(&self) -> MutexGuard<'_, Option<Client>> {
 		self.0.lock().unwrap()
 	}
 }

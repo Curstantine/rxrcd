@@ -8,7 +8,7 @@ use {tauri::WindowEvent, tracing::info};
 #[cfg(any(windows, target_os = "macos"))]
 use {tauri::Manager, window_shadows::set_shadow};
 
-use crate::state::{AppState, ConfigurationState, DirectoriesState};
+use crate::state::{AppState, ConfigurationState, DirectoriesState, NetworkClientState};
 
 mod commands;
 mod errors;
@@ -40,9 +40,11 @@ fn main() {
 		.manage(AppState::default())
 		.manage(DirectoriesState::default())
 		.manage(ConfigurationState::default())
+		.manage(NetworkClientState::default())
 		.invoke_handler(tauri::generate_handler![
 			commands::setup,
-			commands::config::config_get_appearance
+			commands::config::config_get_appearance,
+			commands::album::query_albums,
 		])
 		.run(tauri::generate_context!())
 		.expect("error while running tauri application");
