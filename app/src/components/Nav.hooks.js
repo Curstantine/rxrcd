@@ -87,14 +87,15 @@ export function extort_search_state() {
 	/** @type {WritableSearchEntries} */
 	const entries = writable([]);
 
-	const { run: fetcher, clear: clearFetcher } = debounce(async () => {
+	/** @type {{ run: (arg0: string) => void, clear: () => void }} */
+	const { run: fetcher, clear: clearFetcher } = debounce(async (query) => {
 		entries.set([
-			["Artists", "list", [
+			[{ title: "Artists", href: `#/search/artists?q=${query}`, list_type: "list" }, [
 				{ title: "Daft Punk", href: "/aoe" },
 				{ title: "Blume Popo", href: "/aoe" },
 				{ title: "High Velocity", href: "/aoe" },
 			]],
-			["Albums", "grid", [
+			[{ title: "Albums", href: `#/search/albums?q=${query}`, list_type: "grid" }, [
 				{ title: "SILENT PLANET: RELOADED", subtitle: "TeddyLoid", href: "/aoe" },
 				{ title: "SILENT PLANET", subtitle: "TeddyLoid", href: "/aoe" },
 				{ title: "SILENT PLANET 2", subtitle: "TeddyLoid feat. IA", href: "/aoe" },
@@ -106,11 +107,13 @@ export function extort_search_state() {
 
 	const un_sub = search.subscribe((str) => {
 		if (get(show) && str.length === 0) show.set(false);
-		if (!get(show) && str.length >= 3) show.set(true);
+		if (!get(show) && str.length >= 3) {
+			loading.set(true);
+			show.set(true);
+		}
 
 		if (str.length > 3) {
-			loading.set(true);
-			fetcher();
+			fetcher.call(undefined, str);
 		}
 
 		return () => {

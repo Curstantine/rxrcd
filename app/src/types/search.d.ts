@@ -5,4 +5,4 @@ export declare interface SearchEntry {
 	image?: string;
 }
 
-export declare type SearchEntries = [string, "list" | "grid", SearchEntry[]][];
+export declare type SearchEntries = [{ title: string; href: string; list_type: "list" | "grid" }, SearchEntry[]][];
