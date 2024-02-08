@@ -108,11 +108,12 @@ export function extort_search_state() {
 	const un_sub = search.subscribe((str) => {
 		if (get(show) && str.length === 0) show.set(false);
 		if (!get(show) && str.length >= 3) {
+			// We only want the animation if this is the first time searching since the modal opened
 			loading.set(true);
 			show.set(true);
 		}
 
-		if (str.length > 3) {
+		if (str.length >= 3) {
 			fetcher.call(undefined, str);
 		}
 
