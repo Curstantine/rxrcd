@@ -1,3 +1,4 @@
+import debounce from "@/utils/debounce";
 import { onDestroy, tick } from "svelte";
 import { location, pop } from "svelte-spa-router";
 import { derived, get, readonly, writable } from "svelte/store";
@@ -86,35 +87,34 @@ export function extort_search_state() {
 	/** @type {WritableSearchEntries} */
 	const entries = writable([]);
 
-	const un_sub = search.subscribe((str) => {
-		let timeout;
+	const { run: fetcher, clear: clearFetcher } = debounce(async () => {
+		entries.set([
+			["Artists", "list", [
+				{ title: "Daft Punk", href: "/aoe" },
+				{ title: "Blume Popo", href: "/aoe" },
+				{ title: "High Velocity", href: "/aoe" },
+			]],
+			["Albums", "grid", [
+				{ title: "SILENT PLANET: RELOADED", subtitle: "TeddyLoid", href: "/aoe" },
+				{ title: "SILENT PLANET", subtitle: "TeddyLoid", href: "/aoe" },
+				{ title: "SILENT PLANET 2", subtitle: "TeddyLoid feat. IA", href: "/aoe" },
+			]],
+		]);
 
+		loading.set(false);
+	});
+
+	const un_sub = search.subscribe((str) => {
 		if (get(show) && str.length === 0) show.set(false);
 		if (!get(show) && str.length >= 3) show.set(true);
 
 		if (str.length > 3) {
 			loading.set(true);
-
-			timeout = setTimeout(() => {
-				entries.set([
-					["Artists", [
-						{ title: "Daft Punk", href: "/aoe" },
-						{ title: "Blume Popo", href: "/aoe" },
-						{ title: "High Velocity", href: "/aoe" },
-					]],
-					["Albums", [
-						{ title: "SILENT PLANET: RELOADED", subtitle: "TeddyLoid", href: "/aoe" },
-						{ title: "SILENT PLANET", subtitle: "TeddyLoid", href: "/aoe" },
-						{ title: "SILENT PLANET 2", subtitle: "TeddyLoid feat. IA", href: "/aoe" },
-					]],
-				]);
-
-				loading.set(false);
-			}, 1000);
+			fetcher();
 		}
 
 		return () => {
-			clearTimeout(timeout);
+			clearFetcher();
 		};
 	});
 

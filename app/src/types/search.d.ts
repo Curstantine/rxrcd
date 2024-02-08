@@ -1,7 +1,8 @@
 export declare interface SearchEntry {
 	title: string;
-	subtitle?: string;
 	href: string;
+	subtitle?: string;
+	image?: string;
 }
 
-export declare type SearchEntries = [string, SearchEntry[]][];
+export declare type SearchEntries = [string, "list" | "grid", SearchEntry[]][];
