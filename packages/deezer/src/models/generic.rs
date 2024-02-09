@@ -1,13 +1,13 @@
 use std::fmt::Debug;
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeezerList<T> {
 	pub data: Vec<T>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeezerPaginatedList<T> {
 	pub data: Vec<T>,
 	pub total: u32,

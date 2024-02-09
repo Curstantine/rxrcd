@@ -18,7 +18,7 @@ pub struct DirectoriesState(pub Mutex<Option<Directories>>);
 pub struct ConfigurationState(pub Mutex<Option<Configuration>>);
 
 #[derive(Debug, Default)]
-pub struct NetworkClientState(pub Mutex<Option<reqwest::Client>>);
+pub struct NetworkClientState(pub tokio::sync::Mutex<Option<reqwest::Client>>);
 
 #[derive(Debug, Default)]
 pub struct App {
@@ -66,7 +66,7 @@ impl ConfigurationState {
 }
 
 impl NetworkClientState {
-	pub fn initialize(&self) -> anyhow::Result<()> {
+	pub async fn initialize(&self) -> anyhow::Result<()> {
 		let mut headers = reqwest::header::HeaderMap::new();
 
 		headers
@@ -78,13 +78,13 @@ impl NetworkClientState {
 			.default_headers(headers)
 			.build()?;
 
-		self.get().replace(client);
+		self.get().await.replace(client);
 
 		Ok(())
 	}
 
 	#[inline(always)]
-	pub fn get(&self) -> MutexGuard<'_, Option<Client>> {
-		self.0.lock().unwrap()
+	pub async fn get(&self) -> tokio::sync::MutexGuard<'_, Option<Client>> {
+		self.0.lock().await
 	}
 }

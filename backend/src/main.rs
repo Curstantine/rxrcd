@@ -44,7 +44,7 @@ fn main() {
 		.invoke_handler(tauri::generate_handler![
 			commands::setup,
 			commands::config::config_get_appearance,
-			commands::album::query_albums,
+			commands::album::search_albums,
 		])
 		.run(tauri::generate_context!())
 		.expect("error while running tauri application");

@@ -1,4 +1,4 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use super::{
 	artist::AlbumRelArtist,
@@ -9,7 +9,7 @@ use super::{
 
 pub type AlbumSearch = DeezerPaginatedList<SearchRelAlbum>;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Album {
 	pub id: u32,
 	pub title: String,
@@ -21,7 +21,7 @@ pub struct Album {
 	pub tracks: DeezerList<Track>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct SearchRelAlbum {
 	pub id: u32,
 	pub title: String,

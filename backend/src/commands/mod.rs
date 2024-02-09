@@ -26,7 +26,7 @@ pub async fn setup<R: Runtime>(handle: AppHandle<R>) -> CommandResult<()> {
 	}
 
 	dir_state.initialize(&path_resolver);
-	network_state.initialize()?;
+	network_state.initialize().await?;
 
 	let config_dir = {
 		let dir_guard = dir_state.get();

@@ -1,4 +1,4 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::{
 	constants::DEEZER_API_URL,
@@ -16,7 +16,7 @@ pub struct SearchOptions<'a> {
 	index: Option<u32>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(tag = "type", rename_all = "lowercase")]
 pub enum SearchData {
 	Track(Track),
