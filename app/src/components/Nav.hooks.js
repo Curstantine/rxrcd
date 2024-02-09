@@ -1,4 +1,5 @@
 import debounce from "@/utils/debounce";
+import { invoke } from "@tauri-apps/api";
 import { onDestroy, tick } from "svelte";
 import { location, pop } from "svelte-spa-router";
 import { derived, get, readonly, writable } from "svelte/store";
@@ -89,20 +90,43 @@ export function extort_search_state() {
 
 	/** @type {{ run: (arg0: string) => void, clear: () => void }} */
 	const { run: fetcher, clear: clearFetcher } = debounce(async (query) => {
-		entries.set([
-			[{ title: "Artists", href: `#/search/artists?q=${query}`, list_type: "list" }, [
-				{ title: "Daft Punk", href: "/aoe" },
-				{ title: "Blume Popo", href: "/aoe" },
-				{ title: "High Velocity", href: "/aoe" },
-			]],
-			[{ title: "Albums", href: `#/search/albums?q=${query}`, list_type: "grid" }, [
-				{ title: "SILENT PLANET: RELOADED", subtitle: "TeddyLoid", href: "/aoe" },
-				{ title: "SILENT PLANET", subtitle: "TeddyLoid", href: "/aoe" },
-				{ title: "SILENT PLANET 2", subtitle: "TeddyLoid feat. IA", href: "/aoe" },
-			]],
-		]);
+		try {
+			/** @type {import("@/types/deezer").AlbumSearch} */
+			const caller = await invoke("search_albums", { query });
+			console.log({ caller, query });
 
-		loading.set(false);
+			/** @type {import("@/types/search").SearchEntry[]}*/
+			const data = caller.data.map(({ id, title, artist }) => ({
+				href: `#/album/${id}`,
+				title,
+				subtitle: artist.name,
+			}));
+
+			entries.set([
+				[{ title: "Artists", href: `#/search/artists?q=${query}`, list_type: "list" }, [
+					{ title: "Daft Punk", href: "/aoe" },
+					{ title: "Blume Popo", href: "/aoe" },
+					{ title: "High Velocity", href: "/aoe" },
+				]],
+				[{ title: "Albums", href: `#/search/albums?q=${query}`, list_type: "grid" }, data],
+			]);
+		} catch (e) {
+			console.log({ e, query });
+		} finally {
+			loading.set(false);
+		}
+		// entries.set([
+		// 	[{ title: "Artists", href: `#/search/artists?q=${query}`, list_type: "list" }, [
+		// 		{ title: "Daft Punk", href: "/aoe" },
+		// 		{ title: "Blume Popo", href: "/aoe" },
+		// 		{ title: "High Velocity", href: "/aoe" },
+		// 	]],
+		// 	[{ title: "Albums", href: `#/search/albums?q=${query}`, list_type: "grid" }, [
+		// 		{ title: "SILENT PLANET: RELOADED", subtitle: "TeddyLoid", href: "/aoe" },
+		// 		{ title: "SILENT PLANET", subtitle: "TeddyLoid", href: "/aoe" },
+		// 		{ title: "SILENT PLANET 2", subtitle: "TeddyLoid feat. IA", href: "/aoe" },
+		// 	]],
+		// ]);
 	});
 
 	const un_sub = search.subscribe((str) => {

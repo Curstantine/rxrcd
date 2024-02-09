@@ -3,8 +3,13 @@ use std::{
 	sync::{Mutex, MutexGuard},
 };
 
-use reqwest::Client;
-use tauri::PathResolver;
+use anyhow::ensure;
+
+use {
+	reqwest::Client,
+	tauri::PathResolver,
+	tokio::sync::{Mutex as AsyncMutex, MutexGuard as AsyncMutexGuard},
+};
 
 use crate::utils::{configuration::Configuration, directories::Directories};
 
@@ -18,7 +23,7 @@ pub struct DirectoriesState(pub Mutex<Option<Directories>>);
 pub struct ConfigurationState(pub Mutex<Option<Configuration>>);
 
 #[derive(Debug, Default)]
-pub struct NetworkClientState(pub tokio::sync::Mutex<Option<reqwest::Client>>);
+pub struct NetworkClientState(pub AsyncMutex<Option<reqwest::Client>>);
 
 #[derive(Debug, Default)]
 pub struct App {
@@ -69,9 +74,12 @@ impl NetworkClientState {
 	pub async fn initialize(&self) -> anyhow::Result<()> {
 		let mut headers = reqwest::header::HeaderMap::new();
 
-		headers
-			.insert(reqwest::header::CONTENT_TYPE, "json".parse().unwrap())
-			.unwrap();
+		ensure!(
+			headers
+				.insert(reqwest::header::CONTENT_TYPE, "json".parse().unwrap())
+				.is_none(),
+			"Content-Type header should not be populated in this Client"
+		);
 
 		let client = reqwest::ClientBuilder::new()
 			.https_only(true)
@@ -84,7 +92,7 @@ impl NetworkClientState {
 	}
 
 	#[inline(always)]
-	pub async fn get(&self) -> tokio::sync::MutexGuard<'_, Option<Client>> {
+	pub async fn get(&self) -> AsyncMutexGuard<'_, Option<Client>> {
 		self.0.lock().await
 	}
 }
