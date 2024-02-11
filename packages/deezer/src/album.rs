@@ -65,7 +65,7 @@ mod tests {
 	#[tokio::test]
 	async fn test_search_albums() -> Result<()> {
 		let client = Client::default();
-		let options = SearchOptions::new("Draft Punk", None, None);
+		let options = SearchOptions::new("Draft Punk", None);
 
 		let out = super::search_albums(&client, &options).await?;
 		let mut index = out.total.clamp(0, 25);

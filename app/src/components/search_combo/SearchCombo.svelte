@@ -56,7 +56,9 @@
 					{/each}
 				</div>
 			{:else}
-				<div class="grid auto-cols-max grid-flow-col pb-4">
+				<div
+					class="grid grid-cols-[repeat(4,minmax(0,9rem))] gap-y-2 pb-4 lg:grid-cols-[repeat(5,minmax(0,9rem))] xl:grid-cols-[repeat(6,minmax(0,9rem))]"
+				>
 					{#each items as item}
 						<GridItem data={item} />
 					{/each}

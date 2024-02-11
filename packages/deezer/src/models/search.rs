@@ -40,11 +40,11 @@ pub enum SearchOrder {
 }
 
 impl<'a> SearchOptions<'a> {
-	pub fn new(query: &'a str, order: Option<SearchOrder>, strict: Option<bool>) -> Self {
+	pub fn new(query: &'a str, order: Option<SearchOrder>) -> Self {
 		Self {
 			query,
 			order,
-			strict,
+			strict: None,
 			index: Some(0),
 			limit: Some(25),
 		}
