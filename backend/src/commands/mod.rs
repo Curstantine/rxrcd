@@ -9,6 +9,7 @@ use crate::{
 };
 
 pub mod album;
+pub mod artist;
 pub mod config;
 
 #[tauri::command]

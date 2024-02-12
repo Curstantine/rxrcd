@@ -2,6 +2,8 @@ export declare type SearchData<T = "track" | "artist" | "album", D> = D & { type
 
 export declare type AlbumSearch = DeezerPaginatedList<SearchRelAlbum>;
 
+export declare type ArtistSearch = DeezerPaginatedList<Artist>;
+
 export declare interface DeezerList<T> {
 	data: T[];
 }
