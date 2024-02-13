@@ -5,10 +5,10 @@ export declare type SearchEntryIEResult = Result<SearchEntryIE[], string>;
 export declare interface SearchEntryBase {
 	id: number;
 	title: string;
+	subtitle: string | null;
 }
 
-export declare type SearchEntrySub = SearchEntryBase & { subtitle: string };
-export declare type SearchEntryIE = SearchEntrySub & { image: string | null };
+export declare type SearchEntryIE = SearchEntryBase & { image: string | null };
 
 export declare interface SearchEntries {
 	artists: SearchEntryBaseResult | null;

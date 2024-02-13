@@ -115,7 +115,7 @@ export function extort_search_state() {
 			const artists = await invoke("search_artists", { query });
 
 			/** @type {import("@/types/search").SearchEntryBase[]}*/
-			const data = artists.data.map(({ id, name }) => ({ id, title: name }));
+			const data = artists.data.map(({ id, name }) => ({ id, title: name, subtitle: null }));
 
 			entries.update(({ albums }) => {
 				return { albums, artists: { data, error: null } };

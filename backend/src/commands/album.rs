@@ -21,7 +21,7 @@ pub async fn search_albums(
 	let client_guard = network_state.get().await;
 	let client = client_guard.as_ref().unwrap();
 
-	let opts = SearchOptions::new(&query, Some(SearchOrder::AlbumAsc)).with_limit(limit.unwrap_or(6));
+	let opts = SearchOptions::new(&query, Some(SearchOrder::AlbumAsc)).with_limit(limit.unwrap_or(8));
 
 	deezer::album::search_albums(client, &opts)
 		.await

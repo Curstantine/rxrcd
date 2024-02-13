@@ -1,12 +1,15 @@
 <script>
-	import GridItem from "@/components/search_combo/GridItem.svelte";
-	import GridItemSkeleton from "@/components/search_combo/GridItemSkeleton.svelte";
+	import GridItem from "@/components/search_combo/items/GridItem.svelte";
+	import GridItemSkeleton from "@/components/search_combo/items/GridItemSkeleton.svelte";
 
 	/** @type {string} */
 	export let label;
 
 	/** @type {string} */
 	export let href;
+
+	/** @type {string} */
+	export let child_href;
 
 	/** @type {import("@/types/search").SearchEntryIEResult | null} */
 	export let data;
@@ -24,7 +27,7 @@
 	{#if data.data !== null}
 		<div class="grid-list">
 			{#each data["data"] as item}
-				<GridItem data={item} />
+				<GridItem {...item} href="{child_href}/{item.id}" />
 			{/each}
 		</div>
 	{/if}

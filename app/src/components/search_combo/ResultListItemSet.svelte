@@ -1,12 +1,15 @@
 <script>
-	import ListItem from "@/components/search_combo/ListItem.svelte";
-	import ListItemSkeleton from "@/components/search_combo/ListItemSkeleton.svelte";
+	import ListItem from "@/components/search_combo/items/ListItem.svelte";
+	import ListItemSkeleton from "@/components/search_combo/items/ListItemSkeleton.svelte";
 
 	/** @type {string} */
 	export let label;
 
 	/** @type {string} */
 	export let href;
+
+	/** @type {string} */
+	export let child_href;
 
 	/** @type {import("@/types/search").SearchEntryBaseResult | null} */
 	export let data;
@@ -24,7 +27,7 @@
 	{#if data.data !== null}
 		<div class="flex flex-col pb-4">
 			{#each data["data"] as item}
-				<ListItem data={item} />
+				<ListItem {...item} href="{child_href}/{item.id}" />
 			{/each}
 		</div>
 	{/if}
