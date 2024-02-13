@@ -16,12 +16,13 @@ use crate::{
 pub async fn search_albums(
 	query: String,
 	limit: Option<u32>,
+	index: Option<u32>,
 	network_state: State<'_, NetworkClientState>,
 ) -> CommandResult<AlbumSearch> {
 	let client_guard = network_state.get().await;
 	let client = client_guard.as_ref().unwrap();
 
-	let opts = SearchOptions::new(&query, Some(SearchOrder::AlbumAsc)).with_limit(limit.unwrap_or(8));
+	let opts = SearchOptions::new(&query, Some(SearchOrder::AlbumAsc), limit.or(Some(8)), index);
 
 	deezer::album::search_albums(client, &opts)
 		.await

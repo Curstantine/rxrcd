@@ -65,7 +65,7 @@ mod tests {
 	#[tokio::test]
 	async fn test_search_artists() -> Result<()> {
 		let client = Client::default();
-		let options = SearchOptions::new("A", None);
+		let options = SearchOptions::new("A", None, None, None);
 
 		let out = super::search_artists(&client, &options).await?;
 		let mut index = out.total.clamp(0, 25);
