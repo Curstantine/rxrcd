@@ -131,6 +131,7 @@ export function extort_search_state() {
 		if (get(show) && str.length === 0) show.set(false);
 		if (!get(show) && str.length >= 3) {
 			show.set(true);
+			entries.set({ albums: null, artists: null });
 		}
 
 		if (str.length >= 3) {

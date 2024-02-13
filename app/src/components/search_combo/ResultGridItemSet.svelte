@@ -35,7 +35,7 @@
 		<div class="h-2 w-12 animate-pulse rounded bg-secondary" />
 		<div class="h-3 w-3 rounded-full bg-secondary" />
 	</div>
-	<div class="flex flex-col pb-4">
+	<div class="grid-list">
 		<GridItemSkeleton />
 		<GridItemSkeleton />
 		<GridItemSkeleton />
