@@ -78,11 +78,10 @@ export function extort_nav_state() {
  * @typedef {import("svelte/store").Writable<import("@/types/search").SearchEntries>} WritableSearchEntries
  * @typedef {import("svelte/store").Readable<import("@/types/search").SearchEntries>} ReadableSearchEntries
  *
- * @returns {[[ReadableBool, ReadableBool, WritableString], ReadableSearchEntries]}
+ * @returns {[[ReadableBool, WritableString], ReadableSearchEntries]}
  */
 export function extort_search_state() {
 	const search = writable("");
-	const loading = writable(true);
 	const show = writable(false);
 
 	/** @type {WritableSearchEntries} */
@@ -126,15 +125,11 @@ export function extort_search_state() {
 				return { albums, artists: { error: e.toString(), data: null } };
 			});
 		}
-
-		loading.set(false);
 	});
 
 	const un_sub = search.subscribe((str) => {
 		if (get(show) && str.length === 0) show.set(false);
 		if (!get(show) && str.length >= 3) {
-			// We only want the animation if this is the first time searching since the modal opened
-			loading.set(true);
 			show.set(true);
 		}
 
@@ -149,5 +144,5 @@ export function extort_search_state() {
 
 	onDestroy(un_sub);
 
-	return [[readonly(show), readonly(loading), search], readonly(entries)];
+	return [[readonly(show), search], readonly(entries)];
 }
