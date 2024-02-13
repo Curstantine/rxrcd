@@ -86,7 +86,7 @@ export function extort_search_state() {
 	const show = writable(false);
 
 	/** @type {WritableSearchEntries} */
-	const entries = writable([]);
+	const entries = writable({ albums: null, artists: null });
 
 	/** @type {{ run: (arg0: string) => void, clear: () => void }} */
 	const { run: fetcher, clear: clearFetcher } = debounce(async (query) => {
@@ -94,30 +94,40 @@ export function extort_search_state() {
 			/** @type {import("@/types/deezer").AlbumSearch} */
 			const albums = await invoke("search_albums", { query });
 
+			/** @type {import("@/types/search").SearchEntryIE[]}*/
+			const data = albums.data.map(({ id, title, artist: { name } }) => ({
+				id,
+				title,
+				subtitle: name,
+				image: null,
+			}));
+
+			entries.update(({ artists }) => {
+				return { artists, albums: { data, error: null } };
+			});
+		} catch (e) {
+			entries.update(({ artists }) => {
+				return { artists, albums: { error: e.toString(), data: null } };
+			});
+		}
+
+		try {
 			/** @type {import("@/types/deezer").ArtistSearch} */
 			const artists = await invoke("search_artists", { query });
 
-			console.log({ artists, albums, query });
+			/** @type {import("@/types/search").SearchEntryBase[]}*/
+			const data = artists.data.map(({ id, name }) => ({ id, title: name }));
 
-			/** @type {import("@/types/search").SearchEntry[]}*/
-			const albumData = albums.data.map(({ id, title, artist }) => ({
-				href: `#/album/${id}`,
-				title,
-				subtitle: artist.name,
-			}));
-
-			/** @type {import("@/types/search").SearchEntry[]}*/
-			const artistData = artists.data.map(({ id, name }) => ({ href: `#/artist/${id}`, title: name }));
-
-			entries.set([
-				[{ title: "Artists", href: `#/search/artists?q=${query}`, list_type: "list" }, artistData],
-				[{ title: "Albums", href: `#/search/albums?q=${query}`, list_type: "grid" }, albumData],
-			]);
+			entries.update(({ albums }) => {
+				return { albums, artists: { data, error: null } };
+			});
 		} catch (e) {
-			console.log({ e, query });
-		} finally {
-			loading.set(false);
+			entries.update(({ albums }) => {
+				return { albums, artists: { error: e.toString(), data: null } };
+			});
 		}
+
+		loading.set(false);
 	});
 
 	const un_sub = search.subscribe((str) => {

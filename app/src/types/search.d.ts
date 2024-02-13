@@ -1,8 +1,17 @@
-export declare interface SearchEntry {
+declare type Result<T, E> = { data: T | null; error: E | null };
+
+export declare interface SearchEntryBase {
+	id: number;
 	title: string;
-	href: string;
-	subtitle?: string;
-	image?: string;
 }
 
-export declare type SearchEntries = [{ title: string; href: string; list_type: "list" | "grid" }, SearchEntry[]][];
+export declare type SearchEntrySub = SearchEntryBase & { subtitle: string };
+
+export declare type SearchEntryIE = SearchEntrySub & {
+	image: string | null;
+};
+
+export declare type SearchEntries = {
+	artists: Result<SearchEntryBase[], string> | null;
+	albums: Result<SearchEntryIE[], string> | null;
+};
