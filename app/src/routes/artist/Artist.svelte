@@ -1,26 +1,28 @@
 <script>
 	import { onMount } from "svelte";
 
+	import Discography from "@/routes/artist/Discography.svelte";
+
 	/** @type {{ id: string }} */
 	export let params = {};
 
+	const tabs = [
+		{ id: "discography", label: "Discography", component: Discography },
+		{ id: "albums", label: "Albums", component: null },
+		{ id: "eps", label: "EPs", component: null },
+		{ id: "singles", label: "Singles", component: null },
+		{ id: "compilations", label: "Compilations", component: null },
+	];
+
 	/** @type {HTMLDivElement}*/
 	let active_rod;
-	let active_tab = "latest";
-
-	const tabs = [
-		["latest", "Latest & Greatest"],
-		["albums", "Albums"],
-		["eps", "EPs"],
-		["singles", "Singles"],
-		["compilations", "Compilations"],
-	];
+	let active_tab = tabs[0];
 
 	/**
 	 * @param e {MouseEvent & { currentTarget: HTMLButtonElement }}
 	 */
 	function on_tab_click(e) {
-		active_tab = e.currentTarget.id;
+		active_tab = tabs.find(({ id }) => id === e.currentTarget.id);
 		style_active_rod(e.currentTarget);
 	}
 
@@ -33,7 +35,7 @@
 	}
 
 	onMount(() => {
-		const x = document.getElementById(active_tab);
+		const x = document.getElementById(active_tab.id);
 		style_active_rod(x);
 	});
 </script>
@@ -51,9 +53,9 @@
 	</div>
 
 	<div class="sticky top-12 flex gap-2 bg-background/95 px-6 backdrop-blur-xl">
-		{#each tabs as [id, label]}
-			<button {id} class="tab" class:active={active_tab === id} on:click={on_tab_click}>
-				{label}
+		{#each tabs as tab}
+			<button id={tab.id} class="tab" class:active={active_tab.id === tab.id} on:click={on_tab_click}>
+				{tab.label}
 			</button>
 		{/each}
 
@@ -63,18 +65,7 @@
 		/>
 	</div>
 
-	<div class="flex flex-col gap-4 px-6">
-		<div class="h-32 w-full bg-white"></div>
-		<div class="h-32 w-full bg-white"></div>
-		<div class="h-32 w-full bg-white"></div>
-		<div class="h-32 w-full bg-white"></div>
-		<div class="h-32 w-full bg-white"></div>
-		<div class="h-32 w-full bg-white"></div>
-		<div class="h-32 w-full bg-white"></div>
-		<div class="h-32 w-full bg-white"></div>
-		<div class="h-32 w-full bg-white"></div>
-		<div class="h-32 w-full bg-white"></div>
-	</div>
+	<svelte:component this={active_tab.component} />
 </div>
 
 <style>

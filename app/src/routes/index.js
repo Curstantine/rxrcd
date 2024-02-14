@@ -1,4 +1,4 @@
-import Artist from "@/routes/Artist.svelte";
+import Artist from "@/routes/artist/Artist.svelte";
 import Home from "@/routes/Home.svelte";
 import Settings from "@/routes/Settings.svelte";
 
