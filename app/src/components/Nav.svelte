@@ -6,8 +6,8 @@
 
 	import { extort_nav_state, extort_search_state } from "./Nav.hooks.js";
 
+	const [[show, search], entries, { close }] = extort_search_state();
 	const [[back_disabled, forward_disabled], { back, forward }] = extort_nav_state();
-	const [[show, search], entries] = extort_search_state();
 </script>
 
 <div class="sticky inset-x-0 top-0 flex bg-background/95 px-4 py-2 backdrop-blur-xl space-x-4">
@@ -25,10 +25,10 @@
 	</div>
 
 	<div class="relative flex-1">
-		<Input bind:input={$search} placeholder="Search" class="w-full" />
+		<Input id="search_input" bind:input={$search} placeholder="Search" class="w-full" />
 
 		{#if $show}
-			<SearchCombo data={$entries} on:blur={() => ($show = false)} />
+			<SearchCombo data={$entries} {close} />
 		{/if}
 	</div>
 

@@ -1,8 +1,9 @@
-import debounce from "@/utils/debounce";
 import { invoke } from "@tauri-apps/api";
 import { onDestroy, tick } from "svelte";
 import { location, pop } from "svelte-spa-router";
 import { derived, get, readonly, writable } from "svelte/store";
+
+import debounce from "@/utils/debounce";
 
 /**
  * @typedef {import("svelte/store").Readable<boolean>} ReadableBool
@@ -78,7 +79,7 @@ export function extort_nav_state() {
  * @typedef {import("svelte/store").Writable<import("@/types/search").SearchEntries>} WritableSearchEntries
  * @typedef {import("svelte/store").Readable<import("@/types/search").SearchEntries>} ReadableSearchEntries
  *
- * @returns {[[ReadableBool, WritableString], ReadableSearchEntries]}
+ * @returns {[[ReadableBool, WritableString], ReadableSearchEntries, { close: () => void }]}
  */
 export function extort_search_state() {
 	const search = writable("");
@@ -127,7 +128,7 @@ export function extort_search_state() {
 		}
 	});
 
-	const un_sub = search.subscribe((str) => {
+	const search_un_sub = search.subscribe((str) => {
 		if (get(show) && str.length === 0) show.set(false);
 		if (!get(show) && str.length >= 3) {
 			show.set(true);
@@ -143,7 +144,16 @@ export function extort_search_state() {
 		};
 	});
 
-	onDestroy(un_sub);
+	const close = () => {
+		show.set(false);
+	};
 
-	return [[readonly(show), search], readonly(entries)];
+	const location_un_sub = location.subscribe(() => close());
+
+	onDestroy(() => {
+		search_un_sub();
+		location_un_sub();
+	});
+
+	return [[readonly(show), search], readonly(entries), { close }];
 }
