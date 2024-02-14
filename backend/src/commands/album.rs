@@ -1,5 +1,6 @@
 use anyhow::anyhow;
 use deezer::models::album::AlbumSearch;
+use tracing::info;
 
 use {
 	deezer::models::search::{SearchOptions, SearchOrder},
@@ -19,6 +20,8 @@ pub async fn search_albums(
 	index: Option<u32>,
 	network_state: State<'_, NetworkClientState>,
 ) -> CommandResult<AlbumSearch> {
+	info!("search_albums called with {query:?} (limit: {limit:?}, index: {index:?})");
+
 	let client_guard = network_state.get().await;
 	let client = client_guard.as_ref().unwrap();
 
