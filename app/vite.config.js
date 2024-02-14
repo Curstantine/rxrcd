@@ -7,6 +7,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
 	plugins: [unocss(), svelte()],
 	server: {
+		port: 5173,
 		strictPort: true,
 	},
 	resolve: {
