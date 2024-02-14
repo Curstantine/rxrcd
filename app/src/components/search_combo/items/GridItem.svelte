@@ -15,7 +15,7 @@
 <div class="{$$props.class} flex flex-col px-2 py-1 w-36 use-transition-standard transition-colors">
 	<a {href} class="cover">
 		{#if image !== null}
-			<img src={image} alt="{title} Cover Preview" class="rounded" />
+			<img src={image} alt="{title} Cover Preview" class="w-full rounded" />
 		{/if}
 	</a>
 

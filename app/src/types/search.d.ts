@@ -11,6 +11,7 @@ export declare interface SearchEntryBase {
 export declare type SearchEntryIE = SearchEntryBase & { image: string | null };
 
 export declare interface SearchEntries {
+	query: string;
 	artists: SearchEntryBaseResult | null;
 	albums: SearchEntryIEResult | null;
 }

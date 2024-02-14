@@ -15,6 +15,6 @@
 	class="absolute inset-x-0 top-12 grid grid-cols-1 max-h-md overflow-y-auto border-(1 border solid) rounded bg-background p-2 shadow"
 	on:blur
 >
-	<ResultListItemSet label="Artists" href="#/artists/" data={data.artists} />
-	<ResultGridItemSet label="Albums" href="#/albums/" data={data.albums} />
+	<ResultListItemSet label="Artists" href="#/artists/" child_href="#/artist" data={data.artists} />
+	<ResultGridItemSet label="Albums" href="#/albums/"   child_href="#/album" data={data.albums} />
 </div>

@@ -85,7 +85,7 @@ export function extort_search_state() {
 	const show = writable(false);
 
 	/** @type {WritableSearchEntries} */
-	const entries = writable({ albums: null, artists: null });
+	const entries = writable({ albums: null, query: "", artists: null });
 
 	/** @type {{ run: (arg0: string) => void, clear: () => void }} */
 	const { run: fetcher, clear: clearFetcher } = debounce(async (query) => {
@@ -94,19 +94,19 @@ export function extort_search_state() {
 			const albums = await invoke("search_albums", { query });
 
 			/** @type {import("@/types/search").SearchEntryIE[]}*/
-			const data = albums.data.map(({ id, title, artist: { name } }) => ({
+			const data = albums.data.map(({ id, title, artist: { name }, cover_big }) => ({
 				id,
 				title,
 				subtitle: name,
-				image: null,
+				image: cover_big,
 			}));
 
 			entries.update(({ artists }) => {
-				return { artists, albums: { data, error: null } };
+				return { artists, query, albums: { data, error: null } };
 			});
 		} catch (e) {
 			entries.update(({ artists }) => {
-				return { artists, albums: { error: e.toString(), data: null } };
+				return { artists, query, albums: { error: e.toString(), data: null } };
 			});
 		}
 
@@ -118,11 +118,11 @@ export function extort_search_state() {
 			const data = artists.data.map(({ id, name }) => ({ id, title: name, subtitle: null }));
 
 			entries.update(({ albums }) => {
-				return { albums, artists: { data, error: null } };
+				return { albums, query, artists: { data, error: null } };
 			});
 		} catch (e) {
 			entries.update(({ albums }) => {
-				return { albums, artists: { error: e.toString(), data: null } };
+				return { albums, query, artists: { error: e.toString(), data: null } };
 			});
 		}
 	});
@@ -131,7 +131,7 @@ export function extort_search_state() {
 		if (get(show) && str.length === 0) show.set(false);
 		if (!get(show) && str.length >= 3) {
 			show.set(true);
-			entries.set({ albums: null, artists: null });
+			entries.set({ albums: null, query: str, artists: null });
 		}
 
 		if (str.length >= 3) {
