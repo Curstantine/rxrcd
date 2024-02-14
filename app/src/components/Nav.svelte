@@ -10,7 +10,7 @@
 	const [[back_disabled, forward_disabled], { back, forward }] = extort_nav_state();
 </script>
 
-<div class="sticky inset-x-0 top-0 flex bg-background/95 px-4 py-2 backdrop-blur-xl space-x-4">
+<div class="sticky inset-x-0 top-0 z-20 flex bg-background/95 px-4 py-2 backdrop-blur-xl space-x-4">
 	<div class="inline-flex space-x-2">
 		<a href="#/" class="h-8 w-8 icon-button-layout ghost-button">
 			<div class="i-symbols-home-rounded h-5 w-5" class:text-foreground={$location === "/"} />

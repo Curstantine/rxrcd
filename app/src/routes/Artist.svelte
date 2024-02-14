@@ -39,10 +39,10 @@
 </script>
 
 <div class="flex flex-col">
-	<div class="h-56 flex items-center p-6">
-		<div class="h-48 w-48 rounded-full bg-secondary"></div>
+	<div class="h-48 flex items-center p-6">
+		<div class="h-36 w-36 rounded-full bg-secondary"></div>
 
-		<div class="grid grid-cols-4 flex-1 gap-2 pl-6 text-sm text-muted-foreground">
+		<div class="grid grid-cols-4 flex-1 pl-6 text-sm text-muted-foreground space-y-1">
 			<h1 class="col-span-full text-3xl text-foreground font-medium">Daft Punk</h1>
 			<span>Fans: 120123123</span>
 			<span>Albums: 45</span>
@@ -50,7 +50,7 @@
 		</div>
 	</div>
 
-	<div class="relative flex gap-2 px-6">
+	<div class="sticky top-12 flex gap-2 bg-background/95 px-6 backdrop-blur-xl">
 		{#each tabs as [id, label]}
 			<button {id} class="tab" class:active={active_tab === id} on:click={on_tab_click}>
 				{label}
@@ -61,6 +61,19 @@
 			bind:this={active_rod}
 			class="absolute bottom-1 left-0 h-[2px] transform-gpu rounded-full bg-primary use-transition-standard"
 		/>
+	</div>
+
+	<div class="flex flex-col gap-4 px-6">
+		<div class="h-32 w-full bg-white"></div>
+		<div class="h-32 w-full bg-white"></div>
+		<div class="h-32 w-full bg-white"></div>
+		<div class="h-32 w-full bg-white"></div>
+		<div class="h-32 w-full bg-white"></div>
+		<div class="h-32 w-full bg-white"></div>
+		<div class="h-32 w-full bg-white"></div>
+		<div class="h-32 w-full bg-white"></div>
+		<div class="h-32 w-full bg-white"></div>
+		<div class="h-32 w-full bg-white"></div>
 	</div>
 </div>
 
