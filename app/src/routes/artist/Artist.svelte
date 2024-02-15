@@ -6,12 +6,13 @@
 	/** @type {{ id: string }} */
 	export let params = {};
 
+	/** @type {{ id: string, label: string, component: import("svelte").ComponentType | null }[]} */
 	const tabs = [
-		{ id: "discography", label: "Discography", component: Discography },
-		{ id: "albums", label: "Albums", component: null },
-		{ id: "eps", label: "EPs", component: null },
-		{ id: "singles", label: "Singles", component: null },
-		{ id: "compilations", label: "Compilations", component: null },
+		{ id: "tab_discography", label: "Discography", component: Discography },
+		{ id: "tab_albums", label: "Albums", component: null },
+		{ id: "tab_eps", label: "EPs", component: null },
+		{ id: "tab_singles", label: "Singles", component: null },
+		{ id: "tab_compilations", label: "Compilations", component: null },
 	];
 
 	/** @type {HTMLDivElement}*/
@@ -22,7 +23,7 @@
 	 * @param e {MouseEvent & { currentTarget: HTMLButtonElement }}
 	 */
 	function on_tab_click(e) {
-		active_tab = tabs.find(({ id }) => id === e.currentTarget.id);
+		active_tab = tabs.find(({ id }) => e.currentTarget.id === id);
 		style_active_rod(e.currentTarget);
 	}
 
@@ -34,10 +35,7 @@
 		active_rod.style.transform = `translateX(${e.offsetLeft}px)`;
 	}
 
-	onMount(async () => {
-		const x = document.getElementById(active_tab.id);
-		style_active_rod(x);
-	});
+	onMount(() => style_active_rod(document.getElementById(active_tab.id)));
 </script>
 
 <div class="flex flex-col">
@@ -53,15 +51,13 @@
 	</div>
 
 	<div class="sticky top-12 flex gap-2 bg-background/95 px-6 backdrop-blur-xl">
-		{#each tabs as tab}
-			<button id={tab.id} class="tab" class:active={active_tab.id === tab.id} on:click={on_tab_click}>
-				{tab.label}
-			</button>
+		{#each tabs as { id, label }}
+			<button {id} class="tab" class:active={active_tab.id === id} on:click={on_tab_click}>{label}</button>
 		{/each}
 
 		<div
 			bind:this={active_rod}
-			class="absolute bottom-1 left-0 h-[2px] transform-gpu rounded-full bg-primary use-transition-standard"
+			class="absolute bottom-2 left-0 h-[2px] transform-gpu rounded-full bg-primary use-transition-standard"
 		/>
 	</div>
 
@@ -73,6 +69,7 @@
 		--at-apply: h-12 px-2 text-sm text-muted-foreground use-transition-standard transition-colors;
 	}
 
+	.tab:hover,
 	.tab.active {
 		--at-apply: text-foreground;
 	}
