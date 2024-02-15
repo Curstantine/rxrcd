@@ -1,6 +1,6 @@
 <script>
-	import ListItem from "@/components/search_combo/items/ListItem.svelte";
-	import ListItemSkeleton from "@/components/search_combo/items/ListItemSkeleton.svelte";
+	import ListItem from "@/components/items/ListItem.svelte";
+	import ListItemSkeleton from "@/components/items/ListItemSkeleton.svelte";
 
 	/** @type {string} */
 	export let label;

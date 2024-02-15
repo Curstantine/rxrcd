@@ -1,6 +1,6 @@
 <script>
-	import GridItem from "@/components/search_combo/items/GridItem.svelte";
-	import GridItemSkeleton from "@/components/search_combo/items/GridItemSkeleton.svelte";
+	import GridItem from "@/components/items/GridItem.svelte";
+	import GridItemSkeleton from "@/components/items/GridItemSkeleton.svelte";
 
 	/** @type {string} */
 	export let label;
@@ -48,18 +48,6 @@
 <style>
 	.grid-list {
 		--at-apply: grid gap-y-2 pb-4;
-		grid-template-columns: repeat(4, minmax(0, 9rem));
-	}
-
-	@media (min-width: 1024px) {
-		.grid-list {
-			grid-template-columns: repeat(5, minmax(0, 9rem));
-		}
-	}
-
-	@media (min-width: 1280px) {
-		.grid-list {
-			grid-template-columns: repeat(6, minmax(0, 9rem));
-		}
+		grid-template-columns: repeat(auto-fill, minmax(0, 9rem));
 	}
 </style>

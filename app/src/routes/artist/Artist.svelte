@@ -34,7 +34,7 @@
 		active_rod.style.transform = `translateX(${e.offsetLeft}px)`;
 	}
 
-	onMount(() => {
+	onMount(async () => {
 		const x = document.getElementById(active_tab.id);
 		style_active_rod(x);
 	});
@@ -45,7 +45,7 @@
 		<div class="h-36 w-36 rounded-full bg-secondary"></div>
 
 		<div class="grid grid-cols-4 flex-1 pl-6 text-sm text-muted-foreground space-y-1">
-			<h1 class="col-span-full text-3xl text-foreground font-medium">Daft Punk</h1>
+			<h1 class="col-span-full text-3xl text-foreground font-bold">Daft Punk</h1>
 			<span>Fans: 120123123</span>
 			<span>Albums: 45</span>
 			<span>Tracks: 1024</span>
@@ -70,7 +70,7 @@
 
 <style>
 	.tab {
-		--at-apply: h-12 px-2 text-muted-foreground use-transition-standard transition-colors;
+		--at-apply: h-12 px-2 text-sm text-muted-foreground use-transition-standard transition-colors;
 	}
 
 	.tab.active {
