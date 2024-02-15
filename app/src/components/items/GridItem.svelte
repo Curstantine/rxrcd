@@ -22,7 +22,7 @@
 	<a {href} class="pt-2 text-sm text-foreground leading-tight">{title}</a>
 
 	{#if subtitle !== null}
-		<span class="pt-1 text-xs text-muted-foreground">{subtitle}</span>
+		<span class="mt-0.5 text-xs text-muted-foreground">{subtitle}</span>
 	{/if}
 </div>
 
