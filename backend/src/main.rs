@@ -45,6 +45,7 @@ fn main() {
 			commands::setup,
 			commands::config::config_get_appearance,
 			commands::album::search_albums,
+			commands::artist::get_artist,
 			commands::artist::search_artists,
 		])
 		.run(tauri::generate_context!())
