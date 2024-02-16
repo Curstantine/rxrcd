@@ -38,10 +38,13 @@
 		{:else}
 			<div class="h-36 w-36 animate-pulse rounded-full bg-secondary use-transition-emphasized"></div>
 
-			<div class="grid grid-cols-4 pl-6 transition-colors use-transition-emphasized space-y-1">
-				<div class="col-span-full h-6 w-xs animate-pulse rounded bg-secondary" />
-				<div class="h-3 w-24 animate-pulse rounded bg-secondary" />
-				<div class="h-3 w-24 animate-pulse rounded bg-secondary" />
+			<div class="flex flex-col gap-2 pl-6 transition-colors use-transition-emphasized">
+				<div class="h-6 w-xs animate-pulse rounded bg-secondary" />
+
+				<div class="flex items-center gap-2 text-muted-foreground">
+					<div class="h-3 w-16 animate-pulse rounded bg-secondary" />
+					<div class="h-3 w-12 animate-pulse rounded bg-secondary" />
+				</div>
 			</div>
 		{/if}
 	</div>
