@@ -22,11 +22,18 @@
 				<img src={$artist.picture_big} alt="{$artist.name}'s Avatar" class="w-full rounded-full" />
 			</div>
 
-			<div class="grid grid-cols-4 flex-1 pl-6 text-sm text-muted-foreground space-y-1">
-				<h1 class="col-span-full text-3xl text-foreground font-bold">{$artist.name}</h1>
-				<span>Fans: {$artist.nb_fan}</span>
-				<span>Albums: {$artist.nb_album}</span>
-				<span>Tracks: 1024</span>
+			<div class="flex flex-col pl-6 text-sm text-muted-foreground space-y-2">
+				<h1 class="text-4xl text-foreground font-bold">{$artist.name}</h1>
+				<div class="flex gap-4">
+					<div class="inline-flex items-center space-x-2">
+						<div class="i-symbols-group-rounded h-5 w-5" />
+						<span>{$artist.nb_fan}</span>
+					</div>
+					<div class="inline-flex items-center space-x-2">
+						<div class="i-symbols-album h-5 w-5" />
+						<span>{$artist.nb_album}</span>
+					</div>
+				</div>
 			</div>
 		{:else}
 			<div class="h-36 w-36 animate-pulse rounded-full bg-secondary use-transition-emphasized"></div>
