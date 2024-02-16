@@ -1,4 +1,3 @@
-import { onMount } from "svelte";
 import { get, readonly, writable } from "svelte/store";
 
 import Discography from "@/routes/artist/Discography.svelte";
@@ -51,7 +50,7 @@ export function style_tab(node, active_tab) {
 	};
 }
 
-/** @param {string | null} id */
+/** @param {import("svelte/store").Readable<string>} id */
 export function extort_data_state(id) {
 	/** @type {import("svelte/store").Writable<import("@/types/deezer").Artist | null>} */
 	const artist = writable(null);
@@ -62,9 +61,10 @@ export function extort_data_state(id) {
 		artist.set(data);
 	}
 
-	onMount(() => {
-		if (id === null) throw Error("param id was null");
-		get_artist_data(Number.parseInt(id));
+	id.subscribe((val) => {
+		const id = Number.parseInt(val);
+		if (get(artist) !== null) artist.set(null);
+		get_artist_data(id);
 	});
 
 	return {
