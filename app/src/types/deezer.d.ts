@@ -1,6 +1,7 @@
 export declare type SearchData<T = "track" | "artist" | "album", D> = D & { type: T };
 
 export declare type AlbumSearch = DeezerPaginatedList<SearchRelAlbum>;
+export declare type ArtistAlbumList = DeezerPaginatedList<ArtistRelAlbum>;
 
 export declare type ArtistSearch = DeezerPaginatedList<Artist>;
 
@@ -49,6 +50,8 @@ export declare interface TrackRelArtist {
 	name: string;
 }
 
+export declare type AlbumRecordType = "album" | "ep" | "single";
+
 export declare interface Album {
 	id: number;
 	title: string;
@@ -58,13 +61,11 @@ export declare interface Album {
 	artist: AlbumRelArtist;
 	genres: DeezerList<Genre>;
 	tracks: DeezerList<Track>;
+	release_date: string;
+	record_type: AlbumRecordType;
+	explicit_lyrics: boolean;
 }
 
-export declare interface SearchRelAlbum {
-	id: number;
-	title: string;
-	link: string;
-	cover_small: string;
-	cover_big: string;
-	artist: AlbumRelArtist;
-}
+export declare type SearchRelAlbum = Omit<Album, "genres" | "tracks" | "explicit_lyrics" | "record_type">;
+
+export declare type ArtistRelAlbum = Omit<Album, "artist" | "genres" | "tracks">;

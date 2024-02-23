@@ -11,7 +11,7 @@
 	const id = writable(params.id);
 	$: $id = params.id;
 
-	const { artist } = extort_data_state(id);
+	const { artist, albums } = extort_data_state(id);
 	const { active_tab, on_tab_click } = extort_tab_state();
 </script>
 

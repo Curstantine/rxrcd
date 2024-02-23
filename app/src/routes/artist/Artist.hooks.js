@@ -55,19 +55,32 @@ export function extort_data_state(id) {
 	/** @type {import("svelte/store").Writable<import("@/types/deezer").Artist | null>} */
 	const artist = writable(null);
 
+	/** @type {import("svelte/store").Writable<import("@/types/deezer").ArtistAlbumList | null>} */
+	const albums = writable(null);
+
 	/** @param {number} id */
 	async function get_artist_data(id) {
 		const data = await invoke("get_artist", { id });
 		artist.set(data);
 	}
 
+	async function get_artist_albums(id) {
+		const data = await invoke("get_artist_albums", { artist_id: id });
+		albums.set(data);
+	}
+
 	id.subscribe((val) => {
 		const id = Number.parseInt(val);
 		if (get(artist) !== null) artist.set(null);
-		get_artist_data(id);
+
+		Promise.all([
+			get_artist_data(id),
+			get_artist_albums(id),
+		]);
 	});
 
 	return {
 		artist: readonly(artist),
+		albums: readonly(albums),
 	};
 }
