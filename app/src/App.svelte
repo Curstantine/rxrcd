@@ -13,8 +13,8 @@
 		await invoke("setup");
 		await initialize_theme();
 
-		appWindow.show();
-		appWindow.setFocus();
+		await appWindow.show();
+		await appWindow.setFocus();
 	});
 </script>
 

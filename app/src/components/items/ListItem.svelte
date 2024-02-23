@@ -9,7 +9,7 @@
 	export let subtitle;
 </script>
 
-<a {href} class="{$$props.class} item">
+<a {href} class="{$$props.class} item" >
 	<span class="text-sm text-foreground">{title}</span>
 	{#if subtitle !== null}
 		<span class="text-xs text-muted-foreground">{subtitle}</span>

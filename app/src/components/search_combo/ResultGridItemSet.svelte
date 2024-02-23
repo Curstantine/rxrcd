@@ -25,7 +25,7 @@
 	</a>
 
 	{#if data.data !== null}
-		<div class="grid-list">
+		<div class="grid-list" class:replacing={data.replacing}>
 			{#each data["data"] as item}
 				<GridItem {...item} href="{child_href}/{item.id}" />
 			{/each}
@@ -49,5 +49,9 @@
 	.grid-list {
 		--at-apply: grid gap-y-2 pb-4;
 		grid-template-columns: repeat(auto-fill, minmax(0, 9rem));
+	}
+
+	.replacing {
+		--at-apply: pointer-events-none opacity-50;
 	}
 </style>

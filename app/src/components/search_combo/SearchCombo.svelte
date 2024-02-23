@@ -11,7 +11,7 @@
 
 	/** @type {import("@/types/search").SearchEntries} */
 	export let data;
-
+	
 	/** @type {() => void}*/
 	export let close;
 

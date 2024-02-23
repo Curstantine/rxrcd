@@ -1,7 +1,7 @@
-import { invoke } from "@tauri-apps/api";
-import { onDestroy, tick } from "svelte";
-import { location, pop } from "svelte-spa-router";
-import { derived, get, readonly, writable } from "svelte/store";
+import {invoke} from "@tauri-apps/api";
+import {onDestroy, tick} from "svelte";
+import {location, pop} from "svelte-spa-router";
+import {derived, get, readonly, writable} from "svelte/store";
 
 import debounce from "@/utils/debounce";
 
@@ -90,6 +90,12 @@ export function extort_search_state() {
 
 	/** @type {{ run: (arg0: string) => void, clear: () => void }} */
 	const { run: fetcher, clear: clearFetcher } = debounce(async (query) => {
+		entries.update(({ query, artists, albums }) => ({
+			query,
+			artists: artists !== null ? { ...artists, replacing: true } : null,
+			albums: albums !== null ? { ...albums, replacing: true } : null,
+		}));
+
 		try {
 			/** @type {import("@/types/deezer").AlbumSearch} */
 			const albums = await invoke("search_albums", { query });
@@ -103,11 +109,11 @@ export function extort_search_state() {
 			}));
 
 			entries.update(({ artists }) => {
-				return { artists, query, albums: { data, error: null } };
+				return { artists, query, albums: { data, replacing: false, error: null } };
 			});
 		} catch (e) {
 			entries.update(({ artists }) => {
-				return { artists, query, albums: { error: e.toString(), data: null } };
+				return { artists, query, albums: { error: e.toString(), replacing: false, data: null } };
 			});
 		}
 
@@ -119,11 +125,11 @@ export function extort_search_state() {
 			const data = artists.data.map(({ id, name }) => ({ id, title: name, subtitle: null }));
 
 			entries.update(({ albums }) => {
-				return { albums, query, artists: { data, error: null } };
+				return { albums, query, artists: { data, replacing: false, error: null } };
 			});
 		} catch (e) {
 			entries.update(({ albums }) => {
-				return { albums, query, artists: { error: e.toString(), data: null } };
+				return { albums, query, artists: { error: e.toString(), replacing: false, data: null } };
 			});
 		}
 	});

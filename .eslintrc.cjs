@@ -10,7 +10,7 @@ module.exports = defineConfig({
 	extends: [
 		"eslint:recommended",
 	],
-	ignorePatterns: ["**/dist", "**/node_modules"],
+	ignorePatterns: ["**/dist", "**/node_modules", "**/*.d.ts"],
 	overrides: [
 		{
 			env: {

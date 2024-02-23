@@ -25,7 +25,7 @@
 	</a>
 
 	{#if data.data !== null}
-		<div class="flex flex-col pb-4">
+		<div class="flex flex-col pb-4" class:replacing={data.replacing} >
 			{#each data["data"] as item}
 				<ListItem {...item} href="{child_href}/{item.id}" />
 			{/each}
@@ -44,3 +44,10 @@
 		<ListItemSkeleton />
 	</div>
 {/if}
+
+
+<style>
+	.replacing {
+		--at-apply: pointer-events-none opacity-50;
+	}
+</style>
