@@ -2,14 +2,14 @@ use reqwest::Client;
 
 use crate::{
 	constants::DEEZER_API_URL,
-	errors::Result,
+	errors::DeezerResult,
 	models::{
 		artist::{Artist, ArtistSearch},
 		search::SearchOptions,
 	},
 };
 
-pub async fn get_artist(client: &Client, id: u64) -> Result<Artist> {
+pub async fn get_artist(client: &Client, id: u64) -> DeezerResult<Artist> {
 	let url = format!("{DEEZER_API_URL}/artist/{id}");
 	let req = client.get(url).send().await?;
 	let body = req.json::<Artist>().await?;
@@ -17,8 +17,8 @@ pub async fn get_artist(client: &Client, id: u64) -> Result<Artist> {
 	Ok(body)
 }
 
-pub async fn search_artists(client: &Client, options: &SearchOptions<'_>) -> Result<ArtistSearch> {
-	let url = options.create_url("search/artist");
+pub async fn search_artists(client: &Client, options: &SearchOptions<'_>) -> DeezerResult<ArtistSearch> {
+	let url = options.create_url("search/artist")?;
 	let req = client.get(url).send().await?;
 	let body = req.json::<ArtistSearch>().await?;
 
@@ -30,7 +30,7 @@ mod tests {
 	use reqwest::Client;
 
 	use crate::{
-		errors::Result,
+		errors::DeezerResult,
 		models::{
 			artist::{Artist, ArtistSearch},
 			search::SearchOptions,
@@ -54,7 +54,7 @@ mod tests {
 	}
 
 	#[tokio::test]
-	async fn test_get_artist() -> Result<()> {
+	async fn test_get_artist() -> DeezerResult<()> {
 		let client = Client::default();
 		let out = super::get_artist(&client, 302127).await?;
 		println!("{out:#?}");
@@ -63,9 +63,9 @@ mod tests {
 	}
 
 	#[tokio::test]
-	async fn test_search_artists() -> Result<()> {
+	async fn test_search_artists() -> DeezerResult<()> {
 		let client = Client::default();
-		let options = SearchOptions::new("A", None, None, None);
+		let options = SearchOptions::with_query("A", None, None, None);
 
 		let out = super::search_artists(&client, &options).await?;
 		let mut index = out.total.clamp(0, 25);

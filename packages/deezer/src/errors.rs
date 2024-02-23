@@ -1,10 +1,11 @@
 use std::fmt;
 
-pub type Result<T> = std::result::Result<T, Error>;
+pub type DeezerResult<T> = Result<T, Error>;
 
 #[derive(Debug)]
 pub enum Error {
 	HttpError(reqwest::Error),
+	UrlParse(url::ParseError),
 }
 
 impl From<reqwest::Error> for Error {
@@ -13,10 +14,17 @@ impl From<reqwest::Error> for Error {
 	}
 }
 
+impl From<url::ParseError> for Error {
+	fn from(value: url::ParseError) -> Self {
+		Self::UrlParse(value)
+	}
+}
+
 impl fmt::Display for Error {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		match self {
-			Error::HttpError(err) => write!(f, "HTTP error: {}", err),
+			Error::HttpError(err) => write!(f, "HTTP error: {err}"),
+			Error::UrlParse(err) => write!(f, "URL parse error: {err}"),
 		}
 	}
 }

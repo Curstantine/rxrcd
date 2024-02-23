@@ -38,9 +38,10 @@ pub async fn search_artists(
 	let client_guard = network_state.get().await;
 	let client = client_guard.as_ref().unwrap();
 
-	let opts = SearchOptions::new(&query, Some(SearchOrder::ArtistDesc), limit.or(Some(6)), index);
+	let opts = SearchOptions::with_query(&query, Some(SearchOrder::ArtistDesc), limit.or(Some(6)), index);
 
 	deezer::artist::search_artists(client, &opts)
 		.await
 		.map_err(|e| PassiveError::from(anyhow!(e)))
 }
+
