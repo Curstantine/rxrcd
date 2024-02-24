@@ -1,7 +1,7 @@
-import {invoke} from "@tauri-apps/api";
-import {onDestroy, tick} from "svelte";
-import {location, pop} from "svelte-spa-router";
-import {derived, get, readonly, writable} from "svelte/store";
+import { invoke } from "@tauri-apps/api";
+import { onDestroy, tick } from "svelte";
+import { location, pop } from "svelte-spa-router";
+import { derived, get, readonly, writable } from "svelte/store";
 
 import debounce from "@/utils/debounce";
 
@@ -88,14 +88,16 @@ export function extort_search_state() {
 	/** @type {WritableSearchEntries} */
 	const entries = writable({ albums: null, query: "", artists: null });
 
-	/** @type {{ run: (arg0: string) => void, clear: () => void }} */
-	const { run: fetcher, clear: clearFetcher } = debounce(async (query) => {
+	const startReplacing = () => {
 		entries.update(({ query, artists, albums }) => ({
 			query,
 			artists: artists !== null ? { ...artists, replacing: true } : null,
 			albums: albums !== null ? { ...albums, replacing: true } : null,
 		}));
+	};
 
+	/** @type {{ run: (arg0: string) => void, clear: () => void }} */
+	const { run: fetcher, clear: clearFetcher } = debounce(async (query) => {
 		try {
 			/** @type {import("@/types/deezer").AlbumSearch} */
 			const albums = await invoke("search_albums", { query });
@@ -142,6 +144,7 @@ export function extort_search_state() {
 		}
 
 		if (str.length >= 3) {
+			startReplacing();
 			fetcher.call(undefined, str);
 		}
 

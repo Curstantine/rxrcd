@@ -1,6 +1,7 @@
 <script>
 	import ListItem from "@/components/items/ListItem.svelte";
 	import ListItemSkeleton from "@/components/items/ListItemSkeleton.svelte";
+	import ResultTitle from "@/components/search_combo/ResultTitle.svelte";
 
 	/** @type {string} */
 	export let label;
@@ -16,16 +17,10 @@
 </script>
 
 {#if data !== null}
-	<a
-		{href}
-		class="h-8 flex items-center justify-between px-2 text-muted-foreground transition-colors use-transition-standard hover:text-primary"
-	>
-		<span class="text-sm">{label}</span>
-		<div class="i-symbols-chevron-right h-5 w-5" />
-	</a>
+	<ResultTitle {href} {label} />
 
 	{#if data.data !== null}
-		<div class="flex flex-col pb-4" class:replacing={data.replacing} >
+		<div class="flex flex-col pb-4 transition-opacity use-transition-standard" class:replacing={data.replacing}>
 			{#each data["data"] as item}
 				<ListItem {...item} href="{child_href}/{item.id}" />
 			{/each}
@@ -44,7 +39,6 @@
 		<ListItemSkeleton />
 	</div>
 {/if}
-
 
 <style>
 	.replacing {

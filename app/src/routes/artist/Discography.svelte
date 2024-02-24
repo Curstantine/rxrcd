@@ -27,8 +27,8 @@
 
 		{#if $entries !== null && $entries[sub.key].length > 0}
 			<div class="grid-list">
-				{#each $entries[sub.key] as { id, title, release_date, cover_big }}
-					<GridItem href="/album/{id}" {title} subtitle={release_date} image={cover_big} />
+				{#each $entries[sub.key] as { id, title, release_date, cover_medium }}
+					<GridItem href="/album/{id}" {title} subtitle={release_date} image={cover_medium} />
 				{/each}
 			</div>
 		{:else if $entries === null}

@@ -57,6 +57,7 @@ export declare interface Album {
 	title: string;
 	link: string;
 	cover_small: string;
+	cover_medium: string;
 	cover_big: string;
 	artist: AlbumRelArtist;
 	genres: DeezerList<Genre>;

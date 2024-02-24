@@ -24,6 +24,7 @@ pub struct Album {
 	pub title: String,
 	pub link: String,
 	pub cover_small: String,
+	pub cover_medium: String,
 	pub cover_big: String,
 	pub artist: AlbumRelArtist,
 	pub genres: DeezerList<Genre>,
@@ -39,6 +40,7 @@ pub struct SearchRelAlbum {
 	pub title: String,
 	pub link: String,
 	pub cover_small: String,
+	pub cover_medium: String,
 	pub cover_big: String,
 	pub artist: AlbumRelArtist,
 }
@@ -49,6 +51,7 @@ pub struct ArtistRelAlbum {
 	pub title: String,
 	pub link: String,
 	pub cover_small: String,
+	pub cover_medium: String,
 	pub cover_big: String,
 	pub release_date: String,
 	pub record_type: AlbumRecordType,

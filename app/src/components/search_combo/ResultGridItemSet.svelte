@@ -1,6 +1,7 @@
 <script>
 	import GridItem from "@/components/items/GridItem.svelte";
 	import GridItemSkeleton from "@/components/items/GridItemSkeleton.svelte";
+	import ResultTitle from "@/components/search_combo/ResultTitle.svelte";
 
 	/** @type {string} */
 	export let label;
@@ -16,13 +17,7 @@
 </script>
 
 {#if data !== null}
-	<a
-		{href}
-		class="h-8 flex items-center justify-between px-2 text-muted-foreground transition-colors use-transition-standard hover:text-primary"
-	>
-		<span class="text-sm">{label}</span>
-		<div class="i-symbols-chevron-right h-5 w-5" />
-	</a>
+	<ResultTitle {href} {label} />
 
 	{#if data.data !== null}
 		<div class="grid-list" class:replacing={data.replacing}>
@@ -47,7 +42,7 @@
 
 <style>
 	.grid-list {
-		--at-apply: grid gap-y-2 pb-4;
+		--at-apply: grid gap-y-2 pb-4 transition-opacity use-transition-standard;
 		grid-template-columns: repeat(auto-fill, minmax(0, 9rem));
 	}
 
