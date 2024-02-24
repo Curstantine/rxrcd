@@ -45,7 +45,7 @@ pub async fn get_artist_albums(
 	let client_guard = network_state.get().await;
 	let client = client_guard.as_ref().unwrap();
 
-	let options = SearchOptions::new(Some(SearchOrder::AlbumAsc), limit.or(Some(50)), index);
+	let options = SearchOptions::new(Some(SearchOrder::AlbumAsc), limit.or(Some(100)), index);
 
 	deezer::album::get_artist_albums(client, artist_id, &options)
 		.await
