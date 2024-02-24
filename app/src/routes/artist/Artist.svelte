@@ -60,7 +60,7 @@
 		/>
 	</div>
 
-	<svelte:component this={$active_tab.component} />
+	<svelte:component this={$active_tab.component} data={albums} />
 </div>
 
 <style>

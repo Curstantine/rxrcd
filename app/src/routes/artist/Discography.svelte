@@ -1,22 +1,43 @@
 <script>
-	import GridItem from "@/components/items/GridItem.svelte";
+	import { derived } from "svelte/store";
 
+	import GridItem from "@/components/items/GridItem.svelte";
+	import GridItemSkeleton from "@/components/items/GridItemSkeleton.svelte";
+
+	/** @type {import("svelte/store").Readable<import("@/types/albums").DerivedAlbumList>} */
+	export let data;
+
+	const entries = derived(data, (val) => (val === null ? null : val["data"]));
+
+	/** @type {{ id: string, key: import("@/types/deezer").AlbumRecordType, title: string }[]} */
 	const subs = [
-		{ id: "albums", title: "Albums", items: new Array(8) },
-		{ id: "eps", title: "EPs", items: new Array(4) },
-		{ id: "singles", title: "Singles", items: new Array(2) },
-		{ id: "compilations", title: "Compilations", items: new Array(1) },
+		{ id: "albums", key: "album", title: "Albums" },
+		{ id: "eps", key: "ep", title: "EPs" },
+		{ id: "singles", key: "single", title: "Singles" },
+		{ id: "compilations", key: "compilation", title: "Compilations" },
 	];
 </script>
 
+<!-- TODO: if the total is more than limit, add a note to the user telling them search is limited, use the dedicated page. -->
 <div class="flex flex-col px-4 pt-4">
 	{#each subs as sub}
-		<h2 id={sub.id} class="pl-2 font-medium">{sub.title}</h2>
-		<div class="grid-list">
-			{#each sub.items as _}
-				<GridItem title="Test subject 2.0" subtitle="By testing" href="/" image={null} />
-			{/each}
-		</div>
+		{#if $entries === null || $entries[sub.key].length > 0}
+			<h2 id={sub.id} class="pl-2 font-medium">{sub.title}</h2>
+		{/if}
+
+		{#if $entries !== null && $entries[sub.key].length > 0}
+			<div class="grid-list">
+				{#each $entries[sub.key] as { id, title, release_date, cover_big }}
+					<GridItem href="/album/{id}" {title} subtitle={release_date} image={cover_big} />
+				{/each}
+			</div>
+		{:else if $entries === null}
+			<div class="grid-list">
+				{#each new Array(Math.floor(Math.random() * 6) + 1) as _}
+					<GridItemSkeleton />
+				{/each}
+			</div>
+		{/if}
 	{/each}
 </div>
 

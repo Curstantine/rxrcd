@@ -55,7 +55,7 @@ export function extort_data_state(id) {
 	/** @type {import("svelte/store").Writable<import("@/types/deezer").Artist | null>} */
 	const artist = writable(null);
 
-	/** @type {import("svelte/store").Writable<import("@/types/deezer").ArtistAlbumList | null>} */
+	/** @type {import("svelte/store").Writable<import("@/types/albums").DerivedAlbumList | null>} */
 	const albums = writable(null);
 
 	/** @param {number} id */
@@ -64,9 +64,19 @@ export function extort_data_state(id) {
 		artist.set(data);
 	}
 
+	/** @param {number} id */
 	async function get_artist_albums(id) {
-		const data = await invoke("get_artist_albums", { artist_id: id });
-		albums.set(data);
+		/** @type {import("@/types/deezer").ArtistAlbumList} */
+		const { next, total, data } = await invoke("get_artist_albums", { artistId: id });
+
+		/** @type {import("@/types/albums").DerivedAlbumList["data"]} */
+		const def = { album: [], ep: [], single: [], compilation: [] };
+		for (let i = 0; i < data.length; i++) {
+			const album = data[i];
+			def[album.record_type].push(album);
+		}
+
+		albums.set({ next, total, data: def });
 	}
 
 	id.subscribe((val) => {

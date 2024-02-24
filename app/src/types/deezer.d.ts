@@ -50,7 +50,7 @@ export declare interface TrackRelArtist {
 	name: string;
 }
 
-export declare type AlbumRecordType = "album" | "ep" | "single";
+export declare type AlbumRecordType = "album" | "ep" | "single" | "compilation";
 
 export declare interface Album {
 	id: number;
