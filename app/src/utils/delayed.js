@@ -5,7 +5,7 @@
  *
  * @return {{ run: (arg0: T) => void, clear: () => void }}
  */
-export default function debounce(func, delay = 1000) {
+export function debounce(func, delay = 1000) {
 	let timeoutId;
 
 	return {
@@ -15,4 +15,8 @@ export default function debounce(func, delay = 1000) {
 		},
 		clear: () => clearTimeout(timeoutId),
 	};
+}
+
+export async function wait(delay = 1000) {
+	await new Promise((resolve) => setTimeout(resolve, delay));
 }

@@ -1,6 +1,7 @@
 import { get, readonly, writable } from "svelte/store";
 
 import Discography from "@/routes/artist/Discography.svelte";
+import { wait } from "@/utils/delayed";
 import { invoke } from "@tauri-apps/api";
 
 /**
@@ -66,17 +67,49 @@ export function extort_data_state(id) {
 
 	/** @param {number} id */
 	async function get_artist_albums(id) {
-		/** @type {import("@/types/deezer").ArtistAlbumList} */
-		const { next, total, data } = await invoke("get_artist_albums", { artistId: id });
+		let index = 0;
 
-		/** @type {import("@/types/albums").DerivedAlbumList["data"]} */
-		const def = { album: [], ep: [], single: [], compilation: [] };
-		for (let i = 0; i < data.length; i++) {
-			const album = data[i];
-			def[album.record_type].push(album);
+		/** @returns {Promise<import("@/types/albums").DerivedAlbumList>} */
+		const fetch = async () => {
+			/** @type {import("@/types/deezer").ArtistAlbumList} */
+			const { next, total, data } = await invoke("get_artist_albums", { artistId: id, index });
+
+			/** @type {import("@/types/albums").DerivedAlbumList["data"]} */
+			const derive = { album: [], ep: [], single: [], compilation: [] };
+			for (let i = 0; i < data.length; i++) {
+				const album = data[i];
+				derive[album.record_type].push(album);
+			}
+
+			// Note(Curstantine):
+			// We can use the data.length property to calculate index but hey
+			if (next !== null) {
+				const nextUrl = new URL(next);
+				index += Number.parseInt(nextUrl.searchParams.get("index"));
+			}
+
+			return { next, total, data: derive };
+		};
+
+		albums.set(await fetch());
+
+		while (get(albums).next !== null) {
+			await wait(1000);
+
+			const { next, total, data } = await fetch();
+			albums.update(
+				({ data: { album: old_albums, compilation: old_compilations, ep: old_eps, single: old_single } }) => ({
+					next,
+					total,
+					data: {
+						album: old_albums.concat(data.album),
+						ep: old_eps.concat(data.ep),
+						single: old_single.concat(data.single),
+						compilation: old_compilations.concat(data.compilation),
+					},
+				}),
+			);
 		}
-
-		albums.set({ next, total, data: def });
 	}
 
 	id.subscribe((val) => {

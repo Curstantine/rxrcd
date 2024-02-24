@@ -3,7 +3,7 @@ import { onDestroy, tick } from "svelte";
 import { location, pop } from "svelte-spa-router";
 import { derived, get, readonly, writable } from "svelte/store";
 
-import debounce from "@/utils/debounce";
+import { debounce } from "@/utils/delayed";
 
 /**
  * @typedef {import("svelte/store").Readable<boolean>} ReadableBool
