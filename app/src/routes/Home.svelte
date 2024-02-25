@@ -1,4 +1,36 @@
 <script>
+	import { pushToSnackStack } from "@/components/snack/snack";
 </script>
 
-<div class="flex flex-1 overflow-y-auto px-4 py-2">hai home :3</div>
+<div class="flex flex-1 flex-col gap-2 overflow-y-auto px-2 px-4 py-2">
+	<span>hai home :3</span>
+
+	<div class="inline-flex gap-4">
+		<button
+			class="button-primary w-fit"
+			on:click={() => {
+				pushToSnackStack({ label: "Hai :3", description: "Hello from home snack button summoner! :D" });
+			}}
+		>
+			Snack message
+		</button>
+
+		<button
+			class="button-primary w-fit"
+			on:click={() => {
+				const instance = pushToSnackStack({
+					label: "Progress",
+					description: "This is progression snack instance message!",
+				});
+
+				for (let i = 0; i <= 20; i++) {
+					setTimeout(() => instance.update({ label: `Progress (${i}/20)` }), i * 2000);
+				}
+
+				setTimeout(() => instance.close(), 40000);
+			}}
+		>
+			Snack progression message
+		</button>
+	</div>
+</div>

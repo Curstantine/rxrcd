@@ -8,6 +8,7 @@
 	import { initialize_theme } from "@/utils/theme";
 
 	import Nav from "@/components/Nav.svelte";
+	import SnackBarManager from "@/components/snack/SnackBarManager.svelte";
 
 	onMount(async () => {
 		await invoke("setup");
@@ -20,3 +21,4 @@
 
 <Nav />
 <Router {routes} />
+<SnackBarManager />

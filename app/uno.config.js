@@ -99,6 +99,8 @@ export default defineConfig({
 		"use-transition-standard": "duration-standard ease-standard",
 		"use-transition-emphasized": "duration-emphasized ease-emphasized",
 
+		"button-primary": "rounded bg-primary px-4 py-1 text-primary-foreground",
+
 		"icon-button-layout":
 			"inline-flex items-center justify-center rounded transition-colors use-transition-standard",
 		"ghost-button":
