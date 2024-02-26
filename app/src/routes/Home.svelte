@@ -18,6 +18,19 @@
 		<button
 			class="w-fit button-primary"
 			on:click={() => {
+				pushToSnackStack({
+					persistent: true,
+					label: "Hai :3",
+					description: "Hello from home snack button summoner! :D",
+				});
+			}}
+		>
+			Persistent snack message
+		</button>
+
+		<button
+			class="w-fit button-primary"
+			on:click={() => {
 				const instance = pushToSnackStack({
 					persistent: true,
 					label: "Progress",
