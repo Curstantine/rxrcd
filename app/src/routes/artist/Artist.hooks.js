@@ -1,8 +1,9 @@
+import { invoke } from "@tauri-apps/api";
 import { get, readonly, writable } from "svelte/store";
 
+import { pushToSnackStack } from "@/components/snack/snack";
 import Discography from "@/routes/artist/Discography.svelte";
 import { wait } from "@/utils/delayed";
-import { invoke } from "@tauri-apps/api";
 
 /**
  * @typedef {{ id: string, label: string, component: import("svelte").ComponentType | null }} TabItem
@@ -67,12 +68,17 @@ export function extort_data_state(id) {
 
 	/** @param {number} id */
 	async function get_artist_albums(id) {
-		let index = 0;
+		const limit = 50;
 
-		/** @returns {Promise<import("@/types/albums").DerivedAlbumList>} */
-		const fetch = async () => {
+		/**
+		 * @param index {number}
+		 * @param limit {number}
+		 *
+		 * @returns {Promise<import("@/types/albums").DerivedAlbumList>}
+		 */
+		const fetch = async (index, limit) => {
 			/** @type {import("@/types/deezer").ArtistAlbumList} */
-			const { next, total, data } = await invoke("get_artist_albums", { artistId: id, index });
+			const { next, total, data } = await invoke("get_artist_albums", { artistId: id, index, limit });
 
 			/** @type {import("@/types/albums").DerivedAlbumList["data"]} */
 			const derive = { album: [], ep: [], single: [], compilation: [] };
@@ -81,22 +87,32 @@ export function extort_data_state(id) {
 				derive[album.record_type].push(album);
 			}
 
-			// Note(Curstantine):
-			// We can use the data.length property to calculate index but hey
-			if (next !== null) {
-				const nextUrl = new URL(next);
-				index += Number.parseInt(nextUrl.searchParams.get("index"));
-			}
-
 			return { next, total, data: derive };
 		};
 
-		albums.set(await fetch());
+		const init_fetch = await fetch(0, limit);
+		albums.set(init_fetch);
 
-		while (get(albums).next !== null) {
-			await wait(1000);
+		const fetch_est = Math.floor(init_fetch.total / limit);
+		const snack_session = pushToSnackStack({
+			persistent: true,
+			label: "Retrieving data",
+			description: "Fetching missing artist data...",
+		});
 
-			const { next, total, data } = await fetch();
+		let index = 0;
+		let human_idx = 1;
+		let next_url = new URL(init_fetch.next);
+
+		while (next_url !== null) {
+			index = Number.parseInt(next_url.searchParams.get("index"));
+
+			await wait(2000);
+			snack_session.update({ label: `Retrieving albums (${human_idx}/${fetch_est})` });
+
+			const { next, total, data } = await fetch(index, limit);
+			next_url = next !== null ? new URL(next) : null;
+
 			albums.update(
 				({ data: { album: old_albums, compilation: old_compilations, ep: old_eps, single: old_single } }) => ({
 					next,
@@ -109,7 +125,11 @@ export function extort_data_state(id) {
 					},
 				}),
 			);
+
+			human_idx++;
 		}
+
+		snack_session.close();
 	}
 
 	id.subscribe((val) => {

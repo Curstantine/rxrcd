@@ -1,4 +1,5 @@
 use reqwest::Client;
+use tracing::debug;
 
 use crate::{
 	constants::DEEZER_API_URL,
@@ -9,28 +10,37 @@ use crate::{
 	},
 };
 
+#[tracing::instrument(skip(client))]
 pub async fn get_album(client: &Client, id: u64) -> DeezerResult<Album> {
 	let url = format!("{DEEZER_API_URL}/album/{id}");
+	debug!("Fetch request to {url}");
+
 	let req = client.get(url).send().await?;
 	let body = req.json::<Album>().await?;
 
 	Ok(body)
 }
 
+#[tracing::instrument(skip(client))]
 pub async fn search_albums(client: &Client, options: &SearchOptions<'_>) -> DeezerResult<AlbumSearch> {
 	let url = options.create_url("search/album")?;
+	debug!("Fetch request to {url}");
+
 	let req = client.get(url).send().await?;
 	let body = req.json::<AlbumSearch>().await?;
 
 	Ok(body)
 }
 
+#[tracing::instrument(skip(client))]
 pub async fn get_artist_albums(
 	client: &Client,
 	artist_id: u64,
 	options: &SearchOptions<'_>,
 ) -> DeezerResult<ArtistAlbumList> {
 	let url = options.create_url(&format!("artist/{artist_id}/albums"))?;
+	debug!("Fetch request to {url}");
+
 	let req = client.get(url).send().await?;
 	let body = req.json::<ArtistAlbumList>().await?;
 
