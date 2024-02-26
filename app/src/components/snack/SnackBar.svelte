@@ -3,6 +3,12 @@
 	import { cubicIn, cubicOut } from "svelte/easing";
 
 	/** @type {number} */
+	let offsetHeight;
+
+	/** @type {boolean} */
+	export let expand;
+
+	/** @type {number} */
 	export let index;
 
 	/** @type {number} */
@@ -11,13 +17,16 @@
 	/** @type {import("svelte/store").Readable<import("@/types/snack").SnackInstance>} */
 	export let data;
 
-	let turnover = length - (index + 1) * 12;
+	$: turnover = length - (index + 1);
+	$: yCoefficient = expand ? turnover * (offsetHeight + 12) : turnover * 12;
 </script>
 
 <div
-	class="fixed bottom-6 right-4 min-h-14 min-w-xs flex border-(1 border solid) rounded bg-background p-2 shadow"
-	in:fly={{ y: 100 + turnover, duration: 300, easing: cubicOut }}
+	bind:offsetHeight
+	class="fixed right-4 min-h-14 min-w-xs flex transform-gpu border-(1 border solid) rounded bg-background p-2 shadow transition-bottom use-transition-emphasized"
+	in:fly={{ y: 100, duration: 300, easing: cubicOut }}
 	out:fly={{ y: 100, duration: 300, easing: cubicIn }}
+	style="bottom: calc(1.5rem + {yCoefficient}px);"
 >
 	<div class="h-fit flex flex-col">
 		<span class="text-foreground font-medium">{$data.label}</span>

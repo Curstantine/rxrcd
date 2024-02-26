@@ -7,7 +7,7 @@
 
 	<div class="inline-flex gap-4">
 		<button
-			class="button-primary w-fit"
+			class="w-fit button-primary"
 			on:click={() => {
 				pushToSnackStack({ label: "Hai :3", description: "Hello from home snack button summoner! :D" });
 			}}
@@ -16,9 +16,10 @@
 		</button>
 
 		<button
-			class="button-primary w-fit"
+			class="w-fit button-primary"
 			on:click={() => {
 				const instance = pushToSnackStack({
+					persistent: true,
 					label: "Progress",
 					description: "This is progression snack instance message!",
 				});
