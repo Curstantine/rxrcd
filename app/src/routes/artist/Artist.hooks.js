@@ -92,6 +92,7 @@ export function extort_data_state(id) {
 
 		const init_fetch = await fetch(0, limit);
 		albums.set(init_fetch);
+		if (init_fetch.next === null) return;
 
 		const fetch_est = Math.floor(init_fetch.total / limit);
 		const snack_session = pushToSnackStack({

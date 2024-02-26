@@ -72,3 +72,12 @@ body {
 	--ring: 240 4.9% 83.9%;
 	color-scheme: dark;
 }
+
+::-webkit-scrollbar {
+	background-color: transparent;
+	--at-apply: w-3;
+}
+
+::-webkit-scrollbar-thumb {
+	--at-apply: bg-muted;
+}
