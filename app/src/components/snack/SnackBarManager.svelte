@@ -63,7 +63,7 @@
 </ul>
 
 <style>
-	ul:not(.expand) {
+	ul:not(.expanded) {
 		--at-apply: max-h-0;
 	}
 </style>
