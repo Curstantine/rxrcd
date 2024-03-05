@@ -141,6 +141,7 @@ export function extort_search_state() {
 		if (!get(show) && str.length >= 3) {
 			show.set(true);
 			entries.set({ albums: null, query: str, artists: null });
+			clearFetcher.call(undefined);
 		}
 
 		if (str.length >= 3) {
@@ -149,7 +150,7 @@ export function extort_search_state() {
 		}
 
 		return () => {
-			clearFetcher();
+			clearFetcher.call(undefined);
 		};
 	});
 
