@@ -1,4 +1,6 @@
 <script>
+	import { onMount } from "svelte";
+
 	/** @type {string} */
 	export let href;
 
@@ -10,11 +12,28 @@
 
 	/** @type {string | null} */
 	export let image;
+
+	/** @type {HTMLDivElement} */
+	let ref;
+
+	let is_img_visible = false;
+
+	onMount(() => {
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => (is_img_visible = entry.isIntersecting));
+		});
+
+		observer.observe(ref);
+
+		return () => {
+			observer.unobserve(ref);
+		};
+	});
 </script>
 
-<div class="{$$props.class} flex flex-col px-2 py-1 w-36 use-transition-standard transition-colors">
+<div bind:this={ref} class="{$$props.class} flex flex-col px-2 py-1 w-36 use-transition-standard transition-colors">
 	<a {href} class="cover">
-		{#if image !== null}
+		{#if image !== null && is_img_visible}
 			<img src={image} alt="{title} Cover Preview" class="w-full rounded" />
 		{/if}
 	</a>
