@@ -13,6 +13,8 @@
 	/** @type {string | null} */
 	export let image;
 
+	export let small = false;
+
 	/** @type {HTMLDivElement} */
 	let ref;
 
@@ -31,8 +33,8 @@
 	});
 </script>
 
-<div bind:this={ref} class="{$$props.class} flex flex-col px-2 py-1 w-36 use-transition-standard transition-colors">
-	<a {href} class="cover">
+<div bind:this={ref} class:small class="{$$props.class} item">
+	<a {href} class="aspect-square">
 		{#if image !== null && is_img_visible}
 			<img src={image} alt="{title} Cover Preview" class="w-full rounded" />
 		{/if}
@@ -46,8 +48,20 @@
 </div>
 
 <style>
+	.item {
+		--at-apply: flex flex-col use-transition-standard transition-colors;
+	}
+
+	.item:not(.small) {
+		--at-apply: w-42;
+	}
+
+	.item.small {
+		--at-apply: w-36;
+	}
+
 	.cover {
-		--at-apply: inline-flex h-32 w-32 items-center justify-center border-(1 border solid) rounded;
+		--at-apply: inline-flex items-center justify-center h-42 w-42 border-(1 border solid) rounded;
 	}
 
 	.cover:hover {

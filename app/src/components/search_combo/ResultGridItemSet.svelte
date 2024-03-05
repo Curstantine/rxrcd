@@ -22,7 +22,7 @@
 	{#if data.data !== null}
 		<div class="grid-list" class:replacing={data.replacing}>
 			{#each data["data"] as item}
-				<GridItem {...item} href="{child_href}/{item.id}" />
+				<GridItem {...item} small href="{child_href}/{item.id}" />
 			{/each}
 		</div>
 	{/if}
@@ -34,15 +34,15 @@
 		<div class="h-3 w-3 rounded-full bg-secondary" />
 	</div>
 	<div class="grid-list">
-		<GridItemSkeleton />
-		<GridItemSkeleton />
-		<GridItemSkeleton />
+		<GridItemSkeleton small />
+		<GridItemSkeleton small />
+		<GridItemSkeleton small />
 	</div>
 {/if}
 
 <style>
 	.grid-list {
-		--at-apply: grid gap-y-2 pb-4 transition-opacity use-transition-standard;
+		--at-apply: grid gap-4 pb-4 pt-2 px-2 transition-opacity use-transition-standard;
 		grid-template-columns: repeat(auto-fill, minmax(0, 9rem));
 	}
 

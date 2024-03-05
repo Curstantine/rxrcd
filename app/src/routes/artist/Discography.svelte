@@ -43,7 +43,7 @@
 
 <style>
 	.grid-list {
-		--at-apply: grid gap-y-2 pt-1 pb-6;
-		grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+		--at-apply: grid gap-4 pt-3 pb-6 px-2;
+		grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
 	}
 </style>
