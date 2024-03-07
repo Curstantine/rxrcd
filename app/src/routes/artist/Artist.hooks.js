@@ -2,19 +2,18 @@ import { invoke } from "@tauri-apps/api";
 import { get, readonly, writable } from "svelte/store";
 
 import { pushToSnackStack } from "@/components/snack/snack";
-import Discography from "@/routes/artist/Discography.svelte";
 import { wait } from "@/utils/delayed";
 
 /**
- * @typedef {{ id: string, label: string, component: import("svelte").ComponentType | null }} TabItem
+ * @typedef {{ id: string, label: string, rel_type: import("@/types/deezer").AlbumRecordType | null }} TabItem
  * @type {TabItem[]}
  */
 export const tabs = [
-	{ id: "tab_discography", label: "Discography", component: Discography },
-	{ id: "tab_albums", label: "Albums", component: null },
-	{ id: "tab_eps", label: "EPs", component: null },
-	{ id: "tab_singles", label: "Singles", component: null },
-	{ id: "tab_compilations", label: "Compilations", component: null },
+	{ id: "tab_discography", rel_type: null, label: "Discography" },
+	{ id: "tab_albums", rel_type: "album", label: "Albums" },
+	{ id: "tab_eps", rel_type: "ep", label: "EPs" },
+	{ id: "tab_singles", rel_type: "single", label: "Singles" },
+	{ id: "tab_compilations", rel_type: "compilation", label: "Compilations" },
 ];
 
 export function extort_tab_state() {

@@ -7,6 +7,8 @@
 	/** @type {import("svelte/store").Readable<import("@/types/albums").DerivedAlbumList>} */
 	export let data;
 
+	export const type = null;
+
 	const entries = derived(data, (val) => (val === null ? null : val["data"]));
 
 	/** @type {{ id: string, key: import("@/types/deezer").AlbumRecordType, title: string }[]} */
@@ -18,7 +20,6 @@
 	];
 </script>
 
-<!-- TODO: if the total is more than limit, add a note to the user telling them search is limited, use the dedicated page. -->
 <div class="flex flex-col px-4 pt-4">
 	{#each subs as sub}
 		{#if $entries === null || $entries[sub.key].length > 0}
