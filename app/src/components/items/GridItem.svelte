@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from "svelte";
 	import { fade } from "svelte/transition";
+	import { link } from "svelte-spa-router";
 
 	/** @type {string} */
 	export let href;
@@ -35,7 +36,7 @@
 </script>
 
 <div bind:this={ref} class:small class="{$$props.class} item">
-	<a {href} class="aspect-square">
+	<a use:link {href} class="aspect-square">
 		{#if image !== null && is_img_visible}
 			<img in:fade={{ duration: 300 }} height="256" width="256" src={image} alt="{title} Cover Preview" />
 		{/if}

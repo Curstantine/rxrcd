@@ -1,4 +1,6 @@
 <script>
+	import { link } from "svelte-spa-router";
+
 	/** @type {string} */
 	export let href;
 
@@ -9,7 +11,7 @@
 	export let subtitle;
 </script>
 
-<a {href} class="{$$props.class} item" >
+<a use:link {href} class="{$$props.class} item">
 	<span class="text-sm text-foreground">{title}</span>
 	{#if subtitle !== null}
 		<span class="text-xs text-muted-foreground">{subtitle}</span>

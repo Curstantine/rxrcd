@@ -1,4 +1,6 @@
 <script>
+	import { link } from "svelte-spa-router";
+
 	/** @type {string} */
 	export let label;
 
@@ -8,6 +10,7 @@
 
 <a
 	{href}
+	use:link
 	class="h-8 flex items-center justify-between px-2 text-muted-foreground transition-colors use-transition-standard hover:text-primary"
 >
 	<span class="text-sm">{label}</span>
