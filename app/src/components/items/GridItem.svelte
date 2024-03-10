@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from "svelte";
+	import { fade } from "svelte/transition";
 
 	/** @type {string} */
 	export let href;
@@ -17,12 +18,12 @@
 
 	/** @type {HTMLDivElement} */
 	let ref;
-
 	let is_img_visible = false;
 
 	onMount(() => {
-		const observer = new IntersectionObserver((entries) => {
+		const observer = new IntersectionObserver((entries, ob) => {
 			entries.forEach((entry) => (is_img_visible = entry.isIntersecting));
+			if (is_img_visible) ob.unobserve(ref);
 		});
 
 		observer.observe(ref);
@@ -36,7 +37,7 @@
 <div bind:this={ref} class:small class="{$$props.class} item">
 	<a {href} class="aspect-square">
 		{#if image !== null && is_img_visible}
-			<img src={image} alt="{title} Cover Preview" class="w-full rounded" />
+			<img in:fade={{ duration: 300 }} height="256" width="256" src={image} alt="{title} Cover Preview" />
 		{/if}
 	</a>
 

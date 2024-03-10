@@ -3,6 +3,7 @@ import { get, readonly, writable } from "svelte/store";
 
 import { pushToSnackStack } from "@/components/snack/snack";
 import { wait } from "@/utils/delayed";
+import { transform_to_map } from "@/utils/transformer";
 
 /**
  * @typedef {{ id: string, label: string, rel_type: import("@/types/deezer").AlbumRecordType | null }} TabItem
@@ -78,6 +79,7 @@ export function extort_data_state(id) {
 		const fetch = async (index, limit) => {
 			/** @type {import("@/types/deezer").ArtistAlbumList} */
 			const { next, total, data } = await invoke("get_artist_albums", { artistId: id, index, limit });
+			data.forEach((x) => transform_to_map(x, [["release_date", "LOCALE_DATE_STRING"]]));
 
 			/** @type {import("@/types/albums").DerivedAlbumList["data"]} */
 			const derive = { album: [], ep: [], single: [], compilation: [] };
