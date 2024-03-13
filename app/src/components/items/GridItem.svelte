@@ -38,7 +38,14 @@
 <div bind:this={ref} class:small class="{$$props.class} item">
 	<a use:link {href} class="aspect-square">
 		{#if image !== null && is_img_visible}
-			<img in:fade={{ duration: 300 }} height="256" width="256" src={image} alt="{title} Cover Preview" />
+			<img
+				in:fade={{ duration: 300 }}
+				height="256"
+				width="256"
+				src={image}
+				alt="{title} Cover Preview"
+				class="rounded"
+			/>
 		{/if}
 	</a>
 
