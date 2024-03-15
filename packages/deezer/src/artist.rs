@@ -10,7 +10,6 @@ use crate::{
 	},
 };
 
-#[tracing::instrument(skip(client))]
 pub async fn get_artist(client: &Client, id: u64) -> DeezerResult<Artist> {
 	let url = format!("{DEEZER_API_URL}/artist/{id}");
 	debug!("Fetch request to {url}");
@@ -21,7 +20,6 @@ pub async fn get_artist(client: &Client, id: u64) -> DeezerResult<Artist> {
 	Ok(body)
 }
 
-#[tracing::instrument(skip(client))]
 pub async fn search_artists(client: &Client, options: &SearchOptions<'_>) -> DeezerResult<ArtistSearch> {
 	let url = options.create_url("search/artist")?;
 	debug!("Fetch request to {url}");

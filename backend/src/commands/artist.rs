@@ -1,6 +1,5 @@
 use anyhow::anyhow;
 use deezer::models::artist::{Artist, ArtistSearch};
-use tracing::info;
 
 use {
 	deezer::models::search::{SearchOptions, SearchOrder},
@@ -15,8 +14,6 @@ use crate::{
 #[tauri::command]
 #[tracing::instrument(skip(network_state), err(Debug))]
 pub async fn get_artist(id: u64, network_state: State<'_, NetworkClientState>) -> CommandResult<Artist> {
-	info!("get_artist called with {id}");
-
 	let client_guard = network_state.get().await;
 	let client = client_guard.as_ref().unwrap();
 
@@ -33,8 +30,6 @@ pub async fn search_artists(
 	index: Option<u32>,
 	network_state: State<'_, NetworkClientState>,
 ) -> CommandResult<ArtistSearch> {
-	info!("search_artists called with {query:?} (limit: {limit:?}, index: {index:?})");
-
 	let client_guard = network_state.get().await;
 	let client = client_guard.as_ref().unwrap();
 
@@ -44,4 +39,3 @@ pub async fn search_artists(
 		.await
 		.map_err(|e| PassiveError::from(anyhow!(e)))
 }
-
