@@ -95,15 +95,23 @@ export default defineConfig({
 			sm: "calc(var(--radius) - 4px)",
 		},
 	},
+
 	shortcuts: {
 		"use-transition-standard": "duration-standard ease-standard",
 		"use-transition-emphasized": "duration-emphasized ease-emphasized",
 
-		"button-primary": "rounded bg-primary px-4 py-1 text-primary-foreground",
-
+		"button-layout":
+			"inline-flex justify-center items-center gap-2 rounded-md px-4 py-1 use-transition-standard transition-colors",
 		"icon-button-layout":
-			"inline-flex items-center justify-center rounded transition-colors use-transition-standard",
-		"ghost-button":
+			"inline-flex justify-center  items-center rounded-md transition-colors use-transition-standard",
+
+		"button-variant-ghost":
 			"text-muted-foreground hover:(bg-secondary text-foreground) disabled:(opacity-50 hover:(bg-transparent text-muted-foreground))",
+
+		"button-primary": "button-layout bg-primary text-primary-foreground hover:bg-primary/90",
+		"button-ghost": "button-layout  button-variant-ghost",
+
+		"icon-button": "icon-button-layout border-(1 solid border) aspect-square hover:(bg-secondary)",
+		"icon-button-ghost": "icon-button-layout button-variant-ghost",
 	},
 });

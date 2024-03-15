@@ -12,14 +12,14 @@
 
 <div class="sticky inset-x-0 top-0 z-20 flex bg-background/95 px-4 py-2 backdrop-blur-xl space-x-4">
 	<div class="inline-flex space-x-2">
-		<a href="#/" class="h-8 w-8 icon-button-layout ghost-button">
+		<a href="#/" class="icon-button-ghost h-8 w-8">
 			<div class="i-symbols-home-rounded h-5 w-5" class:text-foreground={$location === "/"} />
 		</a>
 
-		<button on:click={back} class="h-8 w-8 icon-button-layout ghost-button" disabled={$back_disabled}>
+		<button on:click={back} class="icon-button-ghost h-8 w-8" disabled={$back_disabled}>
 			<div class="i-symbols-chevron-left h-5 w-5" />
 		</button>
-		<button on:click={forward} class="h-8 w-8 icon-button-layout ghost-button" disabled={$forward_disabled}>
+		<button on:click={forward} class="icon-button-ghost h-8 w-8" disabled={$forward_disabled}>
 			<div class="i-symbols-chevron-right h-5 w-5" />
 		</button>
 	</div>
@@ -32,7 +32,7 @@
 		{/if}
 	</div>
 
-	<a href="#/settings" class="h-8 w-8 icon-button-layout ghost-button">
+	<a href="#/settings" class="icon-button-ghost h-8 w-8">
 		<div class="i-symbols-settings-rounded h-5 w-5" class:text-foreground={$location === "/settings"} />
 	</a>
 </div>
