@@ -34,7 +34,7 @@ export default defineConfig({
 	theme: {
 		fontFamily: {
 			system:
-				"system-ui, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
+				"Inter, \"Segoe UI\", Roboto, Helvetica, Arial, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
 		},
 		easing: {
 			emphasized: "cubic-bezier(0.4, 0.0, 0.2, 1.0)",
@@ -101,14 +101,14 @@ export default defineConfig({
 		"use-transition-emphasized": "duration-emphasized ease-emphasized",
 
 		"button-layout":
-			"inline-flex justify-center items-center gap-2 rounded-md px-4 py-1 use-transition-standard transition-colors",
+			"inline-flex justify-center items-center gap-2 rounded-md px-4 py-1 font-medium text-sm use-transition-standard transition-colors",
 		"icon-button-layout":
-			"inline-flex justify-center  items-center rounded-md transition-colors use-transition-standard",
+			"inline-flex justify-center  items-center rounded-md font-medium text-sm use-transition-standard transition-colors",
 
 		"button-variant-ghost":
 			"text-muted-foreground hover:(bg-secondary text-foreground) disabled:(opacity-50 hover:(bg-transparent text-muted-foreground))",
 
-		"button-primary": "button-layout bg-primary text-primary-foreground hover:bg-primary/90",
+		"button-primary": "button-layout shadow bg-primary text-primary-foreground hover:bg-primary/90",
 		"button-ghost": "button-layout  button-variant-ghost",
 
 		"icon-button": "icon-button-layout border-(1 solid border) aspect-square hover:(bg-secondary)",

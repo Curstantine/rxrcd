@@ -28,7 +28,7 @@
 				<img src={$artist.picture_big} alt="{$artist.name}'s Avatar" class="w-full rounded-full" />
 			</div>
 
-			<div class="flex flex-col pl-6 text-sm text-muted-foreground space-y-2">
+			<div class="flex flex-col pl-6 text-sm text-muted-foreground space-y-1">
 				<h1 class="select-text text-4xl text-foreground font-bold">{$artist.name}</h1>
 				<div class="flex gap-2">
 					<span>{$artist.nb_fan.toLocaleString()} fans</span> ·
