@@ -1,4 +1,5 @@
 <script>
+	import EmptyListItem from "@/components/items/EmptyListItem.svelte";
 	import GridItem from "@/components/items/GridItem.svelte";
 	import GridItemSkeleton from "@/components/items/GridItemSkeleton.svelte";
 	import ResultTitle from "@/components/search_combo/ResultTitle.svelte";
@@ -17,14 +18,16 @@
 </script>
 
 {#if data !== null}
-	<ResultTitle {href} {label} />
+	<ResultTitle {href} {label} disabled={data?.data?.length === 0} />
 
-	{#if data.data !== null}
+	{#if data.data?.length > 0}
 		<div class="grid-list" class:replacing={data.replacing}>
 			{#each data["data"] as item}
 				<GridItem {...item} small href="{child_href}/{item.id}" />
 			{/each}
 		</div>
+	{:else}
+		<EmptyListItem />
 	{/if}
 {:else}
 	<div
