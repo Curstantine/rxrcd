@@ -13,7 +13,7 @@
 
 <div class="flex flex-col">
 	<div class="info_bar">
-		<div class="grid-area-[artwork] mr-8 aspect-square h-52 w-52 rounded-lg bg-secondary">
+		<div class="grid-area-[artwork] mr-8 aspect-square h-64 w-64 rounded-lg bg-secondary">
 			<!-- <img src={$artist.picture_big} alt="{$artist.name}'s Avatar" class="w-full rounded-full" /> -->
 		</div>
 
@@ -43,12 +43,19 @@
 	</div>
 
 	<div class="flex flex-col px-8 py-4">
+		<div class="h-10 inline-flex items-center px-4 text-sm text-muted-foreground font-medium">
+			<span class="w-10">#</span>
+			<span class="max-w-lg flex-1">Title</span>
+			<span class="flex-1">Featuring Artists</span>
+			<span class="mr-8">Length</span>
+		</div>
 		{#each new Array(12) as _, i}
 			<div class="song-entry">
 				<span class="w-10">{i + 1}.</span>
-				<span class="flex-1 text-foreground">do-re-mi-fa-so-la-ti-do</span>
+				<span class="max-w-lg flex-1 text-foreground">do-re-mi-fa-so-la-ti-do</span>
+				<span class="flex-1">{i === 4 ? "Totally Enormous Extinct Dinosaurs" : "-"}</span>
 				<span>3:34</span>
-				<button class="ml-2 w-8 icon-button-layout">
+				<button class="ml-6 w-8 icon-button-layout">
 					<div class="i-symbols-more-horiz h-4 w-4" />
 				</button>
 			</div>
