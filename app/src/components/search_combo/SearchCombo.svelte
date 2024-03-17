@@ -1,13 +1,12 @@
 <script>
-	import { onDestroy, onMount } from "svelte";
 	import { fade } from "svelte/transition";
 	import { bounceIn, bounceOut } from "svelte/easing";
 
 	import ResultListItemSet from "@/components/search_combo/ResultListItemSet.svelte";
 	import ResultGridItemSet from "@/components/search_combo/ResultGridItemSet.svelte";
 
-	/** @type {HTMLDivElement}*/
-	let div;
+	/** @type {string} ID to ignore when input goes out of focus, usually an input field that initiates the search combo */
+	export let coupling_id;
 
 	/** @type {import("@/types/search").SearchEntries} */
 	export let data;
@@ -15,21 +14,24 @@
 	/** @type {() => void}*/
 	export let close;
 
-	/**
-	 *
-	 * @param e {PointerEvent & { target: HTMLDivElement }}
-	 */
-	function external_hit_listener(e) {
-		if (e.target.id === "search_input") return;
-		if (!div.contains(e.target)) close.call(null);
-	}
+	/** @type {import("svelte/action").Action} */
+	function extern_hit(node) {
+		/** @param e {PointerEvent & { target: HTMLDivElement }} */
+		function listener(e) {
+			if (e.target.id === coupling_id) return;
+			if (!node.contains(e.target)) close.call(null);
+		}
 
-	onMount(() => document.addEventListener("click", external_hit_listener));
-	onDestroy(() => document.removeEventListener("click", external_hit_listener));
+		document.addEventListener("click", listener);
+
+		return {
+			destroy: () => document.removeEventListener("click", listener),
+		};
+	}
 </script>
 
 <div
-	bind:this={div}
+	use:extern_hit
 	in:fade={{ duration: 500, easing: bounceIn }}
 	out:fade={{ duration: 500, easing: bounceOut }}
 	class="absolute inset-x-0 top-12 grid grid-cols-1 max-h-md overflow-y-auto border-(1 border solid) rounded bg-background p-2 shadow"
