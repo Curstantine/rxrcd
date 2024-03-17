@@ -41,7 +41,19 @@
 			</button>
 		</div>
 	</div>
-	<span>{$id}</span>
+
+	<div class="flex flex-col px-8 py-4">
+		{#each new Array(12) as _, i}
+			<div class="song-entry">
+				<span class="w-10">{i + 1}.</span>
+				<span class="flex-1 text-foreground">do-re-mi-fa-so-la-ti-do</span>
+				<span>3:34</span>
+				<button class="ml-2 w-8 icon-button-layout">
+					<div class="i-symbols-more-horiz h-4 w-4" />
+				</button>
+			</div>
+		{/each}
+	</div>
 </div>
 
 <style>
@@ -51,5 +63,14 @@
 			"artwork headings headings"
 			"artwork headings headings"
 			"artwork primary-actions secondary-actions";
+	}
+
+	.song-entry {
+		--at-apply: h-10 inline-flex items-center rounded-md pl-4 pr-2 text-sm text-muted-foreground transition-colors
+			use-transition-standard;
+	}
+
+	.song-entry:hover {
+		--at-apply: bg-muted/50;
 	}
 </style>

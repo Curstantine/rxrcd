@@ -103,7 +103,7 @@ export default defineConfig({
 		"button-layout":
 			"inline-flex justify-center items-center gap-2 rounded-md px-4 py-1 font-medium text-sm use-transition-standard transition-colors",
 		"icon-button-layout":
-			"inline-flex justify-center  items-center rounded-md font-medium text-sm use-transition-standard transition-colors",
+			"inline-flex justify-center items-center aspect-square rounded-md font-medium text-sm use-transition-standard transition-colors",
 
 		"button-variant-ghost":
 			"text-muted-foreground hover:(bg-secondary text-foreground) disabled:(opacity-50 hover:(bg-transparent text-muted-foreground))",
@@ -111,7 +111,7 @@ export default defineConfig({
 		"button-primary": "button-layout shadow bg-primary text-primary-foreground hover:bg-primary/90",
 		"button-ghost": "button-layout  button-variant-ghost",
 
-		"icon-button": "icon-button-layout border-(1 solid border) aspect-square hover:(bg-secondary)",
+		"icon-button": "icon-button-layout border-(1 solid border) hover:(bg-secondary)",
 		"icon-button-ghost": "icon-button-layout button-variant-ghost",
 	},
 });
