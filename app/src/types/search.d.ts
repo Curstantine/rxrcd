@@ -1,4 +1,4 @@
-declare type Result<T, E> = { data: T | null; error: E | null; replacing: boolean; };
+declare type Result<T, E> = { data: T | null; error: E | null; replacing: boolean };
 export declare type SearchEntryBaseResult = Result<SearchEntryBase[], string>;
 export declare type SearchEntryIEResult = Result<SearchEntryIE[], string>;
 

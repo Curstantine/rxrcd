@@ -32,8 +32,8 @@ export declare interface Artist {
 	id: number;
 	name: string;
 	tracklist: string;
-	picture_small: string;
-	picture_big: string;
+	picture_small: string | null;
+	picture_big: string | null;
 	nb_album: number;
 	nb_fan: number;
 }
@@ -41,8 +41,8 @@ export declare interface Artist {
 export declare interface AlbumRelArtist {
 	id: number;
 	name: string;
-	picture_small: string;
-	picture_big: string;
+	picture_small: string | null;
+	picture_big: string | null;
 }
 
 export declare interface TrackRelArtist {
@@ -56,9 +56,9 @@ export declare interface Album {
 	id: number;
 	title: string;
 	link: string;
-	cover_small: string;
-	cover_medium: string;
-	cover_big: string;
+	cover_small: string | null;
+	cover_medium: string | null;
+	cover_big: string | null;
 	artist: AlbumRelArtist;
 	genres: DeezerList<Genre>;
 	tracks: DeezerList<Track>;
