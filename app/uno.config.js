@@ -101,12 +101,11 @@ export default defineConfig({
 		"use-transition-emphasized": "duration-emphasized ease-emphasized",
 
 		"button-layout":
-			"inline-flex justify-center items-center gap-2 rounded-md px-4 py-1 font-medium text-sm use-transition-standard transition-colors",
+			"inline-flex justify-center items-center gap-2 rounded-md px-4 py-1 font-medium text-sm use-transition-standard transition-colors disabled:(opacity-50 pointer-events-none)",
 		"icon-button-layout":
-			"inline-flex justify-center items-center aspect-square rounded-md font-medium text-sm use-transition-standard transition-colors",
+			"inline-flex justify-center items-center aspect-square rounded-md font-medium text-sm use-transition-standard transition-colors disabled:(opacity-50 pointer-events-none)",
 
-		"button-variant-ghost":
-			"text-muted-foreground hover:(bg-secondary text-foreground) disabled:(opacity-50 hover:(bg-transparent text-muted-foreground))",
+		"button-variant-ghost": "text-muted-foreground hover:(bg-secondary text-foreground)",
 
 		"button-primary": "button-layout shadow bg-primary text-primary-foreground hover:bg-primary/90",
 		"button-ghost": "button-layout  button-variant-ghost",

@@ -1,6 +1,8 @@
 <script>
 	import { writable } from "svelte/store";
 
+	import { extort_data_state } from "@/routes/album/Album.hook";
+
 	/** @type {{ id?: string }} */
 	export let params = {};
 
@@ -9,34 +11,51 @@
 	// causing data to stay stale. We can fix that by listening to id and hoisting it as a readable.
 	const id = writable(params.id);
 	$: $id = params.id;
+
+	const { album } = extort_data_state(id);
 </script>
 
 <div class="flex flex-col">
 	<div class="info_bar">
-		<div class="grid-area-[artwork] mr-8 aspect-square h-64 w-64 rounded-lg bg-secondary">
-			<!-- <img src={$artist.picture_big} alt="{$artist.name}'s Avatar" class="w-full rounded-full" /> -->
-		</div>
-
-		<div class="grid-area-[headings] max-w-sm flex flex-col self-center">
-			<h1 class="select-text text-4xl text-foreground font-bold">Nurture</h1>
-			<h1 class="select-text text-xl text-primary">Porter Robinson</h1>
-			<div class="flex gap-2 pt-1 text-sm text-muted-foreground">
-				<span>14 tracks</span> ·
-				<span>58 minutes</span> ·
-				<span>{new Date("2021-04-24").toLocaleDateString()}</span> ·
-				<span>3,766 fans</span>
+		{#if $album !== null}
+			<div class="artwork">
+				<img src={$album.cover_big ?? ""} alt="{$album.title} cover" class="w-full rounded-md" />
 			</div>
-		</div>
+
+			<div class="headings">
+				<h1 class="select-text text-4xl text-foreground font-bold">{$album.title}</h1>
+				<h1 class="select-text text-xl text-primary">{$album.artist.name}</h1>
+				<div class="flex items-center gap-2 pt-1 text-sm text-muted-foreground">
+					<span>{$album.tracks?.data.length ?? "N/A"} tracks</span> ·
+					<span>58 minutes</span> ·
+					<span>{new Date($album.release_date).toLocaleDateString()}</span> ·
+					<span>3,766 fans</span>
+				</div>
+			</div>
+		{:else}
+			<div class="artwork animate-pulse use-transition-standard" />
+			<div class="headings gap-2">
+				<div class="h-6 w-48 animate-pulse rounded bg-secondary" />
+				<div class="h-4 w-24 animate-pulse rounded bg-secondary" />
+				<div class="flex items-center gap-1 pt-2">
+					<div class="h-3 w-16 animate-pulse rounded bg-secondary" />
+					·
+					<div class="h-3 w-16 animate-pulse rounded bg-secondary" />
+					·
+					<div class="h-3 w-16 animate-pulse rounded bg-secondary" />
+				</div>
+			</div>
+		{/if}
 
 		<div class="grid-area-[primary-actions] h-8 flex">
-			<button class="button-primary">
+			<button class="button-primary" disabled={$album === null}>
 				<div class="i-symbols-download-rounded h-4 w-4" />
 				Download
 			</button>
 		</div>
 
 		<div class="grid-area-[secondary-actions] h-8 flex">
-			<button class="icon-button">
+			<button class="icon-button" disabled={$album === null}>
 				<div class="i-symbols-more-vert h-4 w-4" />
 			</button>
 		</div>
@@ -55,7 +74,7 @@
 				<span class="max-w-lg flex-1 text-foreground">do-re-mi-fa-so-la-ti-do</span>
 				<span class="flex-1">{i === 4 ? "Totally Enormous Extinct Dinosaurs" : "-"}</span>
 				<span>3:34</span>
-				<button class="ml-6 w-8 icon-button-layout">
+				<button class="ml-6 icon-button-layout w-8">
 					<div class="i-symbols-more-horiz h-4 w-4" />
 				</button>
 			</div>
@@ -70,6 +89,16 @@
 			"artwork headings headings"
 			"artwork headings headings"
 			"artwork primary-actions secondary-actions";
+	}
+
+	.artwork {
+		grid-area: artwork;
+		--at-apply: mr-8 aspect-square h-64 w-64 rounded-lg bg-secondary;
+	}
+
+	.headings {
+		grid-area: headings;
+		--at-apply: max-w-sm flex flex-col self-center;
 	}
 
 	.song-entry {
