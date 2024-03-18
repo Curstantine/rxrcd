@@ -1,5 +1,5 @@
 use anyhow::anyhow;
-use deezer::models::album::{AlbumSearch, ArtistAlbumList};
+use deezer::models::album::{Album, AlbumSearch, ArtistAlbumList};
 
 use {
 	deezer::models::search::{SearchOptions, SearchOrder},
@@ -10,6 +10,17 @@ use crate::{
 	errors::{CommandResult, PassiveError},
 	state::NetworkClientState,
 };
+
+#[tauri::command]
+#[tracing::instrument(skip(network_state), err(Debug))]
+pub async fn get_album(id: u64, network_state: State<'_, NetworkClientState>) -> CommandResult<Album> {
+	let client_guard = network_state.get().await;
+	let client = client_guard.as_ref().unwrap();
+
+	deezer::album::get_album(client, id)
+		.await
+		.map_err(|e| PassiveError::from(anyhow!(e)))
+}
 
 #[tauri::command]
 #[tracing::instrument(skip(network_state), err(Debug))]
