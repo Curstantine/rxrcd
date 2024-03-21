@@ -2,6 +2,7 @@
 	import { writable } from "svelte/store";
 
 	import { extort_data_state } from "@/routes/album/Album.hook";
+	import TrackEntrySet from "@/components/TrackEntrySet.svelte";
 
 	/** @type {{ id?: string }} */
 	export let params = {};
@@ -61,25 +62,7 @@
 		</div>
 	</div>
 
-	<div class="flex flex-col px-8 py-4">
-		<div class="h-10 inline-flex items-center px-4 text-sm text-muted-foreground font-medium">
-			<span class="w-10">#</span>
-			<span class="max-w-lg flex-1">Title</span>
-			<span class="flex-1">Featuring Artists</span>
-			<span class="mr-8">Length</span>
-		</div>
-		{#each new Array(12) as _, i}
-			<div class="song-entry">
-				<span class="w-10">{i + 1}.</span>
-				<span class="max-w-lg flex-1 text-foreground">do-re-mi-fa-so-la-ti-do</span>
-				<span class="flex-1">{i === 4 ? "Totally Enormous Extinct Dinosaurs" : "-"}</span>
-				<span>3:34</span>
-				<button class="ml-6 icon-button-layout w-8">
-					<div class="i-symbols-more-horiz h-4 w-4" />
-				</button>
-			</div>
-		{/each}
-	</div>
+	<TrackEntrySet tracks={$album !== null ? $album.tracks.data : null} />
 </div>
 
 <style>
@@ -99,14 +82,5 @@
 	.headings {
 		grid-area: headings;
 		--at-apply: max-w-sm flex flex-col self-center;
-	}
-
-	.song-entry {
-		--at-apply: h-10 inline-flex items-center rounded-md pl-4 pr-2 text-sm text-muted-foreground transition-colors
-			use-transition-standard;
-	}
-
-	.song-entry:hover {
-		--at-apply: bg-muted/50;
 	}
 </style>

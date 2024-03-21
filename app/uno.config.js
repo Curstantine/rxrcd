@@ -112,5 +112,7 @@ export default defineConfig({
 
 		"icon-button": "icon-button-layout border-(1 solid border) hover:(bg-secondary)",
 		"icon-button-ghost": "icon-button-layout button-variant-ghost",
+
+		skeletal: "animate-pulse rounded bg-secondary use-transition-emphasized",
 	},
 });

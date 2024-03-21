@@ -10,7 +10,6 @@ export function extort_data_state(id) {
 	async function get_track_data(id) {
 		/** @type {import("@/types/deezer").Album} */
 		const result = await invoke("get_album", { id });
-
 		album.set(result);
 	}
 
