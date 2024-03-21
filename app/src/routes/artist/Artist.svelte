@@ -4,7 +4,13 @@
 	import Discography from "@/routes/artist/Discography.svelte";
 	import DistinctAlbumPages from "@/routes/artist/DistinctAlbumPages.svelte";
 
-	import { tabs, extort_tab_state, extort_data_state, style_tab } from "@/routes/artist/Artist.hooks.js";
+	import {
+		tabs,
+		extort_tab_state,
+		extort_data_state,
+		style_tab,
+		style_tab_bar,
+	} from "@/routes/artist/Artist.hooks.js";
 
 	/** @type {{ id?: string }} */
 	export let params = {};
@@ -49,7 +55,7 @@
 		{/if}
 	</div>
 
-	<div class="sticky top-12 flex gap-2 bg-background/95 px-6 backdrop-blur-xl">
+	<div use:style_tab_bar style="--un-bg-color-opacity: 1;" class="tab_bar">
 		{#each tabs as { id, label }}
 			<button {id} class="tab" class:active={$active_tab.id === id} on:click={on_tab_click}>{label}</button>
 		{/each}
@@ -68,6 +74,10 @@
 </div>
 
 <style>
+	.tab_bar {
+		--at-apply: sticky top-12 flex gap-2 bg-background/[--un-bg-color-opacity] px-6 backdrop-blur-xl;
+	}
+
 	.tab {
 		--at-apply: h-12 px-2 text-sm text-muted-foreground use-transition-standard transition-colors;
 	}

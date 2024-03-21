@@ -16,7 +16,7 @@
 	const { album } = extort_data_state(id);
 </script>
 
-<div class="flex flex-col">
+<div class="flex flex-col container">
 	<div class="info_bar">
 		{#if $album !== null}
 			<div class="artwork">

@@ -52,6 +52,32 @@ export function style_tab(node, active_tab) {
 	};
 }
 
+/**
+ *  @param {HTMLDivElement} node
+ */
+export function style_tab_bar(node) {
+	const app = document.getElementById("app");
+	let marked = false;
+
+	const styler = () => {
+		if (!marked && app.scrollTop >= node.offsetTop) {
+			node.style.setProperty("--un-bg-color-opacity", "0.95");
+			return marked = true;
+		}
+
+		if (marked && node.offsetTop > app.scrollTop) {
+			node.style.setProperty("--un-bg-color-opacity", "1");
+			return marked = false;
+		}
+	};
+
+	app.addEventListener("scroll", styler);
+
+	return {
+		destroy: () => app.removeEventListener("scroll", styler),
+	};
+}
+
 /** @param {import("svelte/store").Readable<string>} id */
 export function extort_data_state(id) {
 	/** @type {import("svelte/store").Writable<import("@/types/deezer").Artist | null>} */

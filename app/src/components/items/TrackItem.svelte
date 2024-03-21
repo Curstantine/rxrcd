@@ -1,4 +1,6 @@
 <script>
+	import { link } from "svelte-spa-router";
+
 	/** @type {number} */
 	export let id;
 
@@ -14,13 +16,17 @@
 	/** @type {string} */
 	export let length;
 
+	$: artist_url = feat_artist !== null ? `/artist/${feat_artist.id}` : "javascript:void(0)";
+
 	const onMoreClick = () => id;
 </script>
 
 <div class="entry">
 	<span class="w-10">{index}.</span>
 	<span class="max-w-lg flex-1 text-foreground">{title}</span>
-	<span class="flex-1">{feat_artist?.name ?? "-"}</span>
+	<a use:link href={artist_url} class="flex-1 hover:underline">
+		{feat_artist?.name ?? "-"}
+	</a>
 	<span>{length}</span>
 	<button class="ml-6 w-8 icon-button-layout" on:click={onMoreClick}>
 		<div class="i-symbols-more-horiz h-4 w-4" />
