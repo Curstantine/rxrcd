@@ -27,7 +27,7 @@
 	const tab_rel_type = derived(active_tab, ({ rel_type }) => rel_type);
 </script>
 
-<div class="flex flex-col">
+<div class="flex flex-col container">
 	<div class="h-64 flex items-center p-6">
 		{#if $artist !== null}
 			<div class="h-48 w-48 rounded-full bg-secondary">
