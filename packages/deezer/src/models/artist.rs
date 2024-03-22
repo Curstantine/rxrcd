@@ -22,9 +22,3 @@ pub struct AlbumRelArtist {
 	pub picture_small: Option<String>,
 	pub picture_big: Option<String>,
 }
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct TrackRelArtist {
-	pub id: u32,
-	pub name: String,
-}

@@ -1,6 +1,8 @@
 <script>
 	import { link } from "svelte-spa-router";
 
+	import { secondsToFormattedDuration } from "@/utils/time";
+
 	/** @type {number} */
 	export let id;
 
@@ -10,13 +12,14 @@
 	/** @type {string} */
 	export let title;
 
-	/** @type {import("@/types/deezer").TrackRelArtist | null} */
+	/** @type {unknown | null} */
 	export let feat_artist;
 
-	/** @type {string} */
-	export let length;
+	/** @type {number} */
+	export let duration;
 
-	$: artist_url = feat_artist !== null ? `/artist/${feat_artist.id}` : "javascript:void(0)";
+	// TODO: make this id of feat_artist
+	$: artist_url = feat_artist !== null ? `/artist/${feat_artist}` : "javascript:void(0)";
 
 	const onMoreClick = () => id;
 </script>
@@ -25,9 +28,9 @@
 	<span class="w-10">{index}.</span>
 	<span class="max-w-lg flex-1 text-foreground">{title}</span>
 	<a use:link href={artist_url} class="flex-1 hover:underline">
-		{feat_artist?.name ?? "-"}
+		{feat_artist ?? "-"}
 	</a>
-	<span>{length}</span>
+	<span>{secondsToFormattedDuration(duration)}</span>
 	<button class="ml-6 w-8 icon-button-layout" on:click={onMoreClick}>
 		<div class="i-symbols-more-horiz h-4 w-4" />
 	</button>

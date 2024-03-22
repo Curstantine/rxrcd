@@ -15,8 +15,8 @@
 	</div>
 
 	{#if tracks !== null}
-		{#each tracks as { id, title, artist: feat_artist }, i}
-			<TrackItem {id} {title} {feat_artist} index={i + 1} length="3:36" />
+		{#each tracks as { id, title, duration }, i}
+			<TrackItem {id} {title} {duration} index={i + 1} feat_artist={null} />
 		{/each}
 	{:else}
 		{#each new Array(12) as _}

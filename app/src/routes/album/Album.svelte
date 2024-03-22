@@ -62,6 +62,12 @@
 		</div>
 	</div>
 
+	<!-- 
+		TODO: Deezer's API on featuring artists is convoluted. Right now, nothing is shown in the featuring artist field because the endpoint we fetch do not return it.
+		We'd either have to do a fetch per each track to get feat. credit or migrate to graphql which I want to avoid at all costs.
+
+		More info: https://x.com/Curstantine/status/1771208750658994408
+	-->
 	<TrackEntrySet tracks={$album !== null ? $album.tracks.data : null} />
 </div>
 

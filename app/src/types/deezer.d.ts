@@ -25,7 +25,7 @@ export declare interface Track {
 	title: string;
 	explicit_lyrics: boolean;
 	preview: string;
-	artist: TrackRelArtist;
+	duration: number;
 }
 
 export declare interface Artist {
@@ -43,11 +43,6 @@ export declare interface AlbumRelArtist {
 	name: string;
 	picture_small: string | null;
 	picture_big: string | null;
-}
-
-export declare interface TrackRelArtist {
-	id: number;
-	name: string;
 }
 
 export declare type AlbumRecordType = "album" | "ep" | "single" | "compilation";
