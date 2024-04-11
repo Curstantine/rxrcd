@@ -7,8 +7,8 @@
 		"build:app": "pnpm --filter app run build"
 	},
 	"devDependencies": {
-		"@tauri-apps/cli": "^1.5.10",
-		"dprint": "^0.45.0",
+		"@tauri-apps/cli": "^1.5.11",
+		"dprint": "^0.45.1",
 		"eslint-define-config": "^2.1.0"
 	}
 }

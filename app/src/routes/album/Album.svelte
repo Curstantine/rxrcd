@@ -1,5 +1,6 @@
 <script>
 	import { writable } from "svelte/store";
+	import { link } from "svelte-spa-router";
 
 	import { extort_data_state } from "@/routes/album/Album.hook";
 	import TrackEntrySet from "@/components/TrackEntrySet.svelte";
@@ -25,7 +26,9 @@
 
 			<div class="headings">
 				<h1 class="select-text text-4xl text-foreground font-bold">{$album.title}</h1>
-				<h1 class="select-text text-xl text-primary">{$album.artist.name}</h1>
+				<a use:link href="/artist/{$album.artist.id}" class="select-text text-xl text-primary">
+					{$album.artist.name}
+				</a>
 				<div class="flex items-center gap-2 pt-1 text-sm text-muted-foreground">
 					<span>{$album.tracks?.data.length ?? "N/A"} tracks</span> ·
 					<span>58 minutes</span> ·

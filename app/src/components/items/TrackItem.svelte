@@ -19,7 +19,7 @@
 	export let duration;
 
 	// TODO: make this id of feat_artist
-	$: artist_url = feat_artist !== null ? `/artist/${feat_artist}` : "javascript:void(0)";
+	$: artist_url = feat_artist !== null ? `/artist/${feat_artist}` : "/";
 
 	const onMoreClick = () => id;
 </script>
@@ -27,7 +27,7 @@
 <div class="entry">
 	<span class="w-10">{index}.</span>
 	<span class="max-w-lg flex-1 text-foreground">{title}</span>
-	<a use:link href={artist_url} class="flex-1 hover:underline">
+	<a use:link href={artist_url} class="flex-1 hover:underline" class:pointer-events-none={feat_artist === null}>
 		{feat_artist ?? "-"}
 	</a>
 	<span>{secondsToFormattedDuration(duration)}</span>
