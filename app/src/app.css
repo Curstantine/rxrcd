@@ -1,3 +1,5 @@
+@import "@unocss/reset/tailwind.css";
+
 :root {
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
@@ -16,7 +18,7 @@ body {
 }
 
 #app {
-	--at-apply: bg-background text-foreground m-0 h-screen overflow-y-auto;
+	--at-apply: m-0 h-screen grid grid-rows-[auto_1fr] bg-background text-foreground overflow-y-auto;
 }
 
 :root {
