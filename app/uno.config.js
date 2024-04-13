@@ -1,4 +1,3 @@
-import extractorSvelte from "@unocss/extractor-svelte";
 import {
 	defineConfig,
 	presetIcons,
@@ -30,7 +29,6 @@ export default defineConfig({
 		transformerDirectives(),
 		transformerVariantGroup(),
 	],
-	extractors: [extractorSvelte()],
 	theme: {
 		fontFamily: {
 			system:

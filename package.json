@@ -2,13 +2,16 @@
 	"name": "rxrcd",
 	"author": "Curstantine",
 	"license": "MIT",
+	"type": "module",
 	"scripts": {
 		"dev:app": "pnpm --filter app run dev",
 		"build:app": "pnpm --filter app run build"
 	},
 	"devDependencies": {
+		"@eslint/js": "^9.0.0",
 		"@tauri-apps/cli": "^1.5.11",
 		"dprint": "^0.45.1",
-		"eslint-define-config": "^2.1.0"
+		"eslint": "^9.0.0",
+		"globals": "^15.0.0"
 	}
 }

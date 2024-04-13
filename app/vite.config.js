@@ -1,11 +1,10 @@
+import { sveltekit } from "@sveltejs/kit/vite";
+import unocss from "@unocss/svelte-scoped/vite";
 import { resolve as resolvePath } from "node:path";
-
-import { svelte } from "@sveltejs/vite-plugin-svelte";
-import unocss from "unocss/vite";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-	plugins: [unocss(), svelte()],
+	plugins: [unocss({ injectReset: "@unocss/reset/tailwind.css" }), sveltekit()],
 	server: {
 		port: 5173,
 		strictPort: true,
