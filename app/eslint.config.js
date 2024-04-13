@@ -4,7 +4,7 @@ import svelte from "eslint-plugin-svelte";
 import globals from "globals";
 
 /** @type {import('eslint').Linter.FlatConfig[]} */
-export default [
+const config = [
 	js.configs.recommended,
 	unocss,
 	...svelte.configs["flat/recommended"],
@@ -13,3 +13,5 @@ export default [
 		ignores: ["build/", ".svelte-kit/", "package/"],
 	},
 ];
+
+export default config;
