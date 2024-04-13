@@ -14,7 +14,10 @@
 
 	"files.exclude": {
 		"**/target": true,
-		"**/dist": true
+		"**/dist": true,
+		"**/node_modules": true,
+		"**/.svelte-kit": true,
+		"**/build": true
 	},
 	"cSpell.words": [
 		"Deezer",
