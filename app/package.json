@@ -1,5 +1,5 @@
 {
-	"name": "app-ssg",
+	"name": "app",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
@@ -10,17 +10,20 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
 		"lint": "eslint ."
 	},
-	"devDependencies": {
+	"dependencies": {
 		"@iconify-json/material-symbols": "^1.1.78",
+		"@tauri-apps/api": "^1.5.3",
+		"@unocss/reset": "^0.58.9"
+	},
+	"devDependencies": {
 		"@iconify/types": "^2.0.0",
 		"@sveltejs/adapter-auto": "^3.2.0",
 		"@sveltejs/kit": "^2.5.5",
 		"@sveltejs/vite-plugin-svelte": "^3.1.0",
-		"@tauri-apps/api": "^1.5.3",
 		"@types/eslint": "^8.56.9",
 		"@types/node": "^20.12.7",
 		"@unocss/eslint-config": "^0.59.2",
-		"@unocss/reset": "^0.58.9",
+		"@unocss/svelte-scoped": "^0.59.2",
 		"eslint": "^9.0.0",
 		"eslint-plugin-svelte": "^2.37.0",
 		"globals": "^15.0.0",
