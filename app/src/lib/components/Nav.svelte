@@ -1,5 +1,5 @@
 <script>
-	import { location } from "svelte-spa-router";
+	import { page } from "$app/stores";
 
 	import Input from "$lib/components/Input.svelte";
 	import SearchCombo from "$lib/components/search_combo/SearchCombo.svelte";
@@ -14,8 +14,8 @@
 
 <div class="sticky inset-x-0 top-0 z-20 h-12 flex items-center bg-background/95 px-4 backdrop-blur-xl space-x-4">
 	<div class="inline-flex space-x-2">
-		<a href="#/" class="h-8 w-8 icon-button-ghost">
-			<div class="i-symbols-home-rounded h-5 w-5" class:text-foreground={$location === "/"} />
+		<a href="/" class="h-8 w-8 icon-button-ghost">
+			<div class="i-symbols-home-rounded h-5 w-5" class:text-foreground={$page.url.pathname === "/"} />
 		</a>
 
 		<button on:click={back} class="h-8 w-8 icon-button-ghost" disabled={$back_disabled}>
@@ -34,7 +34,7 @@
 		{/if}
 	</div>
 
-	<a href="#/settings" class="h-8 w-8 icon-button-ghost">
-		<div class="i-symbols-settings-rounded h-5 w-5" class:text-foreground={$location === "/settings"} />
+	<a href="/settings" class="h-8 w-8 icon-button-ghost">
+		<div class="i-symbols-settings-rounded h-5 w-5" class:text-foreground={$page.url.pathname === "/settings"} />
 	</a>
 </div>

@@ -16,15 +16,17 @@
 
 	/** @type {import("svelte/action").Action} */
 	function extern_hit(node) {
-		/** @param e {PointerEvent & { target: HTMLDivElement }} */
+		/** @param e {MouseEvent & { target: HTMLDivElement }} */
 		function listener(e) {
 			if (e.target.id === coupling_id) return;
 			if (!node.contains(e.target)) close.call(null);
 		}
 
+		// @ts-expect-error We already know the event.target is a div
 		document.addEventListener("click", listener);
 
 		return {
+			// @ts-expect-error We already know the event.target is a div
 			destroy: () => document.removeEventListener("click", listener),
 		};
 	}

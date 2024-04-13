@@ -19,8 +19,8 @@
 			<TrackItem {id} {title} {duration} index={i + 1} feat_artist={null} />
 		{/each}
 	{:else}
-		{#each new Array(12) as _}
-			<TrackItemSkeleton />
-		{/each}
+		<TrackItemSkeleton />
+		<TrackItemSkeleton />
+		<TrackItemSkeleton />
 	{/if}
 </div>
