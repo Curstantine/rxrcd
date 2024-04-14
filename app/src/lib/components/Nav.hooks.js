@@ -1,7 +1,8 @@
 import { invoke } from "@tauri-apps/api";
 import { onDestroy, tick } from "svelte";
-import { location, pop } from "svelte-spa-router";
 import { derived, get, readonly, writable } from "svelte/store";
+
+import { onNavigate } from "$app/navigation";
 
 import { debounce } from "$lib/utils/delayed";
 
@@ -12,7 +13,7 @@ import { debounce } from "$lib/utils/delayed";
  * @returns {[[ReadableBool, ReadableBool], { back: VoidFunction, forward: VoidFunction }]} [[back_disabled, forward_disabled], { back, forward }]
  */
 export function extort_nav_state() {
-	/** @type {string[]} */
+	/** @type {URL[]} */
 	const stack = [];
 	let internal = false;
 
@@ -27,8 +28,10 @@ export function extort_nav_state() {
 	 * If it is, we ignore since we are just traversing the stack.
 	 * If not, we need to check if the user has pressed "back" before and remove the future tree from that index accordingly.
 	 */
-	const un_sub = location.subscribe((url) => {
+	onNavigate(({ to }) => {
 		const index = get(current_index);
+
+		if (to === null) throw Error("onNavigation 'to' was null.");
 
 		// We don't want to mutate history_stack if the action comes from a internal back/forth change.
 		if (internal) {
@@ -38,7 +41,7 @@ export function extort_nav_state() {
 
 		// We don't want to mutate current_index in the initial render, so the "/" path won't start back/forth.
 		if (stack.length === 0) {
-			stack.push(url);
+			stack.push(to.url);
 			return;
 		}
 
@@ -47,10 +50,10 @@ export function extort_nav_state() {
 		if (index !== stack.length - 1) {
 			const current_pos = index + 1;
 
-			stack.splice(current_pos, stack.length - current_pos, url);
+			stack.splice(current_pos, stack.length - current_pos, to.url);
 			current_index.set(stack.length - 1);
 		} else {
-			stack.push(url);
+			stack.push(to.url);
 			current_index.update((index) => index + 1);
 		}
 	});
@@ -58,7 +61,7 @@ export function extort_nav_state() {
 	const back = async () => {
 		internal = true;
 		current_index.update((index) => index - 1);
-		await pop();
+		window.history.back();
 	};
 
 	const forward = async () => {
@@ -68,8 +71,6 @@ export function extort_nav_state() {
 		await tick();
 		window.history.forward();
 	};
-
-	onDestroy(un_sub);
 
 	return [[back_disabled, forward_disabled], { back, forward }];
 }
@@ -115,7 +116,16 @@ export function extort_search_state() {
 			});
 		} catch (e) {
 			entries.update(({ artists }) => {
-				return { artists, query, albums: { error: e.toString(), replacing: false, data: null } };
+				return {
+					artists,
+					query,
+					albums: {
+						// @ts-ignore
+						error: e.toString(),
+						replacing: false,
+						data: null,
+					},
+				};
 			});
 		}
 
@@ -131,6 +141,7 @@ export function extort_search_state() {
 			});
 		} catch (e) {
 			entries.update(({ albums }) => {
+				// @ts-ignore
 				return { albums, query, artists: { error: e.toString(), replacing: false, data: null } };
 			});
 		}
@@ -158,6 +169,7 @@ export function extort_search_state() {
 		show.set(false);
 	};
 
+	// @ts-ignore
 	const location_un_sub = location.subscribe(() => close());
 
 	onDestroy(() => {

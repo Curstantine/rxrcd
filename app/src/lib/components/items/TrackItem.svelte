@@ -1,6 +1,4 @@
 <script>
-	import { link } from "svelte-spa-router";
-
 	import { secondsToFormattedDuration } from "$lib/utils/time";
 
 	/** @type {number} */
@@ -27,7 +25,7 @@
 <div class="entry">
 	<span class="w-10">{index}.</span>
 	<span class="max-w-lg flex-1 text-foreground">{title}</span>
-	<a use:link href={artist_url} class="flex-1 hover:underline" class:pointer-events-none={feat_artist === null}>
+	<a href={artist_url} class="flex-1 hover:underline" class:pointer-events-none={feat_artist === null}>
 		{feat_artist ?? "-"}
 	</a>
 	<span>{secondsToFormattedDuration(duration)}</span>
