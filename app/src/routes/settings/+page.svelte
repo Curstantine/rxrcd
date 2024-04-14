@@ -1,9 +1,6 @@
 <script>
 	import SettingsHeading from "$lib/components/SettingsHeading.svelte";
 	import SettingsNavigationItem from "$lib/components/items/SettingsNavigationItem.svelte";
-
-	/** @type {import('./$types').PageData} */
-	export let data;
 </script>
 
 <main class="grid grid-cols-[16rem_1fr] w-full 2xl:container">
