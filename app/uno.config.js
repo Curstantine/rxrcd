@@ -99,7 +99,7 @@ export default defineConfig({
 		"use-transition-emphasized": "duration-emphasized ease-emphasized",
 
 		"button-layout":
-			"inline-flex justify-center items-center gap-2 rounded-md px-4 py-1 font-medium text-sm use-transition-standard transition-colors disabled:(opacity-50 pointer-events-none)",
+			"inline-flex justify-center items-center gap-2 rounded-md px-4 py-1 font-medium text-sm use-transition-standard transition-colors select-none disabled:(opacity-50 pointer-events-none)",
 		"icon-button-layout":
 			"inline-flex justify-center items-center aspect-square rounded-md font-medium text-sm use-transition-standard transition-colors disabled:(opacity-50 pointer-events-none)",
 

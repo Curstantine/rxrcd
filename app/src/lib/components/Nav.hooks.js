@@ -169,12 +169,8 @@ export function extort_search_state() {
 		show.set(false);
 	};
 
-	// @ts-ignore
-	const location_un_sub = location.subscribe(() => close());
-
 	onDestroy(() => {
 		search_un_sub();
-		location_un_sub();
 	});
 
 	return [[readonly(show), search], readonly(entries), { close }];
