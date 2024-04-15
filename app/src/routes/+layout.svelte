@@ -5,7 +5,7 @@
 
 	import { initialize_theme } from "$lib/utils/theme";
 
-	import Nav from "$lib/components/Nav.svelte";
+	import Nav from "$lib/components/nav/Nav.svelte";
 	import SnackBarManager from "$lib/components/snack/SnackBarManager.svelte";
 
 	onMount(async () => {

@@ -2,8 +2,8 @@
 	import { fade } from "svelte/transition";
 	import { bounceIn, bounceOut } from "svelte/easing";
 
-	import ResultListItemSet from "$lib/components/search_combo/ResultListItemSet.svelte";
-	import ResultGridItemSet from "$lib/components/search_combo/ResultGridItemSet.svelte";
+	import ResultListItemSet from "./ResultListItemSet.svelte";
+	import ResultGridItemSet from "./ResultGridItemSet.svelte";
 
 	/** @type {string} ID to ignore when input goes out of focus, usually an input field that initiates the search combo */
 	export let coupling_id;

@@ -1,8 +1,9 @@
 <script>
 	import EmptyListItem from "$lib/components/items/EmptyListItem.svelte";
-	import ListItem from "$lib/components/items/ListItem.svelte";
-	import ListItemSkeleton from "$lib/components/items/ListItemSkeleton.svelte";
-	import ResultTitle from "$lib/components/search_combo/ResultTitle.svelte";
+	import GridItem from "$lib/components/items/GridItem.svelte";
+	import GridItemSkeleton from "$lib/components/items/GridItemSkeleton.svelte";
+
+	import ResultTitle from "./ResultTitle.svelte";
 
 	/** @type {string} */
 	export let label;
@@ -13,18 +14,17 @@
 	/** @type {string} */
 	export let child_href;
 
-	/** @type {import("$lib/types/search").SearchEntryBaseResult | null} */
+	/** @type {import("$lib/types/search").SearchEntryIEResult | null} */
 	export let data;
 </script>
 
 {#if data !== null}
 	<ResultTitle {href} {label} disabled={data?.data?.length === 0} />
 
-	<!-- TODO: Handle errors -->
-	{#if !!data.data && data.data.length > 0}
-		<div class="flex flex-col pb-4 transition-opacity use-transition-standard" class:replacing={data.replacing}>
+	{#if !!data.data && data.data?.length > 0}
+		<div class="grid-list" class:replacing={data.replacing}>
 			{#each data["data"] as item}
-				<ListItem {...item} href="{child_href}/{item.id}" />
+				<GridItem {...item} small href="{child_href}/{item.id}" />
 			{/each}
 		</div>
 	{:else}
@@ -37,14 +37,19 @@
 		<div class="h-2 w-12 animate-pulse rounded bg-secondary" />
 		<div class="h-3 w-3 rounded-full bg-secondary" />
 	</div>
-	<div class="flex flex-col pb-4">
-		<ListItemSkeleton />
-		<ListItemSkeleton />
-		<ListItemSkeleton />
+	<div class="grid-list">
+		<GridItemSkeleton small />
+		<GridItemSkeleton small />
+		<GridItemSkeleton small />
 	</div>
 {/if}
 
 <style>
+	.grid-list {
+		--at-apply: grid gap-4 pb-4 pt-2 px-2 transition-opacity use-transition-standard;
+		grid-template-columns: repeat(auto-fill, minmax(0, 9rem));
+	}
+
 	.replacing {
 		--at-apply: pointer-events-none opacity-50;
 	}

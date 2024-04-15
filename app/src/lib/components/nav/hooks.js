@@ -169,9 +169,8 @@ export function extort_search_state() {
 		show.set(false);
 	};
 
-	onDestroy(() => {
-		search_un_sub();
-	});
+	onDestroy(() => search_un_sub());
+	onNavigate(() => close());
 
 	return [[readonly(show), search], readonly(entries), { close }];
 }

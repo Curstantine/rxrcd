@@ -2,9 +2,9 @@
 	import { page } from "$app/stores";
 
 	import Input from "$lib/components/Input.svelte";
-	import SearchCombo from "$lib/components/search_combo/SearchCombo.svelte";
+	import SearchCombo from "$lib/components/nav/search_combo/SearchCombo.svelte";
 
-	import { extort_nav_state, extort_search_state } from "./Nav.hooks.js";
+	import { extort_nav_state, extort_search_state } from "./hooks.js";
 
 	const search_input_id = "search_input";
 
