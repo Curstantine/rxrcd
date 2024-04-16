@@ -1,8 +1,9 @@
 import { invoke } from "@tauri-apps/api";
-import { onDestroy, tick } from "svelte";
+import { onDestroy } from "svelte";
 import { derived, get, readonly, writable } from "svelte/store";
 
 import { onNavigate } from "$app/navigation";
+import { page } from "$app/stores";
 
 import { debounce } from "$lib/utils/delayed";
 
@@ -13,12 +14,10 @@ import { debounce } from "$lib/utils/delayed";
  * @returns {[[ReadableBool, ReadableBool], { back: VoidFunction, forward: VoidFunction }]} [[back_disabled, forward_disabled], { back, forward }]
  */
 export function extort_nav_state() {
-	/** @type {URL[]} */
-	const stack = [];
+	const stack = [get(page).url];
 	let internal = false;
 
 	const current_index = writable(0);
-
 	const back_disabled = derived(current_index, (idx) => idx === 0);
 	const forward_disabled = derived(current_index, (idx) => idx === stack.length - 1);
 
@@ -31,17 +30,11 @@ export function extort_nav_state() {
 	onNavigate(({ to }) => {
 		const index = get(current_index);
 
-		if (to === null) throw Error("onNavigation 'to' was null.");
+		if (to === null) throw new Error("onNavigation 'to' was null.");
 
 		// We don't want to mutate history_stack if the action comes from a internal back/forth change.
 		if (internal) {
 			internal = false;
-			return;
-		}
-
-		// We don't want to mutate current_index in the initial render, so the "/" path won't start back/forth.
-		if (stack.length === 0) {
-			stack.push(to.url);
 			return;
 		}
 
@@ -67,8 +60,6 @@ export function extort_nav_state() {
 	const forward = async () => {
 		internal = true;
 		current_index.update((index) => index + 1);
-
-		await tick();
 		window.history.forward();
 	};
 
@@ -165,9 +156,7 @@ export function extort_search_state() {
 		};
 	});
 
-	const close = () => {
-		show.set(false);
-	};
+	const close = () => show.set(false);
 
 	onDestroy(() => search_un_sub());
 	onNavigate(() => close());
