@@ -1,5 +1,6 @@
 <script>
-	import { location } from "svelte-spa-router";
+	import { link } from "svelte-spa-router";
+	import active from "svelte-spa-router/active";
 
 	import Input from "@/components/Input.svelte";
 	import SearchCombo from "@/components/search_combo/SearchCombo.svelte";
@@ -14,8 +15,8 @@
 
 <div class="sticky inset-x-0 top-0 z-20 h-12 flex items-center bg-background/95 px-4 backdrop-blur-xl space-x-4">
 	<div class="inline-flex space-x-2">
-		<a href="#/" class="h-8 w-8 icon-button-ghost">
-			<div class="i-symbols-home-rounded h-5 w-5" class:text-foreground={$location === "/"} />
+		<a use:link use:active href="/" class="action_button">
+			<div class="i-symbols-home-rounded h-5 w-5" />
 		</a>
 
 		<button on:click={back} class="h-8 w-8 icon-button-ghost" disabled={$back_disabled}>
@@ -27,14 +28,24 @@
 	</div>
 
 	<div class="relative flex-1">
-		<Input id={search_input_id} bind:input={$search} placeholder="Search" class="w-full" />
+		<Input id={search_input_id} bind:input={$search} autocomplete="false" placeholder="Search" class="w-full" />
 
 		{#if $show}
 			<SearchCombo data={$entries} coupling_id={search_input_id} {close} />
 		{/if}
 	</div>
 
-	<a href="#/settings" class="h-8 w-8 icon-button-ghost">
-		<div class="i-symbols-settings-rounded h-5 w-5" class:text-foreground={$location === "/settings"} />
+	<a use:link use:active href="/settings" class="action_button">
+		<div class="i-symbols-settings-rounded h-5 w-5" />
 	</a>
 </div>
+
+<style>
+	.action_button {
+		--at-apply: h-8 w-8 icon-button-ghost;
+	}
+
+	.action_button:global(.active) {
+		--at-apply: text-foreground;
+	}
+</style>
