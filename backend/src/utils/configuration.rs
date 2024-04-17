@@ -4,7 +4,7 @@ use std::{
 };
 
 use {
-	anyhow::{Context, Result},
+	anyhow::{anyhow, Context, Result},
 	serde::{Deserialize, Serialize},
 };
 
@@ -58,13 +58,28 @@ impl Configuration {
 
 				tokio::fs::create_dir_all(parent)
 					.await
-					.with_context(move || format!("Failed to create config parent at {parent:?}"))?;
+					.with_context(move || format!("Failed to create configuration directory at {parent:?}"))?;
 
 				tokio::fs::write(&config_path, config_str)
 					.await
-					.with_context(move || format!("Failed to create config at {config_path:?}"))?;
+					.with_context(move || format!("Failed to create configuration at {config_path:?}"))?;
 
 				config
+			}
+			Err(e) => return Err(e.into()),
+		};
+
+		Ok(config)
+	}
+
+	pub async fn initialize_blindly(config_dir: &Path) -> Result<Self> {
+		let config_path = directories::get_config_path(config_dir);
+
+		let config = match tokio::fs::read_to_string(&config_path).await {
+			Ok(string) => toml::from_str::<Configuration>(&string)?,
+			Err(e) if e.kind() == ErrorKind::NotFound => {
+				let e = anyhow!("Configuration was blindly, but the config does not exist at {config_path:?}");
+				return Err(e);
 			}
 			Err(e) => return Err(e.into()),
 		};

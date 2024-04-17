@@ -59,7 +59,14 @@ impl DirectoriesState {
 impl ConfigurationState {
 	pub async fn initialize(&self, config_dir: &Path) -> anyhow::Result<()> {
 		let conf = Configuration::initialize(config_dir).await?;
-		self.get().replace(conf);
+		*self.get() = Some(conf);
+
+		Ok(())
+	}
+
+	pub async fn reload(&self, config_dir: &Path) -> anyhow::Result<()> {
+		let conf = Configuration::initialize_blindly(config_dir).await?;
+		*self.get() = Some(conf);
 
 		Ok(())
 	}
