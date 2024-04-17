@@ -35,6 +35,9 @@
 	</div>
 
 	<a href="/settings" class="h-8 w-8 icon-button-ghost">
-		<div class="i-symbols-settings-rounded h-5 w-5" class:text-foreground={$page.url.pathname === "/settings"} />
+		<div
+			class="i-symbols-settings-rounded h-5 w-5"
+			class:text-foreground={$page.url.pathname.startsWith("/settings")}
+		/>
 	</a>
 </div>

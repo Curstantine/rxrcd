@@ -2,7 +2,7 @@ import { invoke } from "@tauri-apps/api";
 import { onDestroy } from "svelte";
 import { derived, get, readonly, writable } from "svelte/store";
 
-import { onNavigate } from "$app/navigation";
+import { beforeNavigate, goto } from "$app/navigation";
 import { page } from "$app/stores";
 
 import { debounce } from "$lib/utils/delayed";
@@ -27,16 +27,16 @@ export function extort_nav_state() {
 	 * If it is, we ignore since we are just traversing the stack.
 	 * If not, we need to check if the user has pressed "back" before and remove the future tree from that index accordingly.
 	 */
-	onNavigate(({ to }) => {
-		const index = get(current_index);
-
-		if (to === null) throw new Error("onNavigation 'to' was null.");
-
-		// We don't want to mutate history_stack if the action comes from a internal back/forth change.
+	beforeNavigate(({ from, to }) => {
 		if (internal) {
 			internal = false;
 			return;
 		}
+
+		if (from === null || to === null) throw new Error("onNavigation 'from' or 'to' was null.");
+		if (from.url.href === to.url.href) return;
+
+		const index = get(current_index);
 
 		// We can check if this is "backed" before or not by comparing the current index and last index of the history stack.
 		// The index that gets replaced should be "next forward" (So the forward tree resets)
@@ -45,22 +45,30 @@ export function extort_nav_state() {
 
 			stack.splice(current_pos, stack.length - current_pos, to.url);
 			current_index.set(stack.length - 1);
-		} else {
-			stack.push(to.url);
-			current_index.update((index) => index + 1);
+			return;
 		}
+
+		stack.push(to.url);
+		current_index.update((index) => index + 1);
 	});
+
+	/** @param {number} delta */
+	const update_index = (delta) => {
+		const x = get(current_index) + delta;
+		current_index.set(x);
+		return x;
+	};
 
 	const back = async () => {
 		internal = true;
-		current_index.update((index) => index - 1);
-		window.history.back();
+		const idx = update_index(-1);
+		goto(stack[idx]);
 	};
 
 	const forward = async () => {
 		internal = true;
-		current_index.update((index) => index + 1);
-		window.history.forward();
+		const idx = update_index(+1);
+		goto(stack[idx]);
 	};
 
 	return [[back_disabled, forward_disabled], { back, forward }];
@@ -159,7 +167,7 @@ export function extort_search_state() {
 	const close = () => show.set(false);
 
 	onDestroy(() => search_un_sub());
-	onNavigate(() => close());
+	beforeNavigate(() => close());
 
 	return [[readonly(show), search], readonly(entries), { close }];
 }
