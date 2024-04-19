@@ -1,8 +1,11 @@
 <script>
 	import { link } from "svelte-spa-router";
-	import active from "svelte-spa-router/active";
 
+	/** @type {string} */
 	export let href;
+
+	/** @type {boolean} */
+	export let active;
 
 	/** @type {string} */
 	export let label;
@@ -11,7 +14,7 @@
 	export let icon;
 </script>
 
-<a use:link use:active {href}>
+<a use:link {href} class:active>
 	<div class="{icon} h-5 w-5" />
 	<span class="text-sm">{label}</span>
 </a>
@@ -22,10 +25,10 @@
 	}
 
 	a:hover {
-		--at-apply: bg-secondary;
+		--at-apply: underline;
 	}
 
-	:global(a.active) {
-		--at-apply: bg-secondary;
+	a.active {
+		--at-apply: bg-secondary decoration-none pointer-events-none;
 	}
 </style>

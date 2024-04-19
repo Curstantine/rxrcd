@@ -15,6 +15,13 @@
 		"/appearance": Appearance,
 	};
 
+	/** @type {{ icon: string, label: string, sub_route: string }[]} */
+	const tabs = [
+		{ icon: "i-symbols-person-outline-rounded", label: "Account", sub_route: "account" },
+		{ icon: "i-symbols-palette-outline", label: "Appearance", sub_route: "appearance" },
+		{ icon: "i-symbols-download-rounded", label: "Downloads", sub_route: "downloads" },
+	];
+
 	onMount(() => {
 		if (!params?.wild) replace("/settings/account");
 	});
@@ -22,9 +29,9 @@
 
 <main class="grid grid-cols-[16rem_1fr] w-full 2xl:container">
 	<div class="flex flex-col border-r-(1 border solid) px-2 pt-2">
-		<SettingsNavigationItem href="/settings/account" label="Account" icon="i-symbols-person-outline-rounded" />
-		<SettingsNavigationItem href="/settings/appearance" label="Appearance" icon="i-symbols-palette-outline" />
-		<SettingsNavigationItem href="/settings/downloads" label="Downloads" icon="i-symbols-download-rounded" />
+		{#each tabs as { icon, label, sub_route }}
+			<SettingsNavigationItem active={params?.wild === sub_route} href="/settings/{sub_route}" {icon} {label} />
+		{/each}
 	</div>
 
 	<div class="px-6 pt-4">
