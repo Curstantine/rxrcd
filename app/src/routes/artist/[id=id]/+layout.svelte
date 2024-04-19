@@ -5,25 +5,23 @@
 	export let data;
 
 	/**
-	 * @typedef {{ id: string, label: string, rel_type: import("$lib/types/deezer").AlbumRecordType | "discography" }} TabItem
+	 * @typedef {{ id: import("$lib/types/deezer").AlbumRecordType | "discography", label: string }} TabItem
 	 * @type {TabItem[]}
 	 */
 	const tabs = [
-		{ id: "tab_discography", rel_type: "discography", label: "Discography" },
-		{ id: "tab_albums", rel_type: "album", label: "Albums" },
-		{ id: "tab_eps", rel_type: "ep", label: "EPs" },
-		{ id: "tab_singles", rel_type: "single", label: "Singles" },
-		{ id: "tab_compilations", rel_type: "compilation", label: "Compilations" },
+		{ id: "discography", label: "Discography" },
+		{ id: "album", label: "Albums" },
+		{ id: "ep", label: "EPs" },
+		{ id: "single", label: "Singles" },
+		{ id: "compilation", label: "Compilations" },
 	];
 
 	/**
 	 *  @param {HTMLDivElement} node
 	 */
 	function style_tab(node) {
-		/**
-		 * @param {TabItem} param0
-		 */
-		const update_styles = ({ id }) => {
+		/** @param {TabItem["id"]} id */
+		const update_styles = (id) => {
 			const element = document.getElementById(id);
 			if (element === null) throw new Error(`Tab by #${id} doesn't exist`);
 
@@ -32,8 +30,9 @@
 		};
 
 		const un_sub = page.subscribe((o) => {
-			o.url;
-			update_styles();
+			const ops = o.url.pathname.split("/", -1);
+			update_styles(ops);
+			// update_styles(o.url.);
 		});
 
 		return {
@@ -41,24 +40,20 @@
 		};
 	}
 
-	/**
-	 *  @param {HTMLDivElement} node
-	 */
+	/** @param {HTMLDivElement} node */
 	function style_tab_bar(node) {
 		const body = document.getElementsByTagName("body")[0];
 		let marked = false;
 
 		const styler = () => {
 			if (!marked && body.scrollTop >= node.offsetTop) {
-				node.style.setProperty("--un-bg-color-opacity", "0.95");
 				marked = true;
-				return;
+				return node.style.setProperty("--un-bg-color-opacity", "0.95");
 			}
 
 			if (marked && node.offsetTop > body.scrollTop) {
-				node.style.setProperty("--un-bg-color-opacity", "1");
 				marked = false;
-				return;
+				return node.style.setProperty("--un-bg-color-opacity", "1");
 			}
 		};
 
@@ -99,7 +94,7 @@
 	</div>
 
 	<div use:style_tab_bar style="--un-bg-color-opacity: 1;" class="tab_bar">
-		{#each tabs as { id, label, rel_type }}
+		{#each tabs as { id, label, id: rel_type }}
 			<a {id} class="tab" class:active={$page.url.pathname.endsWith(rel_type)} href="./{rel_type}">{label}</a>
 		{/each}
 
