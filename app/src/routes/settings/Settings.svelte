@@ -1,15 +1,21 @@
 <script>
-	import Router from "svelte-spa-router";
+	import { onMount } from "svelte";
+	import Router, { replace } from "svelte-spa-router";
 
 	import SettingsNavigationItem from "@/components/items/SettingsNavigationItem.svelte";
-	import Account from "@/routes/settings/Account.svelte";
+
+	import Account from "./Account.svelte";
+
+	/** @type { { wild : string }} */
+	export let params;
 
 	const routes = {
 		"/account": Account,
 	};
 
-	/** @type { { wild : string }} */
-	export let params;
+	onMount(() => {
+		if (!params?.wild) replace("/settings/account");
+	});
 </script>
 
 <main class="grid grid-cols-[16rem_1fr] w-full 2xl:container">
