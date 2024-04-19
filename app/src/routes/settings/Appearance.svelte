@@ -1,6 +1,12 @@
 <script>
 	import SettingsHeading from "@/components/SettingsHeading.svelte";
 	import Select from "@/components/select/Select.svelte";
+
+	let selected_mode = "dark";
+	const scheme_modes = [
+		{ label: "Dark", value: "dark" },
+		{ label: "Light", value: "light" },
+	];
 </script>
 
 <article id="appearance">
@@ -10,7 +16,13 @@
 		<span class="grid-area-[header]">Color Scheme</span>
 		<span class="grid-area-[description] text-sm text-muted-foreground">Change the general colors</span>
 
-		<Select label="Dark" class="grid-area-[option]" />
+		<Select
+			label={scheme_modes.find(({ value }) => value === selected_mode).label}
+			class="grid-area-[option] w-42"
+			aria_controls="color-scheme"
+			actions={scheme_modes}
+			on_change={(mode) => (selected_mode = mode)}
+		/>
 	</div>
 </article>
 

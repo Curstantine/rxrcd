@@ -31,7 +31,7 @@
 		<Input id={search_input_id} bind:input={$search} autocomplete="false" placeholder="Search" class="w-full" />
 
 		{#if $show}
-			<SearchCombo data={$entries} coupling_id={search_input_id} {close} />
+			<SearchCombo data={$entries} coupling_ids={[search_input_id]} {close} />
 		{/if}
 	</div>
 
