@@ -4,13 +4,15 @@
 
 	import SettingsNavigationItem from "@/components/items/SettingsNavigationItem.svelte";
 
-	import Account from "./Account.svelte";
+	import Appearance from "@/routes/settings/Appearance.svelte";
+	import Account from "@/routes/settings/Account.svelte";
 
 	/** @type { { wild : string }} */
 	export let params;
 
 	const routes = {
 		"/account": Account,
+		"/appearance": Appearance,
 	};
 
 	onMount(() => {
