@@ -3,6 +3,8 @@ use std::{
 	sync::MutexGuard,
 };
 
+use tracing::debug;
+
 use {
 	anyhow::{ensure, Context, Result},
 	reqwest::Client,
@@ -47,7 +49,7 @@ impl ConfigurationState {
 
 	pub async fn initialize(&self, app_config_dir: &Path) -> Result<()> {
 		let config_path = directories::get_config_path(app_config_dir);
-		let conf = configuration::initialize(app_config_dir).await?;
+		let conf = configuration::initialize(&config_path).await?;
 
 		*self.get_data() = Some(conf);
 		*self.get_path() = Some(config_path);
@@ -64,13 +66,14 @@ impl ConfigurationState {
 	}
 
 	pub async fn write(&self) -> Result<()> {
-		let config_path = self.get_owned_path();
-
 		let toml_str = {
 			let inner = self.get_data();
 			toml::to_string_pretty(inner.as_ref().unwrap())
 				.with_context(move || format!("Failed to serialized the config in its current state: {self:#?}"))?
 		};
+
+		let config_path = self.get_owned_path();
+		debug!("Modified configuration is being written to {config_path:?}");
 
 		tokio::fs::write(&config_path, toml_str)
 			.await

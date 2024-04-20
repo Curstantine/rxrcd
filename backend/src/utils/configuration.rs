@@ -1,16 +1,20 @@
 use std::{io::ErrorKind, path::Path};
 
-use anyhow::{bail, Context, Result};
+use {
+	anyhow::{bail, Context, Result},
+	tracing::debug,
+};
 
 use crate::models::configuration::Configuration;
 
 pub async fn initialize(config_path: &Path) -> Result<Configuration> {
+	debug!("Reading configuration file from {config_path:?}");
+
 	let config = match tokio::fs::read_to_string(&config_path).await {
 		Ok(string) => toml::from_str::<Configuration>(&string)?,
 		Err(e) if e.kind() == ErrorKind::NotFound => {
 			let config = Configuration::default();
 			let config_str = toml::to_string_pretty(&config)?;
-
 			let parent = config_path.parent().unwrap();
 
 			tokio::fs::create_dir_all(parent)
@@ -21,6 +25,7 @@ pub async fn initialize(config_path: &Path) -> Result<Configuration> {
 				.await
 				.with_context(move || format!("Failed to create configuration at {config_path:?}"))?;
 
+			debug!("Configuration files with defaults were created as part of the initialization process");
 			config
 		}
 		Err(e) => return Err(e.into()),

@@ -1,12 +1,15 @@
 <script>
+	import { set_theme, selected_theme, themes } from "@/utils/theme";
+
 	import SettingsHeading from "@/components/SettingsHeading.svelte";
 	import Select from "@/components/select/Select.svelte";
 
-	let selected_mode = "dark";
-	const scheme_modes = [
-		{ label: "Dark", value: "dark" },
-		{ label: "Light", value: "light" },
-	];
+	const actioned_themes = themes.map(({ label, id }) => ({ label, value: id }));
+
+	/** @param {import("@/types/utils").Theme} changed */
+	const change_theme = async (changed) => {
+		if (changed !== $selected_theme.id) await set_theme(changed);
+	};
 </script>
 
 <article id="appearance">
@@ -17,11 +20,11 @@
 		<span class="grid-area-[description] text-sm text-muted-foreground">Change the general colors</span>
 
 		<Select
-			label={scheme_modes.find(({ value }) => value === selected_mode).label}
+			label={$selected_theme?.label ?? "N/A"}
 			class="grid-area-[option] w-42"
-			aria_controls="color-scheme"
-			actions={scheme_modes}
-			on_change={(mode) => (selected_mode = mode)}
+			aria_controls="select-color-scheme"
+			actions={actioned_themes}
+			on_change={change_theme}
 		/>
 	</div>
 </article>
