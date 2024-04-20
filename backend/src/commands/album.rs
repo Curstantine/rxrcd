@@ -1,14 +1,15 @@
-use anyhow::anyhow;
-use deezer::models::album::{Album, AlbumSearch, ArtistAlbumList};
-
 use {
-	deezer::models::search::{SearchOptions, SearchOrder},
+	anyhow::anyhow,
+	deezer::models::{
+		album::{Album, AlbumSearch, ArtistAlbumList},
+		search::{SearchOptions, SearchOrder},
+	},
 	tauri::State,
 };
 
 use crate::{
 	errors::{CommandResult, PassiveError},
-	state::NetworkClientState,
+	models::state::NetworkClientState,
 };
 
 #[tauri::command]

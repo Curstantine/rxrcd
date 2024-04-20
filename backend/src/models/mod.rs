@@ -1,1 +1,2 @@
-pub mod tauri;
+pub mod configuration;
+pub mod state;

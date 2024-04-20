@@ -1,4 +1,6 @@
 {
+	"editor.rulers": [120],
+
 	"editor.defaultFormatter": "dprint.dprint",
 	"eslint.validate": ["svelte"],
 	"eslint.workingDirectories": [

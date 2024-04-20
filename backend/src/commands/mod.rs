@@ -5,7 +5,7 @@ use {
 
 use crate::{
 	errors::CommandResult,
-	state::{AppState, ConfigurationState, DirectoriesState, NetworkClientState},
+	models::state::{AppState, ConfigurationState, NetworkClientState},
 };
 
 pub mod album;
@@ -17,7 +17,6 @@ pub mod config;
 pub async fn setup<R: Runtime>(handle: AppHandle<R>) -> CommandResult<()> {
 	let app_state = handle.state::<AppState>();
 	let path_resolver = handle.path_resolver();
-	let dir_state = handle.state::<DirectoriesState>();
 	let config_state = handle.state::<ConfigurationState>();
 	let network_state = handle.state::<NetworkClientState>();
 
@@ -26,15 +25,13 @@ pub async fn setup<R: Runtime>(handle: AppHandle<R>) -> CommandResult<()> {
 		return Ok(());
 	}
 
-	dir_state.initialize(&path_resolver);
 	network_state.initialize().await?;
 
-	let config_dir = {
-		let dir_guard = dir_state.get();
-		let directories = dir_guard.as_ref().unwrap();
-		directories.config_dir.clone()
-	};
-	config_state.initialize(&config_dir).await?;
+	let app_config_dir = path_resolver
+		.app_config_dir()
+		.expect("Couldn't read the app_config_dir");
+
+	config_state.initialize(&app_config_dir).await?;
 
 	info!("Setup hook completed successfully!");
 
