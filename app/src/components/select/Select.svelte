@@ -46,11 +46,9 @@
 	on:click={() => (expanded = !expanded)}
 	class="{$$props.class} flex justify-between items-center min-w-32 rounded-md h-9 px-3 border-(1 solid border)"
 >
-	<span class="text-sm">{label}</span>
-	<div class="i-symbols-expand-all-rounded"></div>
+	<span class="pointer-events-none text-sm">{label}</span>
+	<div class="i-symbols-expand-all-rounded text-muted-foreground"></div>
 </button>
-
-<!-- <svelte:body on:click={() => (expanded ? (expanded = false) : null)} /> -->
 
 {#if expanded}
 	<div
