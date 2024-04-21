@@ -20,7 +20,7 @@
 {#if data !== null}
 	<ResultTitle {href} {label} disabled={data?.data?.length === 0} />
 
-	{#if data.data?.length > 0}
+	{#if data.data !== null && data.data?.length > 0}
 		<div class="grid-list" class:replacing={data.replacing}>
 			{#each data["data"] as item}
 				<GridItem {...item} small href="{child_href}/{item.id}" />

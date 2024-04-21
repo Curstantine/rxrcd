@@ -92,15 +92,16 @@ export function pushToSnackStack(instance) {
 		closeSnack(id);
 	}
 
-	/** @type {number | null} */
-	let timeout = null;
+	/** @type {number | undefined} */
+	let timeout;
 
 	if (!instance.persistent) {
 		timeout = window.setTimeout(() => closeSnack(id), TIMEOUT_MS);
 	}
 
 	data.update((stack) => {
-		return { ...stack, [id]: { inner: writableInstance, timeout } };
+		stack[id] = { inner: writableInstance, timeout };
+		return stack;
 	});
 
 	return { update, close };

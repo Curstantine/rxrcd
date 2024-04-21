@@ -3,7 +3,7 @@ import { get, readonly, writable } from "svelte/store";
 
 /** @param {import("svelte/store").Readable<string>} id */
 export function extort_data_state(id) {
-	/** @type {import("svelte/store").Writable<import("@/types/deezer").Album>} */
+	/** @type {import("svelte/store").Writable<import("@/types/deezer").Album | null>} */
 	const album = writable(null);
 
 	/** @param {number} id */

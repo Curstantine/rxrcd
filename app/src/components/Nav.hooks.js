@@ -115,7 +115,11 @@ export function extort_search_state() {
 			});
 		} catch (e) {
 			entries.update(({ artists }) => {
-				return { artists, query, albums: { error: e.toString(), replacing: false, data: null } };
+				return {
+					artists,
+					query,
+					albums: { error: e?.toString() ?? "Unreadable error", replacing: false, data: null },
+				};
 			});
 		}
 
@@ -131,7 +135,11 @@ export function extort_search_state() {
 			});
 		} catch (e) {
 			entries.update(({ albums }) => {
-				return { albums, query, artists: { error: e.toString(), replacing: false, data: null } };
+				return {
+					albums,
+					query,
+					artists: { error: e?.toString() ?? "Unreadable error", replacing: false, data: null },
+				};
 			});
 		}
 	});

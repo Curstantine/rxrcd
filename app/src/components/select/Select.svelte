@@ -12,7 +12,7 @@
 	/** @type {{ label: string; value: string }[]} */
 	export let actions;
 
-	/** @type {(value: string) => void} */
+	/** @type {(value: string) => (void | Promise<void>)} */
 	export let on_change;
 
 	const combobox_id = `${aria_controls}-hit-box`;

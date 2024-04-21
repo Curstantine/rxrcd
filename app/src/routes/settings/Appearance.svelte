@@ -6,16 +6,17 @@
 
 	const actioned_themes = themes.map(({ label, id }) => ({ label, value: id }));
 
-	/** @param {import("@/types/utils").Theme} changed */
+	/** @param {string} changed */
 	const change_theme = async (changed) => {
-		if (changed !== $selected_theme.id) await set_theme(changed);
+		// @ts-expect-error changed is of type Theme as we feed values in themes
+		if (changed !== $selected_theme?.id) await set_theme(changed);
 	};
 </script>
 
 <article id="appearance">
 	<SettingsHeading heading="Appearance" sub="Tweak rxrcd's appearance to your liking" />
 
-	<div class="ambatukam mt-4 items-center">
+	<div class="option_area mt-4 items-center">
 		<span class="grid-area-[header]">Color Scheme</span>
 		<span class="grid-area-[description] text-sm text-muted-foreground">Change the general colors</span>
 
@@ -30,7 +31,7 @@
 </article>
 
 <style>
-	.ambatukam {
+	.option_area {
 		--at-apply: grid grid-cols-[1fr_1fr_auto] py-2;
 		grid-template-areas:
 			"header header option"

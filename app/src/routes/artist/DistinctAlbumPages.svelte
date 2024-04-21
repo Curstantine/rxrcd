@@ -4,13 +4,13 @@
 	import GridItem from "@/components/items/GridItem.svelte";
 	import GridItemSkeleton from "@/components/items/GridItemSkeleton.svelte";
 
-	/** @type {import("svelte/store").Readable<import("@/types/albums").DerivedAlbumList>} */
-	export let data;
-
-	/** @type {import("svelte/store").Readable<import("@/types/deezer").AlbumRecordType>}*/
+	/** @type {import("@/types/deezer").AlbumRecordType}*/
 	export let type;
 
-	const entries = derived([type, data], ([typ, val]) => (!val?.data[typ] ? null : val.data[typ]));
+	/** @type {import("svelte/store").Readable<import("@/types/albums").DerivedAlbumList | null>} */
+	export let data;
+
+	const entries = derived(data, (val) => (!val?.data[type] ? null : val.data[type]));
 </script>
 
 <div class="flex flex-col px-4 pt-4">

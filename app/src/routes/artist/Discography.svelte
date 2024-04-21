@@ -4,10 +4,8 @@
 	import GridItem from "@/components/items/GridItem.svelte";
 	import GridItemSkeleton from "@/components/items/GridItemSkeleton.svelte";
 
-	/** @type {import("svelte/store").Readable<import("@/types/albums").DerivedAlbumList>} */
+	/** @type {import("svelte/store").Readable<import("@/types/albums").DerivedAlbumList | null>} */
 	export let data;
-
-	export const type = null;
 
 	const entries = derived(data, (val) => (val === null ? null : val["data"]));
 

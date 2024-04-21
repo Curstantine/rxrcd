@@ -1,5 +1,5 @@
 <script>
-	import { derived, writable } from "svelte/store";
+	import { derived, get, writable } from "svelte/store";
 
 	import Discography from "@/routes/artist/Discography.svelte";
 	import DistinctAlbumPages from "@/routes/artist/DistinctAlbumPages.svelte";
@@ -8,7 +8,7 @@
 		tabs,
 		extort_tab_state,
 		extort_data_state,
-		style_tab,
+		style_tab_decoration,
 		style_tab_bar,
 	} from "@/routes/artist/Artist.hooks.js";
 
@@ -19,7 +19,7 @@
 	// svelte-spa-router doesn't remount when the param is changed. (e.g. cases where the user navigates to a new artist page from an artist page)
 	// causing data to stay stale. We can fix that by listening to id and hoisting it as a readable.
 	const id = writable(params.id);
-	$: $id = params.id;
+	$: $id = params.id ?? get(id);
 
 	const { artist, albums } = extort_data_state(id);
 	const { active_tab, on_tab_click } = extort_tab_state();
@@ -61,15 +61,15 @@
 		{/each}
 
 		<div
-			use:style_tab={active_tab}
+			use:style_tab_decoration={active_tab}
 			class="absolute bottom-2 left-0 h-[2px] transform-gpu rounded-full bg-primary use-transition-standard"
 		/>
 	</div>
 
-	{#if $tab_rel_type === null}
+	{#if $tab_rel_type === "discography"}
 		<Discography data={albums} />
 	{:else}
-		<DistinctAlbumPages type={tab_rel_type} data={albums} />
+		<DistinctAlbumPages type={$tab_rel_type} data={albums} />
 	{/if}
 </div>
 

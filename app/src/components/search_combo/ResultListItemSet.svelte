@@ -20,7 +20,7 @@
 {#if data !== null}
 	<ResultTitle {href} {label} disabled={data?.data?.length === 0} />
 
-	{#if data.data?.length > 0}
+	{#if data.data !== null && data.data.length > 0}
 		<div class="flex flex-col pb-4 transition-opacity use-transition-standard" class:replacing={data.replacing}>
 			{#each data["data"] as item}
 				<ListItem {...item} href="{child_href}/{item.id}" />

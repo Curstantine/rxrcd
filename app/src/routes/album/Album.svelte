@@ -1,5 +1,5 @@
 <script>
-	import { writable } from "svelte/store";
+	import { get, writable } from "svelte/store";
 	import { link } from "svelte-spa-router";
 
 	import { extort_data_state } from "@/routes/album/Album.hook";
@@ -12,7 +12,7 @@
 	// svelte-spa-router doesn't remount when the param is changed. (e.g. cases where the user navigates to a new artist page from an artist page)
 	// causing data to stay stale. We can fix that by listening to id and hoisting it as a readable.
 	const id = writable(params.id);
-	$: $id = params.id;
+	$: $id = params.id ?? get(id);
 
 	const { album } = extort_data_state(id);
 </script>
