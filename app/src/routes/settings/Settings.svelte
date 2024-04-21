@@ -6,6 +6,7 @@
 
 	import Appearance from "@/routes/settings/Appearance.svelte";
 	import Account from "@/routes/settings/Account.svelte";
+	import Downloads from "@/routes/settings/Downloads.svelte";
 
 	/** @type { { wild : string }} */
 	export let params;
@@ -13,6 +14,7 @@
 	const routes = {
 		"/account": Account,
 		"/appearance": Appearance,
+		"/downloads": Downloads,
 	};
 
 	/** @type {{ icon: string, label: string, sub_route: string }[]} */

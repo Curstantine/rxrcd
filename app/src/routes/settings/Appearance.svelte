@@ -3,6 +3,7 @@
 
 	import SettingsHeading from "@/components/SettingsHeading.svelte";
 	import Select from "@/components/select/Select.svelte";
+	import SettingsOptionArea from "@/components/SettingsOptionArea.svelte";
 
 	const actioned_themes = themes.map(({ label, id }) => ({ label, value: id }));
 
@@ -14,27 +15,15 @@
 </script>
 
 <article id="appearance">
-	<SettingsHeading heading="Appearance" sub="Tweak rxrcd's appearance to your liking" />
+	<SettingsHeading heading="Appearance" sub="Tweak rxrcd's look and feel" />
 
-	<div class="option_area mt-4 items-center">
-		<span class="grid-area-[header]">Color Scheme</span>
-		<span class="grid-area-[description] text-sm text-muted-foreground">Change the general colors</span>
-
+	<SettingsOptionArea class="mt-4" label="Theme" subtitle="Change application-wide color scheme">
 		<Select
 			label={$selected_theme?.label ?? "N/A"}
-			class="grid-area-[option] w-42"
+			class="w-42"
 			aria_controls="select-color-scheme"
 			actions={actioned_themes}
 			on_change={change_theme}
 		/>
-	</div>
+	</SettingsOptionArea>
 </article>
-
-<style>
-	.option_area {
-		--at-apply: grid grid-cols-[1fr_1fr_auto] py-2;
-		grid-template-areas:
-			"header header option"
-			"description description option";
-	}
-</style>

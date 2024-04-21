@@ -71,6 +71,6 @@
 	}
 
 	.action:hover {
-		--at-apply: bg-secondary/50;
+		--at-apply: bg-secondary/75;
 	}
 </style>
