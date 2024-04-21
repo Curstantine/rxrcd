@@ -49,7 +49,7 @@
 		{/if}
 	</a>
 
-	<a {href} class="pt-2 text-sm text-foreground leading-tight">{title}</a>
+	<a use:link {href} class="pt-2 text-sm text-foreground leading-tight">{title}</a>
 
 	{#if subtitle !== null}
 		<span class="mt-0.5 text-xs text-muted-foreground">{subtitle}</span>
