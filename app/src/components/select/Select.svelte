@@ -20,6 +20,9 @@
 	/** @type {HTMLButtonElement} */
 	let button;
 
+	/** @type {number} */
+	let resize_timeout;
+
 	let expanded = false;
 	let [listbox_top, listbox_left, listbox_width] = [0, 0, 0];
 
@@ -29,13 +32,23 @@
 		on_change(action_value);
 	};
 
-	onMount(() => {
+	const calculate_listbox_position = () => {
 		const rect = button.getBoundingClientRect();
 		listbox_top = rect.top + window.scrollY;
 		listbox_left = rect.left + window.scrollX;
 		listbox_width = rect.right - listbox_left;
-	});
+	};
+
+	onMount(calculate_listbox_position);
 </script>
+
+<svelte:window
+	on:resize={() => {
+		if (expanded) expanded = false;
+		clearTimeout(resize_timeout);
+		resize_timeout = window.setTimeout(calculate_listbox_position, 1000);
+	}}
+/>
 
 <button
 	bind:this={button}
