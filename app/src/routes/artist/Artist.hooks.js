@@ -1,10 +1,12 @@
-import { invoke } from "@tauri-apps/api";
 import { get, readonly, writable } from "svelte/store";
 
-import { pushToSnackStack } from "@/components/snack/snack";
+import { get_artist_albums } from "@/bindings/album";
+import { get_artist } from "@/bindings/artist";
 import { wait } from "@/utils/delayed";
 import { fetch_error } from "@/utils/errors";
 import { transform_to_map } from "@/utils/transformer";
+
+import { pushToSnackStack } from "@/components/snack/snack";
 
 /**
  * @typedef {{ id: string, label: string, rel_type: import("@/types/deezer").AlbumRecordType | "discography" }} TabItem
@@ -98,13 +100,13 @@ export function extort_data_state(id) {
 	const albums = writable(null);
 
 	/** @param {number} id */
-	async function get_artist_data(id) {
-		const data = await invoke("get_artist", { id });
+	async function update_artist_data(id) {
+		const data = await get_artist(id);
 		artist.set(data);
 	}
 
 	/** @param {number} id */
-	async function get_artist_albums(id) {
+	async function update_artist_albums(id) {
 		const limit = 50;
 
 		/**
@@ -115,7 +117,7 @@ export function extort_data_state(id) {
 		 */
 		const fetch = async (index, limit) => {
 			/** @type {import("@/types/deezer").ArtistAlbumList} */
-			const { next, total, data } = await invoke("get_artist_albums", { artistId: id, index, limit });
+			const { next, total, data } = await get_artist_albums(id, limit, index);
 			data.forEach((x) => transform_to_map(x, [["release_date", "LOCALE_DATE_STRING"]]));
 
 			/** @type {import("@/types/albums").DerivedAlbumList["data"]} */
@@ -190,8 +192,8 @@ export function extort_data_state(id) {
 		if (get(artist) !== null) artist.set(null);
 
 		Promise.all([
-			get_artist_data(id),
-			get_artist_albums(id),
+			update_artist_data(id),
+			update_artist_albums(id),
 		]);
 	});
 

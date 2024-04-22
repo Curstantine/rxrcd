@@ -1,8 +1,9 @@
-import { invoke } from "@tauri-apps/api";
 import { onDestroy, tick } from "svelte";
 import { location, pop } from "svelte-spa-router";
 import { derived, get, readonly, writable } from "svelte/store";
 
+import { search_albums } from "@/bindings/album";
+import { search_artists } from "@/bindings/artist";
 import { debounce } from "@/utils/delayed";
 
 /**
@@ -99,8 +100,7 @@ export function extort_search_state() {
 	/** @type {{ run: (arg0: string) => void, clear: () => void }} */
 	const { run: fetcher, clear: clearFetcher } = debounce(async (query) => {
 		try {
-			/** @type {import("@/types/deezer").AlbumSearch} */
-			const albums = await invoke("search_albums", { query });
+			const albums = await search_albums(query);
 
 			/** @type {import("@/types/search").SearchEntryIE[]}*/
 			const data = albums.data.map(({ id, title, artist: { name }, cover_big }) => ({
@@ -124,8 +124,7 @@ export function extort_search_state() {
 		}
 
 		try {
-			/** @type {import("@/types/deezer").ArtistSearch} */
-			const artists = await invoke("search_artists", { query });
+			const artists = await search_artists(query);
 
 			/** @type {import("@/types/search").SearchEntryBase[]}*/
 			const data = artists.data.map(({ id, name }) => ({ id, title: name, subtitle: null }));

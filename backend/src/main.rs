@@ -43,7 +43,9 @@ fn main() {
 		.invoke_handler(tauri::generate_handler![
 			commands::setup,
 			commands::config::config_get_appearance,
-			commands::config::config_set_theme,
+			commands::config::config_set_appearance,
+			commands::config::config_get_download,
+			commands::config::config_set_download,
 			commands::config::config_reload,
 			commands::album::get_album,
 			commands::album::search_albums,

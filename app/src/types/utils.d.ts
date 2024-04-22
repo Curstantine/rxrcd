@@ -1,4 +1,5 @@
 import type { Writable } from "svelte/store";
 
-export declare type Theme = "system" | "light" | "dark";
+import type { Theme } from "@/bindings/config";
+
 export declare type WritableTheme = Writable<Theme | null>;

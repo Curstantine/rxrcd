@@ -12,7 +12,7 @@ use crate::{
 	models::state::NetworkClientState,
 };
 
-#[tauri::command]
+#[tauri::command(rename_all = "snake_case")]
 #[tracing::instrument(skip(network_state), err(Debug))]
 pub async fn get_artist(id: u64, network_state: State<'_, NetworkClientState>) -> CommandResult<Artist> {
 	let client_guard = network_state.get().await;
@@ -23,7 +23,7 @@ pub async fn get_artist(id: u64, network_state: State<'_, NetworkClientState>) -
 		.map_err(|e| PassiveError::from(anyhow!(e)))
 }
 
-#[tauri::command]
+#[tauri::command(rename_all = "snake_case")]
 #[tracing::instrument(skip(network_state), err(Debug))]
 pub async fn search_artists(
 	query: String,

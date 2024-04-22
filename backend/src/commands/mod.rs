@@ -12,7 +12,7 @@ pub mod album;
 pub mod artist;
 pub mod config;
 
-#[tauri::command]
+#[tauri::command(rename_all = "snake_case")]
 #[tracing::instrument(skip_all, err(Debug))]
 pub async fn setup<R: Runtime>(handle: AppHandle<R>) -> CommandResult<()> {
 	let app_state = handle.state::<AppState>();

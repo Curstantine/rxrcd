@@ -1,9 +1,10 @@
-import { invoke } from "@tauri-apps/api";
 import { derived, get, writable } from "svelte/store";
+
+import { config_get_appearance, config_set_appearance } from "@/bindings/config";
 
 const media_sys_dark = matchMedia("(prefers-color-scheme: dark)");
 
-/** @type {{ id: import("@/types/utils").Theme, label: string }[]} */
+/** @type {{ id: import("@/bindings/config").Theme, label: string }[]} */
 export const themes = [
 	{ id: "light", label: "Light" },
 	{ id: "dark", label: "Dark" },
@@ -33,7 +34,7 @@ function on_sys_pref_change({ matches: is_system_dark }) {
 	);
 }
 
-/** @param {import("@/types/utils").Theme} theme */
+/** @param {import("@/bindings/config").Theme} theme */
 function set_theme_(theme) {
 	const old_theme = get(selected_theme_);
 	const apply = theme === "system" ? get_sys_pref_theme() : theme;
@@ -57,13 +58,13 @@ function set_theme_(theme) {
 }
 
 export async function initialize_theme() {
-	/** @type {import("@/types/backend").ConfigurationAppearance}*/
-	const config_appearance = await invoke("config_get_appearance");
-	set_theme_(config_appearance.theme);
+	/** @type {import("@/bindings/config").ConfigurationAppearance}*/
+	const appearance = await config_get_appearance();
+	set_theme_(appearance.theme);
 }
 
-/** @param {import("@/types/utils").Theme} theme */
+/** @param {import("@/bindings/config").Theme} theme */
 export async function set_theme(theme) {
-	await invoke("config_set_theme", { theme });
+	await config_set_appearance({ theme });
 	set_theme_(theme);
 }
