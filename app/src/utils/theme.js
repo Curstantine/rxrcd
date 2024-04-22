@@ -4,7 +4,7 @@ import { config_get_appearance, config_set_appearance } from "@/bindings/config"
 
 const media_sys_dark = matchMedia("(prefers-color-scheme: dark)");
 
-/** @type {{ id: import("@/bindings/config").Theme, label: string }[]} */
+/** @type {{ id: import("@/types/config").Theme, label: string }[]} */
 export const themes = [
 	{ id: "light", label: "Light" },
 	{ id: "dark", label: "Dark" },
@@ -34,7 +34,7 @@ function on_sys_pref_change({ matches: is_system_dark }) {
 	);
 }
 
-/** @param {import("@/bindings/config").Theme} theme */
+/** @param {import("@/types/config").Theme} theme */
 function set_theme_(theme) {
 	const old_theme = get(selected_theme_);
 	const apply = theme === "system" ? get_sys_pref_theme() : theme;
@@ -58,12 +58,12 @@ function set_theme_(theme) {
 }
 
 export async function initialize_theme() {
-	/** @type {import("@/bindings/config").ConfigurationAppearance}*/
+	/** @type {import("@/types/config").ConfigurationAppearance}*/
 	const appearance = await config_get_appearance();
 	set_theme_(appearance.theme);
 }
 
-/** @param {import("@/bindings/config").Theme} theme */
+/** @param {import("@/types/config").Theme} theme */
 export async function set_theme(theme) {
 	await config_set_appearance({ theme });
 	set_theme_(theme);
