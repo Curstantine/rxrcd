@@ -19,6 +19,18 @@
 			class="w-fit button-primary"
 			on:click={() => {
 				create_snack({
+					label: "Hai :3",
+					description:
+						"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Inventore, earum optio doloribus labore quasi sint vero, tempore voluptatem illum voluptatibus quia a, non dicta quod!",
+				});
+			}}
+		>
+			supa lon
+		</button>
+		<button
+			class="w-fit button-primary"
+			on:click={() => {
+				create_snack({
 					persistent: true,
 					label: "Hai :3",
 					description: "Hello from home snack button summoner! :D",

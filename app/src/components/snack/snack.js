@@ -47,7 +47,7 @@ export function pause_snack_timeouts() {
 		const key = keys[i];
 		const val = source[key];
 
-		if (val.timeout !== null) {
+		if (val.timeout !== undefined) {
 			window.clearTimeout(val.timeout);
 			val.timeout = -1;
 		}
@@ -62,7 +62,7 @@ export function resume_snack_timeouts() {
 		const key = keys[i];
 		const val = source[key];
 
-		if (val.timeout !== null) {
+		if (val.timeout !== undefined) {
 			val.timeout = window.setTimeout(() => close_snack(key), TIMEOUT_MS);
 		}
 	}

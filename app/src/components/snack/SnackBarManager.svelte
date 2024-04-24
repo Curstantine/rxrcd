@@ -51,9 +51,9 @@
 
 <ul
 	use:auto_sizer
-	class="absolute bottom-4 right-4"
-	class:expanded
 	role="group"
+	class:expanded
+	class="absolute bottom-4 right-4"
 	on:mouseenter={onEnter}
 	on:mouseleave={onLeave}
 >
