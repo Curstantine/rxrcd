@@ -12,7 +12,7 @@
 	/** @type {string} */
 	export let aria_controls;
 
-	/** @type {{ label: string; value: string }[]} */
+	/** @type {import("@/types/select").Action[]} */
 	export let actions;
 
 	/** @type {(value: string) => (void | Promise<void>)} */
@@ -76,8 +76,13 @@
 		style:min-width="{listbox_width}px"
 		use:external_hit={{ coupling_ids: [combobox_id], close: () => (expanded = false) }}
 	>
-		{#each actions as { label, value }}
-			<button class="action" on:click|once={() => on_action_click(value)}>{label}</button>
+		{#each actions as { label, value, sub }}
+			<button class="action" on:click|once={() => on_action_click(value)}>
+				{label}
+				{#if sub}
+					<span class="text-xs text-muted-foreground">{sub}</span>
+				{/if}
+			</button>
 		{/each}
 	</div>
 {/if}

@@ -4,11 +4,22 @@ import { get, readonly, writable } from "svelte/store";
 import { config_get_download, config_set_download } from "@/bindings/config";
 import { create_snack } from "@/components/snack/snack";
 
-/** @type {{ label: string; value: import("@/types/config").DownloadQuality }[]} */
+/**
+ * @type {Record<import("@/types/config").DownloadQuality | "NA", string>}
+ * @constant
+ */
+export const labels = {
+	Mp3_128: "MP3 120K",
+	Mp3_320: "MP3 320K",
+	Flac: "FLAC",
+	NA: "-",
+};
+
+/** @type {import("@/types/select").Action<import("@/types/config").DownloadQuality>[]} */
 export const download_quality_actions = [
-	{ label: "MP3 128K (Low Quality)", value: "Mp3_128" },
-	{ label: "MP3 320K (High Quality)", value: "Mp3_320" },
-	{ label: "FLAC (Lossless Quality)", value: "Flac" },
+	{ value: "Mp3_128", label: labels["Mp3_128"], sub: "(Low Quality)" },
+	{ value: "Mp3_320", label: labels["Mp3_320"], sub: "(High Quality)" },
+	{ value: "Flac", label: labels["Flac"], sub: "(Lossless Quality)" },
 ];
 
 export function initialize_state() {

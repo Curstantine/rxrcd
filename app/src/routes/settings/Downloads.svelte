@@ -3,7 +3,7 @@
 	import SettingsOptionArea from "@/components/SettingsOptionArea.svelte";
 	import Select from "@/components/select/Select.svelte";
 
-	import { download_quality_actions, initialize_state } from "@/routes/settings/Downloads.hooks";
+	import { download_quality_actions, initialize_state, labels } from "@/routes/settings/Downloads.hooks";
 
 	const { settings, change_property } = initialize_state();
 </script>
@@ -21,10 +21,10 @@
 	>
 		<Select
 			disabled={$settings === null}
-			label={$settings?.quality ?? "-"}
-			class="w-42"
-			aria_controls="select-color-scheme"
+			label={labels[$settings?.quality ?? "NA"]}
 			actions={download_quality_actions}
+			class="w-42"
+			aria_controls="select-download-quality"
 			on_change={async (val) =>
 				await change_property("quality", /** @type {import("@/types/config").DownloadQuality}*/ (val))}
 		/>
