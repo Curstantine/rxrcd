@@ -2,7 +2,6 @@
 	import { link } from "svelte-spa-router";
 	import active from "svelte-spa-router/active";
 
-	import Input from "@/components/Input.svelte";
 	import SearchCombo from "@/components/search_combo/SearchCombo.svelte";
 
 	import { extort_nav_state, extort_search_state } from "./Nav.hooks.js";
@@ -28,7 +27,13 @@
 	</div>
 
 	<div class="relative flex-1">
-		<Input id={search_input_id} bind:input={$search} autocomplete="false" placeholder="Search" class="w-full" />
+		<input
+			id={search_input_id}
+			autocomplete="false"
+			placeholder="Search"
+			bind:value={$search}
+			class="input w-full"
+		/>
 
 		{#if $show}
 			<SearchCombo data={$entries} coupling_ids={[search_input_id]} {close} />

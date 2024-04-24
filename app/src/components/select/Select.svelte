@@ -89,7 +89,7 @@
 
 <style>
 	.combobox {
-		--at-apply: flex justify-between items-center min-w-32 rounded-md h-9 px-3 border-(1 solid border);
+		--at-apply: flex justify-between items-center min-w-32 rounded-md h-8 px-3 border-(1 solid border);
 	}
 
 	.combobox:disabled {

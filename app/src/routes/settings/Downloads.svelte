@@ -29,4 +29,16 @@
 				await change_property("quality", /** @type {import("@/types/config").DownloadQuality}*/ (val))}
 		/>
 	</SettingsOptionArea>
+
+	<SettingsOptionArea label="Concurrent Downloads" subtitle="Number of downloads to run concurrently">
+		<input
+			type="number"
+			min={1}
+			max={10}
+			value={$settings?.concurrent}
+			disabled={$settings === null}
+			on:change={async (e) => await change_property("concurrent", Number.parseInt(e.currentTarget.value))}
+			class="input max-w-32"
+		/>
+	</SettingsOptionArea>
 </article>

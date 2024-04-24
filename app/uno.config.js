@@ -100,10 +100,14 @@ export default defineConfig({
 		"use-transition-standard": "duration-standard ease-standard",
 		"use-transition-emphasized": "duration-emphasized ease-emphasized",
 
-		"button-layout":
-			"inline-flex justify-center items-center gap-2 rounded-md px-4 py-1 font-medium text-sm use-transition-standard transition-colors disabled:(opacity-50 pointer-events-none)",
-		"icon-button-layout":
-			"inline-flex justify-center items-center aspect-square rounded-md font-medium text-sm use-transition-standard transition-colors disabled:(opacity-50 pointer-events-none)",
+		"button-layout": [
+			"inline-flex justify-center items-center gap-2 rounded-md px-4 py-1 font-medium text-sm",
+			"use-transition-standard transition-colors disabled:(opacity-50 pointer-events-none)",
+		].join(" "),
+		"icon-button-layout": [
+			"inline-flex justify-center items-center aspect-square rounded-md font-medium text-sm",
+			"use-transition-standard transition-colors disabled:(opacity-50 pointer-events-none)",
+		].join(" "),
 
 		"button-variant-ghost": "text-muted-foreground hover:(bg-secondary text-foreground)",
 
@@ -112,6 +116,12 @@ export default defineConfig({
 
 		"icon-button": "icon-button-layout border-(1 solid border) hover:(bg-secondary)",
 		"icon-button-ghost": "icon-button-layout button-variant-ghost",
+
+		input: [
+			"bg-transparent h-8 inline-flex items-center border-(1 border solid) rounded px-3 text-sm",
+			"transition-colors use-transition-standard appearance-none",
+			"active:outline-0 focus:(outline-0 border-ring) placeholder:text-sm focus:placeholder:opacity-0",
+		].join(" "),
 
 		skeletal: "animate-pulse rounded bg-secondary use-transition-emphasized",
 	},
