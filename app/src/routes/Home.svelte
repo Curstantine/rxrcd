@@ -1,5 +1,5 @@
 <script>
-	import { pushToSnackStack } from "@/components/snack/snack";
+	import { create_snack } from "@/components/snack/snack";
 </script>
 
 <div class="flex flex-1 flex-col gap-2 overflow-y-auto px-2 px-4 py-2">
@@ -9,7 +9,7 @@
 		<button
 			class="w-fit button-primary"
 			on:click={() => {
-				pushToSnackStack({ label: "Hai :3", description: "Hello from home snack button summoner! :D" });
+				create_snack({ label: "Hai :3", description: "Hello from home snack button summoner! :D" });
 			}}
 		>
 			Snack message
@@ -18,7 +18,7 @@
 		<button
 			class="w-fit button-primary"
 			on:click={() => {
-				pushToSnackStack({
+				create_snack({
 					persistent: true,
 					label: "Hai :3",
 					description: "Hello from home snack button summoner! :D",
@@ -31,7 +31,7 @@
 		<button
 			class="w-fit button-primary"
 			on:click={() => {
-				const instance = pushToSnackStack({
+				const instance = create_snack({
 					persistent: true,
 					label: "Progress",
 					description: "This is progression snack instance message!",

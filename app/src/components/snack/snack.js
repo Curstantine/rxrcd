@@ -32,14 +32,14 @@ export const snacks = derived(data, (source) => {
 /**
  * @param {symbol} id
  */
-function closeSnack(id) {
+function close_snack(id) {
 	data.update((stack) => {
 		delete stack[id];
 		return stack;
 	});
 }
 
-export function pauseSnackTimeouts() {
+export function pause_snack_timeouts() {
 	const source = get(data);
 	const keys = Object.getOwnPropertySymbols(source);
 
@@ -54,7 +54,7 @@ export function pauseSnackTimeouts() {
 	}
 }
 
-export function resumeSnackTimeouts() {
+export function resume_snack_timeouts() {
 	const source = get(data);
 	const keys = Object.getOwnPropertySymbols(source);
 
@@ -63,7 +63,7 @@ export function resumeSnackTimeouts() {
 		const val = source[key];
 
 		if (val.timeout !== null) {
-			val.timeout = window.setTimeout(() => closeSnack(key), TIMEOUT_MS);
+			val.timeout = window.setTimeout(() => close_snack(key), TIMEOUT_MS);
 		}
 	}
 }
@@ -71,7 +71,7 @@ export function resumeSnackTimeouts() {
 /**
  * @param {import("@/types/snack").SnackInstance} instance
  */
-export function pushToSnackStack(instance) {
+export function create_snack(instance) {
 	const id = Symbol();
 	const writableInstance = writable(instance);
 
@@ -89,14 +89,14 @@ export function pushToSnackStack(instance) {
 	}
 
 	function close() {
-		closeSnack(id);
+		close_snack(id);
 	}
 
 	/** @type {number | undefined} */
 	let timeout;
 
 	if (!instance.persistent) {
-		timeout = window.setTimeout(() => closeSnack(id), TIMEOUT_MS);
+		timeout = window.setTimeout(() => close_snack(id), TIMEOUT_MS);
 	}
 
 	data.update((stack) => {

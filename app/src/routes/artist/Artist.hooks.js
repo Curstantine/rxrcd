@@ -6,7 +6,7 @@ import { wait } from "@/utils/delayed";
 import { fetch_error } from "@/utils/errors";
 import { transform_to_map } from "@/utils/transformer";
 
-import { pushToSnackStack } from "@/components/snack/snack";
+import { create_snack } from "@/components/snack/snack";
 
 /**
  * @typedef {{ id: string, label: string, rel_type: import("@/types/deezer").AlbumRecordType | "discography" }} TabItem
@@ -135,7 +135,7 @@ export function extort_data_state(id) {
 		if (init_fetch.next === null) return;
 
 		const fetch_est = Math.floor(init_fetch.total / limit);
-		const snack_session = pushToSnackStack({
+		const snack_session = create_snack({
 			persistent: true,
 			label: "Retrieving data",
 			description: "Fetching missing artist data...",
@@ -187,11 +187,11 @@ export function extort_data_state(id) {
 		snack_session.close();
 	}
 
-	id.subscribe((val) => {
+	id.subscribe(async (val) => {
 		const id = Number.parseInt(val);
 		if (get(artist) !== null) artist.set(null);
 
-		Promise.all([
+		await Promise.all([
 			update_artist_data(id),
 			update_artist_albums(id),
 		]);

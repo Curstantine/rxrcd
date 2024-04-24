@@ -49,12 +49,12 @@ pub async fn config_get_download(config_state: State<'_, ConfigurationState>) ->
 #[tracing::instrument(skip_all, err(Debug))]
 pub async fn config_set_download(
 	config_state: State<'_, ConfigurationState>,
-	config: ConfigurationDownload,
+	download: ConfigurationDownload,
 ) -> CommandResult<()> {
 	{
 		let mut guard = config_state.get_data();
 		let inner = guard.as_mut().unwrap();
-		inner.download = config;
+		inner.download = download;
 	}
 
 	config_state.write().await?;

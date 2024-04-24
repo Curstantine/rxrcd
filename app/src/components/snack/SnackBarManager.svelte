@@ -1,6 +1,6 @@
 <script>
 	import SnackBar from "@/components/snack/SnackBar.svelte";
-	import { pauseSnackTimeouts, resumeSnackTimeouts, snacks } from "@/components/snack/snack";
+	import { pause_snack_timeouts, resume_snack_timeouts, snacks } from "@/components/snack/snack";
 
 	let expanded = false;
 
@@ -8,14 +8,14 @@
 		if (expanded) return;
 
 		expanded = true;
-		pauseSnackTimeouts();
+		pause_snack_timeouts();
 	};
 
 	const onLeave = () => {
 		if (!expanded) return;
 
 		expanded = false;
-		resumeSnackTimeouts();
+		resume_snack_timeouts();
 	};
 
 	/** @type {import("svelte/action").Action<HTMLUListElement>}*/

@@ -3,18 +3,9 @@
 	import SettingsOptionArea from "@/components/SettingsOptionArea.svelte";
 	import Select from "@/components/select/Select.svelte";
 
-	let selected_download_quality = "Mp3_128";
-	let download_qualities = [
-		{ label: "MP3 128K", value: "Mp3_128" },
-		{ label: "MP3 320K", value: "Mp3_320" },
-		{ label: "FLAC", value: "FLAC" },
-	];
+	import { download_quality_actions, initialize_state } from "@/routes/settings/Downloads.hooks";
 
-	/** @param {string} changed */
-	const change_download_quality = (changed) => {
-		const x = download_qualities.find(({ value }) => value === changed);
-		if (x !== undefined) selected_download_quality = x.value;
-	};
+	const { settings, change_property } = initialize_state();
 </script>
 
 <article id="downloads">
@@ -29,11 +20,13 @@
 		]}
 	>
 		<Select
-			label={selected_download_quality}
+			disabled={$settings === null}
+			label={$settings?.quality ?? "-"}
 			class="w-42"
 			aria_controls="select-color-scheme"
-			actions={download_qualities}
-			on_change={change_download_quality}
+			actions={download_quality_actions}
+			on_change={async (val) =>
+				await change_property("quality", /** @type {import("@/types/config").DownloadQuality}*/ (val))}
 		/>
 	</SettingsOptionArea>
 </article>

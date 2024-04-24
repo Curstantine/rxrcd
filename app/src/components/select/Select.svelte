@@ -3,6 +3,9 @@
 
 	import { external_hit } from "@/utils/actions";
 
+	/** @type {boolean} */
+	export let disabled = false;
+
 	/** @type {string} */
 	export let label;
 
@@ -51,13 +54,14 @@
 />
 
 <button
+	{disabled}
 	bind:this={button}
 	id={combobox_id}
 	role="combobox"
 	aria-expanded={expanded}
 	aria-controls={aria_controls}
 	on:click={() => (expanded = !expanded)}
-	class="{$$props.class} flex justify-between items-center min-w-32 rounded-md h-9 px-3 border-(1 solid border)"
+	class="{$$props.class} combobox"
 >
 	<span class="pointer-events-none text-sm">{label}</span>
 	<div class="i-symbols-expand-all-rounded text-muted-foreground"></div>
@@ -79,6 +83,14 @@
 {/if}
 
 <style>
+	.combobox {
+		--at-apply: flex justify-between items-center min-w-32 rounded-md h-9 px-3 border-(1 solid border);
+	}
+
+	.combobox:disabled {
+		--at-apply: opacity-50 pointer-events-none;
+	}
+
 	.action {
 		--at-apply: h-8 w-full px-3 text-start text-sm transition-colors use-transition-standard;
 	}
