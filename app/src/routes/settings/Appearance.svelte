@@ -2,7 +2,7 @@
 	import { set_theme, selected_theme, themes } from "@/utils/theme";
 
 	import SettingsHeading from "@/components/SettingsHeading.svelte";
-	import Select from "@/components/select/Select.svelte";
+	import Select from "@/components/Select.svelte";
 	import SettingsOptionArea from "@/components/SettingsOptionArea.svelte";
 
 	const actioned_themes = themes.map(({ label, id }) => ({ label, value: id }));

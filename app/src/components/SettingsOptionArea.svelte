@@ -13,7 +13,7 @@
 
 <div class="{$$props.class} {layout} option_area">
 	<label for={option_id} class="grid-area-[header]">{label}</label>
-	<span class="grid-area-[description] text-sm text-muted-foreground">
+	<label for={option_id} class="grid-area-[description] text-sm text-muted-foreground">
 		{#if typeof subtitle === "string"}
 			{subtitle}
 		{:else}
@@ -21,7 +21,7 @@
 				<p>{line}</p>
 			{/each}
 		{/if}
-	</span>
+	</label>
 
 	<div class="option">
 		<slot />

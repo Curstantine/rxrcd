@@ -3,9 +3,10 @@
 
 	import SettingsHeading from "@/components/SettingsHeading.svelte";
 	import SettingsOptionArea from "@/components/SettingsOptionArea.svelte";
-	import Select from "@/components/select/Select.svelte";
+	import Select from "@/components/Select.svelte";
 
 	import { download_quality_actions, initialize_state, labels } from "@/routes/settings/Downloads.hooks";
+	import Switch from "@/components/Switch.svelte";
 
 	const { settings, change_property } = initialize_state();
 </script>
@@ -85,18 +86,11 @@
 		label="Save Cover"
 		subtitle="Save covers along with the tracks downloaded"
 	>
-		<button
+		<Switch
 			id="save_covers"
-			role="switch"
 			disabled={$settings === null}
-			aria-checked={$settings?.save_covers}
-			value={$settings?.save_covers.toString() ?? undefined}
-			class="h-9 w-10 bg-red"
-			on:click={async (e) => {
-				const val = e.currentTarget.value === "true";
-				await change_property("save_covers", !val);
-			}}
-		>
-		</button>
+			value={$settings?.save_covers ?? false}
+			on_click={async (val) => await change_property("save_covers", val)}
+		/>
 	</SettingsOptionArea>
 </article>

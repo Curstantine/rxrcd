@@ -37,10 +37,12 @@ export default defineConfig({
 				"Inter, \"Segoe UI\", Roboto, Helvetica, Arial, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
 		},
 		easing: {
+			DEFAULT: "cubic-bezier(0.2, 0.0, 0, 1.0)",
 			emphasized: "cubic-bezier(0.4, 0.0, 0.2, 1.0)",
 			standard: "cubic-bezier(0.2, 0.0, 0, 1.0)",
 		},
 		duration: {
+			DEFAULT: "300ms",
 			standard: "300ms",
 			emphasized: "500ms",
 		},
