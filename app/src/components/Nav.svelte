@@ -29,10 +29,10 @@
 	<div class="relative flex-1">
 		<input
 			id={search_input_id}
-			autocomplete="false"
+			autocomplete="off"
 			placeholder="Search"
 			bind:value={$search}
-			class="input w-full"
+			class="h-8 w-full input"
 		/>
 
 		{#if $show}

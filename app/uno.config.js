@@ -118,8 +118,8 @@ export default defineConfig({
 		"icon-button-ghost": "icon-button-layout button-variant-ghost",
 
 		input: [
-			"bg-transparent h-8 inline-flex items-center border-(1 border solid) rounded px-3 text-sm",
-			"transition-colors use-transition-standard appearance-none",
+			"bg-transparent h-9 inline-flex items-center border-(1 border solid) rounded px-3 text-sm",
+			"transition-colors use-transition-standard",
 			"active:outline-0 focus:(outline-0 border-ring) placeholder:text-sm focus:placeholder:opacity-0",
 		].join(" "),
 

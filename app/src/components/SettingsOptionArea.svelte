@@ -4,9 +4,12 @@
 
 	/** @type {string | string[]} */
 	export let subtitle;
+
+	/** @type {"col" | "row"}*/
+	export let layout = "row";
 </script>
 
-<div class="{$$props.class} option_area">
+<div class="{$$props.class} {layout} option_area">
 	<span class="grid-area-[header]">{label}</span>
 	<span class="grid-area-[description] text-sm text-muted-foreground">
 		{#if typeof subtitle === "string"}
@@ -18,16 +21,36 @@
 		{/if}
 	</span>
 
-	<div class="grid-area-[option]">
+	<div class="option">
 		<slot />
 	</div>
 </div>
 
 <style>
 	.option_area {
-		--at-apply: grid grid-cols-[1fr_1fr_auto] py-2 items-center;
+		--at-apply: grid py-2 items-center;
+	}
+
+	.option {
+		--at-apply: grid-area-[option];
+	}
+
+	.option_area.row {
+		--at-apply: grid-cols-[1fr_1fr_auto];
 		grid-template-areas:
 			"header header option"
 			"description description option";
+	}
+
+	.option_area.col {
+		--at-apply: grid-cols-[1fr_1fr];
+		grid-template-areas:
+			"header header header"
+			"description description description"
+			"option option option";
+	}
+
+	.option_area.col .option {
+		--at-apply: mt-2;
 	}
 </style>

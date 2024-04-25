@@ -42,6 +42,7 @@ features = [
 	"window-start-dragging",
 	"window-unmaximize",
 	"window-unminimize",
+	"dialog-open",
 ]
 
 [target.'cfg(any(windows, target_os = "macos"))'.dependencies]

@@ -1,4 +1,6 @@
 <script>
+	import { open } from "@tauri-apps/api/dialog";
+
 	import SettingsHeading from "@/components/SettingsHeading.svelte";
 	import SettingsOptionArea from "@/components/SettingsOptionArea.svelte";
 	import Select from "@/components/select/Select.svelte";
@@ -38,7 +40,31 @@
 			value={$settings?.concurrent}
 			disabled={$settings === null}
 			on:change={async (e) => await change_property("concurrent", Number.parseInt(e.currentTarget.value))}
-			class="input max-w-32"
+			class="w-42 input"
 		/>
+	</SettingsOptionArea>
+
+	<SettingsOptionArea label="Location" subtitle="Save location for the downloaded tracks" layout="col">
+		<button
+			disabled={$settings === null}
+			class="w-full input"
+			on:click={async () => {
+				/** @type {string | null} */
+				// @ts-expect-error multiple = false returns only string | nul
+				const folder = await open({
+					title: "Select a download folder",
+					directory: true,
+					multiple: false,
+					defaultPath: $settings?.path,
+				});
+
+				if (folder !== null) {
+					await change_property("path", folder);
+				}
+			}}
+		>
+			<div class="i-symbols-folder-outline-rounded mr-2 h-5 w-5 text-muted-foreground"></div>
+			{$settings?.path ?? "N/A"}
+		</button>
 	</SettingsOptionArea>
 </article>

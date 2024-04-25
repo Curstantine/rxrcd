@@ -9,5 +9,5 @@ pub fn get_config_path(config_dir: &Path) -> PathBuf {
 
 #[inline(always)]
 pub fn get_default_download_dir() -> PathBuf {
-	download_dir().unwrap().join("rxrcd/")
+	download_dir().unwrap().join("rxrcd")
 }

@@ -30,6 +30,9 @@
 
 				"startDragging": true
 			},
+			"dialog": {
+				"open": true
+			},
 			"fs": {
 				"readDir": true,
 				"readFile": true,
