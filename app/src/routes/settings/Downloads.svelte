@@ -4,9 +4,9 @@
 	import SettingsHeading from "@/components/SettingsHeading.svelte";
 	import SettingsOptionArea from "@/components/SettingsOptionArea.svelte";
 	import Select from "@/components/Select.svelte";
+	import Switch from "@/components/Switch.svelte";
 
 	import { download_quality_actions, initialize_state, labels } from "@/routes/settings/Downloads.hooks";
-	import Switch from "@/components/Switch.svelte";
 
 	const { settings, change_property } = initialize_state();
 </script>
@@ -83,8 +83,9 @@
 
 	<SettingsOptionArea
 		option_id="save_covers"
-		label="Save Cover"
-		subtitle="Save covers along with the tracks downloaded"
+		label="Save Covers"
+		subtitle="Download covers alongside the tracks"
+		class="mt-4"
 	>
 		<Switch
 			id="save_covers"
