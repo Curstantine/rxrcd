@@ -6,7 +6,13 @@
 	import Select from "@/components/Select.svelte";
 	import Switch from "@/components/Switch.svelte";
 
-	import { download_quality_actions, initialize_state, labels } from "@/routes/settings/Downloads.hooks";
+	import {
+		download_quality_actions,
+		initialize_state,
+		download_quality_labels,
+		cover_quality_actions,
+		cover_quality_labels,
+	} from "@/routes/settings/Downloads.hooks";
 
 	const { settings, change_property } = initialize_state();
 </script>
@@ -25,9 +31,9 @@
 	>
 		<Select
 			class="w-42"
-			id="select-download-quality"
+			id="select_download_quality"
 			disabled={$settings === null}
-			label={labels[$settings?.quality ?? "NA"]}
+			label={download_quality_labels[$settings?.quality ?? "NA"]}
 			actions={download_quality_actions}
 			on_change={async (val) =>
 				await change_property("quality", /** @type {import("@/types/config").DownloadQuality}*/ (val))}
@@ -105,6 +111,47 @@
 			disabled={$settings === null}
 			value={$settings?.embed_covers ?? false}
 			on_click={async (val) => await change_property("embed_covers", val)}
+		/>
+	</SettingsOptionArea>
+
+	<SettingsOptionArea
+		option_id="select_cover_quality"
+		label="Cover Resolution"
+		subtitle={[
+			"Select the resolutions of the downloaded covers",
+			"NOTE: Sizes are not fixed, but relative to the width",
+		]}
+	>
+		<Select
+			class="w-42"
+			id="select_cover_quality"
+			disabled={$settings === null}
+			label={cover_quality_labels[$settings?.cover_resolution ?? "NA"]}
+			actions={cover_quality_actions}
+			on_change={async (val) =>
+				await change_property("cover_resolution", /** @type {import("@/types/config").CoverQuality}*/ (val))}
+		/>
+	</SettingsOptionArea>
+
+	<SettingsOptionArea
+		label="Embedded Cover Resolution"
+		subtitle={[
+			"Select the resolution of the embedded covers",
+			"NOTE: Sizes are not fixed, but relative to the width",
+		]}
+		option_id="select_embedded_cover_resolution"
+	>
+		<Select
+			class="w-42"
+			id="select_embedded_cover_resolution"
+			disabled={$settings === null}
+			label={cover_quality_labels[$settings?.cover_embed_resolution ?? "NA"]}
+			actions={cover_quality_actions}
+			on_change={async (val) =>
+				await change_property(
+					"cover_embed_resolution",
+					/** @type {import("@/types/config").CoverQuality}*/ (val),
+				)}
 		/>
 	</SettingsOptionArea>
 </article>

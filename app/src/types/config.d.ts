@@ -9,6 +9,7 @@ export declare interface ConfigurationAppearance {
 }
 
 export declare type DownloadQuality = "Flac" | "Mp3_320" | "Mp3_128";
+export declare type CoverQuality = "Small" | "Medium" | "Big" | "Xl";
 export declare interface ConfigurationDownload {
 	concurrent: number;
 	quality: DownloadQuality;
@@ -16,6 +17,6 @@ export declare interface ConfigurationDownload {
 
 	save_covers: boolean;
 	embed_covers: boolean;
-	cover_resolution: number;
-	cover_embed_resolution: number;
+	cover_resolution: CoverQuality;
+	cover_embed_resolution: CoverQuality;
 }

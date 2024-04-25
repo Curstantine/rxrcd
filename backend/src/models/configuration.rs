@@ -17,6 +17,14 @@ pub enum DownloadQuality {
 	Mp3_128,
 }
 
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
+pub enum CoverQuality {
+	Small,
+	Medium,
+	Big,
+	Xl,
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ConfigurationDownload {
 	pub concurrent: u8,
@@ -25,8 +33,8 @@ pub struct ConfigurationDownload {
 
 	pub save_covers: bool,
 	pub embed_covers: bool,
-	pub cover_resolution: u16,
-	pub cover_embed_resolution: u16,
+	pub cover_resolution: CoverQuality,
+	pub cover_embed_resolution: CoverQuality,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -44,8 +52,8 @@ impl Default for Configuration {
 
 				save_covers: true,
 				embed_covers: true,
-				cover_resolution: 1200,
-				cover_embed_resolution: 1000,
+				cover_resolution: CoverQuality::Xl,
+				cover_embed_resolution: CoverQuality::Medium,
 			},
 			appearance: ConfigurationAppearance {
 				theme: "system".to_string(),

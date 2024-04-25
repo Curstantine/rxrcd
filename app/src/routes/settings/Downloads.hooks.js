@@ -8,18 +8,38 @@ import { create_snack } from "@/components/snack/snack";
  * @type {Record<import("@/types/config").DownloadQuality | "NA", string>}
  * @constant
  */
-export const labels = {
+export const download_quality_labels = {
 	Mp3_128: "MP3 120K",
 	Mp3_320: "MP3 320K",
 	Flac: "FLAC",
 	NA: "-",
 };
 
+/**
+ * @type {Record<import("@/types/config").CoverQuality | "NA", string>}
+ * @constant
+ */
+export const cover_quality_labels = {
+	Small: "Small",
+	Medium: "Medium",
+	Big: "Big",
+	Xl: "XL",
+	NA: "-",
+};
+
 /** @type {import("@/types/select").Action<import("@/types/config").DownloadQuality>[]} */
 export const download_quality_actions = [
-	{ value: "Mp3_128", label: labels["Mp3_128"], sub: "(Low Quality)" },
-	{ value: "Mp3_320", label: labels["Mp3_320"], sub: "(High Quality)" },
-	{ value: "Flac", label: labels["Flac"], sub: "(Lossless Quality)" },
+	{ value: "Mp3_128", label: download_quality_labels["Mp3_128"], sub: "(Low Quality)" },
+	{ value: "Mp3_320", label: download_quality_labels["Mp3_320"], sub: "(High Quality)" },
+	{ value: "Flac", label: download_quality_labels["Flac"], sub: "(Lossless Quality)" },
+];
+
+/** @type {import("@/types/select").Action<import("@/types/config").CoverQuality>[]} */
+export const cover_quality_actions = [
+	{ value: "Small", label: cover_quality_labels["Small"], sub: "(56px)" },
+	{ value: "Medium", label: cover_quality_labels["Medium"], sub: "(250px)" },
+	{ value: "Big", label: cover_quality_labels["Big"], sub: "(500px)" },
+	{ value: "Xl", label: cover_quality_labels["Xl"], sub: "(1000px)" },
 ];
 
 export function initialize_state() {
