@@ -12,7 +12,7 @@
 	const [[back_disabled, forward_disabled], { back, forward }] = extort_nav_state();
 </script>
 
-<div class="sticky inset-x-0 top-0 z-20 h-12 flex items-center bg-background/95 px-4 backdrop-blur-xl space-x-4">
+<nav class="sticky inset-x-0 top-0 z-20 flex items-center bg-background/95 px-4 backdrop-blur-xl space-x-4">
 	<div class="inline-flex space-x-2">
 		<a use:link use:active href="/" class="action_button">
 			<div class="i-symbols-home-rounded h-5 w-5" />
@@ -31,8 +31,8 @@
 			id={search_input_id}
 			autocomplete="off"
 			placeholder="Search"
-			bind:value={$search}
 			class="h-8 w-full input"
+			bind:value={$search}
 		/>
 
 		{#if $show}
@@ -43,9 +43,13 @@
 	<a use:link use:active href="/settings" class="action_button">
 		<div class="i-symbols-settings-rounded h-5 w-5" />
 	</a>
-</div>
+</nav>
 
 <style>
+	nav {
+		height: var(--nav-height);
+	}
+
 	.action_button {
 		--at-apply: h-8 w-8 icon-button-ghost;
 	}

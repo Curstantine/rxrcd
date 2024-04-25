@@ -30,13 +30,20 @@
 </script>
 
 <main class="grid grid-cols-[16rem_1fr] w-full 2xl:container">
-	<div class="flex flex-col border-r-(1 border solid) px-2 pt-2">
+	<div class="side_nav">
 		{#each tabs as { icon, label, sub_route }}
 			<SettingsNavigationItem active={params?.wild === sub_route} href="/settings/{sub_route}" {icon} {label} />
 		{/each}
 	</div>
 
-	<div class="px-6 pt-4">
+	<div class="col-start-2 px-6 pt-4">
 		<Router prefix="/settings" {routes} />
 	</div>
 </main>
+
+<style>
+	.side_nav {
+		height: calc(100vh - var(--nav-height));
+		--at-apply: sticky top-12 w-64 flex flex-col border-r-(1 border solid) px-2 pt-2;
+	}
+</style>
