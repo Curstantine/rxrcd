@@ -1,5 +1,7 @@
 <script>
 	/** @type {string} */
+	export let option_id;
+	/** @type {string} */
 	export let label;
 
 	/** @type {string | string[]} */
@@ -10,7 +12,7 @@
 </script>
 
 <div class="{$$props.class} {layout} option_area">
-	<span class="grid-area-[header]">{label}</span>
+	<label for={option_id} class="grid-area-[header]">{label}</label>
 	<span class="grid-area-[description] text-sm text-muted-foreground">
 		{#if typeof subtitle === "string"}
 			{subtitle}

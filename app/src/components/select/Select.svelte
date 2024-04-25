@@ -10,15 +10,13 @@
 	export let label;
 
 	/** @type {string} */
-	export let aria_controls;
+	export let id;
 
 	/** @type {import("@/types/select").Action[]} */
 	export let actions;
 
 	/** @type {(value: string) => (void | Promise<void>)} */
 	export let on_change;
-
-	const combobox_id = `${aria_controls}-hit-box`;
 
 	/** @type {HTMLButtonElement} */
 	let button;
@@ -54,12 +52,12 @@
 />
 
 <button
+	{id}
 	{disabled}
 	bind:this={button}
-	id={combobox_id}
 	role="combobox"
 	aria-expanded={expanded}
-	aria-controls={aria_controls}
+	aria-controls={id}
 	on:click={() => (expanded = !expanded)}
 	class="{$$props.class} combobox"
 >
@@ -74,7 +72,7 @@
 		style:top="calc({listbox_top}px + 2.75rem)"
 		style:left="{listbox_left}px"
 		style:min-width="{listbox_width}px"
-		use:external_hit={{ coupling_ids: [combobox_id], close: () => (expanded = false) }}
+		use:external_hit={{ coupling_ids: [id], close: () => (expanded = false) }}
 	>
 		{#each actions as { label, value, sub }}
 			<button class="action" on:click|once={() => on_action_click(value)}>

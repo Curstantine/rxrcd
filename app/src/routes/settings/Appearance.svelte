@@ -17,13 +17,18 @@
 <article id="appearance">
 	<SettingsHeading heading="Appearance" sub="Tweak rxrcd's look and feel" />
 
-	<SettingsOptionArea class="mt-4" label="Theme" subtitle="Change application-wide color scheme">
+	<SettingsOptionArea
+		label="Theme"
+		subtitle="Change application-wide color scheme"
+		class="mt-4"
+		option_id="color-scheme"
+	>
 		<Select
+			id="color-scheme"
 			label={$selected_theme?.label ?? "N/A"}
-			class="w-42"
-			aria_controls="select-color-scheme"
 			actions={actioned_themes}
 			on_change={change_theme}
+			class="w-42"
 		/>
 	</SettingsOptionArea>
 </article>

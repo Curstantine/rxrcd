@@ -14,38 +14,50 @@
 	<SettingsHeading heading="Downloads" sub="Configure the download location, quality, and many more" />
 
 	<SettingsOptionArea
-		class="mt-4"
 		label="Track Quality"
 		subtitle={[
 			"Change the quality of the downloaded tracks",
 			"Note: You need to be logged in to use higher quality targets like FLAC",
 		]}
+		class="mt-4"
+		option_id="select_download_quality"
 	>
 		<Select
+			class="w-42"
+			id="select-download-quality"
 			disabled={$settings === null}
 			label={labels[$settings?.quality ?? "NA"]}
 			actions={download_quality_actions}
-			class="w-42"
-			aria_controls="select-download-quality"
 			on_change={async (val) =>
 				await change_property("quality", /** @type {import("@/types/config").DownloadQuality}*/ (val))}
 		/>
 	</SettingsOptionArea>
 
-	<SettingsOptionArea label="Concurrent Downloads" subtitle="Number of downloads to run concurrently">
+	<SettingsOptionArea
+		option_id="concurrent_downloads"
+		label="Concurrent Downloads"
+		subtitle="Number of downloads to run concurrently"
+	>
 		<input
+			id="concurrent_downloads"
 			type="number"
 			min={1}
 			max={10}
 			value={$settings?.concurrent}
 			disabled={$settings === null}
-			on:change={async (e) => await change_property("concurrent", Number.parseInt(e.currentTarget.value))}
 			class="w-42 input"
+			on:change={async (e) => await change_property("concurrent", Number.parseInt(e.currentTarget.value))}
 		/>
 	</SettingsOptionArea>
 
-	<SettingsOptionArea label="Location" subtitle="Save location for the downloaded tracks" layout="col">
+	<SettingsOptionArea
+		option_id="download_path"
+		label="Location"
+		subtitle="Save location for the downloaded tracks"
+		layout="col"
+	>
 		<button
+			id="download_path"
 			disabled={$settings === null}
 			class="w-full input"
 			on:click={async () => {
@@ -65,6 +77,26 @@
 		>
 			<div class="i-symbols-folder-outline-rounded mr-2 h-5 w-5 text-muted-foreground"></div>
 			{$settings?.path ?? "N/A"}
+		</button>
+	</SettingsOptionArea>
+
+	<SettingsOptionArea
+		option_id="save_covers"
+		label="Save Cover"
+		subtitle="Save covers along with the tracks downloaded"
+	>
+		<button
+			id="save_covers"
+			role="switch"
+			disabled={$settings === null}
+			aria-checked={$settings?.save_covers}
+			value={$settings?.save_covers.toString() ?? undefined}
+			class="h-9 w-10 bg-red"
+			on:click={async (e) => {
+				const val = e.currentTarget.value === "true";
+				await change_property("save_covers", !val);
+			}}
+		>
 		</button>
 	</SettingsOptionArea>
 </article>
