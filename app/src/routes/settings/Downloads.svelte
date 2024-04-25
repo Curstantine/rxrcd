@@ -94,4 +94,17 @@
 			on_click={async (val) => await change_property("save_covers", val)}
 		/>
 	</SettingsOptionArea>
+
+	<SettingsOptionArea
+		option_id="embed_covers"
+		label="Embed Covers"
+		subtitle="Where the covers should be embedded to the track's metadata"
+	>
+		<Switch
+			id="embed_covers"
+			disabled={$settings === null}
+			value={$settings?.embed_covers ?? false}
+			on_click={async (val) => await change_property("embed_covers", val)}
+		/>
+	</SettingsOptionArea>
 </article>
