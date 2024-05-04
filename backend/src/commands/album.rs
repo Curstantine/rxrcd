@@ -9,14 +9,14 @@ use {
 
 use crate::{
 	errors::{CommandResult, PassiveError},
-	models::state::NetworkClientState,
+	models::state::DeezerClientState,
 };
 
 #[tauri::command(rename_all = "snake_case")]
-#[tracing::instrument(skip(network_state), err(Debug))]
-pub async fn get_album(id: u64, network_state: State<'_, NetworkClientState>) -> CommandResult<Album> {
-	let client_guard = network_state.get().await;
-	let client = client_guard.as_ref().unwrap();
+#[tracing::instrument(skip(deezer_state), err(Debug))]
+pub async fn get_album(id: u64, deezer_state: State<'_, DeezerClientState>) -> CommandResult<Album> {
+	let deezer_guard = deezer_state.get().await;
+	let client = deezer_guard.as_ref().unwrap();
 
 	deezer::album::get_album(client, id)
 		.await
@@ -24,15 +24,15 @@ pub async fn get_album(id: u64, network_state: State<'_, NetworkClientState>) ->
 }
 
 #[tauri::command(rename_all = "snake_case")]
-#[tracing::instrument(skip(network_state), err(Debug))]
+#[tracing::instrument(skip(deezer_state), err(Debug))]
 pub async fn search_albums(
 	query: String,
 	limit: Option<u32>,
 	index: Option<u32>,
-	network_state: State<'_, NetworkClientState>,
+	deezer_state: State<'_, DeezerClientState>,
 ) -> CommandResult<AlbumSearch> {
-	let client_guard = network_state.get().await;
-	let client = client_guard.as_ref().unwrap();
+	let deezer_guard = deezer_state.get().await;
+	let client = deezer_guard.as_ref().unwrap();
 
 	let options = SearchOptions::with_query(&query, Some(SearchOrder::AlbumAsc), limit.or(Some(8)), index);
 
@@ -42,15 +42,15 @@ pub async fn search_albums(
 }
 
 #[tauri::command(rename_all = "snake_case")]
-#[tracing::instrument(skip(network_state), err(Debug))]
+#[tracing::instrument(skip(deezer_state), err(Debug))]
 pub async fn get_artist_albums(
 	artist_id: u64,
 	limit: Option<u32>,
 	index: Option<u32>,
-	network_state: State<'_, NetworkClientState>,
+	deezer_state: State<'_, DeezerClientState>,
 ) -> CommandResult<ArtistAlbumList> {
-	let client_guard = network_state.get().await;
-	let client = client_guard.as_ref().unwrap();
+	let deezer_guard = deezer_state.get().await;
+	let client = deezer_guard.as_ref().unwrap();
 
 	let options = SearchOptions::new(Some(SearchOrder::AlbumAsc), limit.or(Some(100)), index);
 

@@ -8,7 +8,7 @@ use {tauri::WindowEvent, tracing::info};
 #[cfg(any(windows, target_os = "macos"))]
 use {tauri::Manager, window_shadows::set_shadow};
 
-use crate::models::state::{AppState, ConfigurationState, NetworkClientState};
+use crate::models::state::{AppState, ConfigurationState, DeezerClientState};
 
 mod commands;
 mod errors;
@@ -39,7 +39,7 @@ fn main() {
 		})
 		.manage(AppState::default())
 		.manage(ConfigurationState::default())
-		.manage(NetworkClientState::default())
+		.manage(DeezerClientState::default())
 		.invoke_handler(tauri::generate_handler![
 			commands::setup,
 			commands::config::config_get_appearance,
@@ -52,6 +52,7 @@ fn main() {
 			commands::album::get_artist_albums,
 			commands::artist::get_artist,
 			commands::artist::search_artists,
+			commands::user::login_with_arl,
 		])
 		.run(tauri::generate_context!())
 		.expect("error while running tauri application");

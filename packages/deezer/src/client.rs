@@ -42,6 +42,11 @@ impl DeezerClient {
 		}
 	}
 
+	pub fn is_authenticated(&self) -> bool {
+		let data = self.api_token.lock().unwrap();
+		data.is_some()
+	}
+
 	pub fn set_api_token(&self, api_token: String) {
 		let mut data = self.api_token.lock().unwrap();
 		*data = Some(api_token);
@@ -59,5 +64,10 @@ impl DeezerClient {
 
 	pub fn post<U: reqwest::IntoUrl>(&self, url: U) -> reqwest::RequestBuilder {
 		self.client.post(url)
+	}
+
+	#[cfg(test)]
+	pub fn testing() -> Self {
+		DeezerClient::with_client_name("rxrcd-deezer", "testing")
 	}
 }

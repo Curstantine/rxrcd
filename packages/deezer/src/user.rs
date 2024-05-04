@@ -28,7 +28,7 @@ mod tests {
 
 	#[tokio::test]
 	async fn test_login_with_arl() -> DeezerResult<()> {
-		let client = DeezerClient::with_client_name("rxrcd-deezer", "testing");
+		let client = DeezerClient::testing();
 		let arl = var("ARL").expect("ARL env needs to be set for this test to run!");
 		super::login_with_arl(&client, &arl).await?;
 

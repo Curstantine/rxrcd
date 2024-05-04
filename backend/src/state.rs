@@ -3,18 +3,15 @@ use std::{
 	sync::MutexGuard,
 };
 
+use anyhow::{Context, Result};
+use deezer::client::DeezerClient;
+use tokio::sync::MutexGuard as AsyncMutexGuard;
 use tracing::debug;
-
-use {
-	anyhow::{ensure, Context, Result},
-	reqwest::Client,
-	tokio::sync::MutexGuard as AsyncMutexGuard,
-};
 
 use crate::{
 	models::{
 		configuration::Configuration,
-		state::{AppState, ConfigurationState, NetworkClientState},
+		state::{AppState, ConfigurationState, DeezerClientState},
 	},
 	utils::{configuration, directories},
 };
@@ -83,28 +80,16 @@ impl ConfigurationState {
 	}
 }
 
-impl NetworkClientState {
+impl DeezerClientState {
 	#[inline(always)]
-	pub async fn get(&self) -> AsyncMutexGuard<'_, Option<Client>> {
+	pub async fn get(&self) -> AsyncMutexGuard<'_, Option<DeezerClient>> {
 		self.0.lock().await
 	}
 
 	pub async fn initialize(&self) -> Result<()> {
-		let mut headers = reqwest::header::HeaderMap::new();
-
-		ensure!(
-			headers
-				.insert(reqwest::header::CONTENT_TYPE, "json".parse().unwrap())
-				.is_none(),
-			"Content-Type header should not be populated in this Client"
-		);
-
-		let client = reqwest::ClientBuilder::new()
-			.https_only(true)
-			.default_headers(headers)
-			.build()?;
-
-		self.get().await.replace(client);
+		let client = DeezerClient::with_client_name("rxrcd", env!("CARGO_PKG_VERSION"));
+		let mut lock = self.0.lock().await;
+		*lock = Some(client);
 
 		Ok(())
 	}

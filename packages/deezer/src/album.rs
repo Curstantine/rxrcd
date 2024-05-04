@@ -1,7 +1,7 @@
-use reqwest::Client;
 use tracing::debug;
 
 use crate::{
+	client::DeezerClient,
 	constants::DEEZER_API_URL,
 	errors::DeezerResult,
 	models::{
@@ -10,7 +10,7 @@ use crate::{
 	},
 };
 
-pub async fn get_album(client: &Client, id: u64) -> DeezerResult<Album> {
+pub async fn get_album(client: &DeezerClient, id: u64) -> DeezerResult<Album> {
 	let url = format!("{DEEZER_API_URL}/album/{id}");
 	debug!("Fetch request to {url}");
 
@@ -21,7 +21,7 @@ pub async fn get_album(client: &Client, id: u64) -> DeezerResult<Album> {
 }
 
 #[tracing::instrument(skip(client))]
-pub async fn search_albums(client: &Client, options: &SearchOptions<'_>) -> DeezerResult<AlbumSearch> {
+pub async fn search_albums(client: &DeezerClient, options: &SearchOptions<'_>) -> DeezerResult<AlbumSearch> {
 	let url = options.create_url("search/album")?;
 	debug!("Fetch request to {url}");
 
@@ -32,7 +32,7 @@ pub async fn search_albums(client: &Client, options: &SearchOptions<'_>) -> Deez
 }
 
 pub async fn get_artist_albums(
-	client: &Client,
+	client: &DeezerClient,
 	artist_id: u64,
 	options: &SearchOptions<'_>,
 ) -> DeezerResult<ArtistAlbumList> {
@@ -47,9 +47,8 @@ pub async fn get_artist_albums(
 
 #[cfg(test)]
 mod tests {
-	use reqwest::Client;
-
 	use crate::{
+		client::DeezerClient,
 		errors::DeezerResult,
 		models::{
 			album::{Album, AlbumSearch},
@@ -75,7 +74,7 @@ mod tests {
 
 	#[tokio::test]
 	async fn test_get_album() -> DeezerResult<()> {
-		let client = Client::default();
+		let client = DeezerClient::testing();
 		let out = super::get_album(&client, 302127).await?;
 		println!("{out:#?}");
 
@@ -84,7 +83,7 @@ mod tests {
 
 	#[tokio::test]
 	async fn test_search_albums() -> DeezerResult<()> {
-		let client = Client::default();
+		let client = DeezerClient::testing();
 		let options = SearchOptions::with_query("Draft Punk", None, None, None);
 
 		let out = super::search_albums(&client, &options).await?;
@@ -105,7 +104,7 @@ mod tests {
 
 	#[tokio::test]
 	async fn test_get_artist_albums() -> DeezerResult<()> {
-		let client = Client::default();
+		let client = DeezerClient::testing();
 		let options = SearchOptions::new(None, None, None);
 
 		let out = super::get_artist_albums(&client, 27, &options).await?;

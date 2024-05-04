@@ -9,14 +9,14 @@ use {
 
 use crate::{
 	errors::{CommandResult, PassiveError},
-	models::state::NetworkClientState,
+	models::state::DeezerClientState,
 };
 
 #[tauri::command(rename_all = "snake_case")]
-#[tracing::instrument(skip(network_state), err(Debug))]
-pub async fn get_artist(id: u64, network_state: State<'_, NetworkClientState>) -> CommandResult<Artist> {
-	let client_guard = network_state.get().await;
-	let client = client_guard.as_ref().unwrap();
+#[tracing::instrument(skip(deezer_state), err(Debug))]
+pub async fn get_artist(id: u64, deezer_state: State<'_, DeezerClientState>) -> CommandResult<Artist> {
+	let deezer_guard = deezer_state.get().await;
+	let client = deezer_guard.as_ref().unwrap();
 
 	deezer::artist::get_artist(client, id)
 		.await
@@ -24,15 +24,15 @@ pub async fn get_artist(id: u64, network_state: State<'_, NetworkClientState>) -
 }
 
 #[tauri::command(rename_all = "snake_case")]
-#[tracing::instrument(skip(network_state), err(Debug))]
+#[tracing::instrument(skip(deezer_state), err(Debug))]
 pub async fn search_artists(
 	query: String,
 	limit: Option<u32>,
 	index: Option<u32>,
-	network_state: State<'_, NetworkClientState>,
+	deezer_state: State<'_, DeezerClientState>,
 ) -> CommandResult<ArtistSearch> {
-	let client_guard = network_state.get().await;
-	let client = client_guard.as_ref().unwrap();
+	let deezer_guard = deezer_state.get().await;
+	let client = deezer_guard.as_ref().unwrap();
 
 	let opts = SearchOptions::with_query(&query, Some(SearchOrder::ArtistDesc), limit.or(Some(6)), index);
 
