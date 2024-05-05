@@ -27,7 +27,7 @@
 			"Note: You need to be logged in to use higher quality targets like FLAC",
 		]}
 		class="mt-4"
-		option_id="select_download_quality"
+		form_id="select_download_quality"
 	>
 		<Select
 			class="w-42"
@@ -41,7 +41,7 @@
 	</SettingsOptionArea>
 
 	<SettingsOptionArea
-		option_id="concurrent_downloads"
+		form_id="concurrent_downloads"
 		label="Concurrent Downloads"
 		subtitle="Number of downloads to run concurrently"
 	>
@@ -58,7 +58,7 @@
 	</SettingsOptionArea>
 
 	<SettingsOptionArea
-		option_id="download_path"
+		form_id="download_path"
 		label="Location"
 		subtitle="Save location for the downloaded tracks"
 		layout="col"
@@ -88,7 +88,7 @@
 	</SettingsOptionArea>
 
 	<SettingsOptionArea
-		option_id="save_covers"
+		form_id="save_covers"
 		label="Save Covers"
 		subtitle="Download covers alongside the tracks"
 		class="mt-4"
@@ -102,7 +102,7 @@
 	</SettingsOptionArea>
 
 	<SettingsOptionArea
-		option_id="embed_covers"
+		form_id="embed_covers"
 		label="Embed Covers"
 		subtitle="Whether the covers should be embedded into track's metadata"
 	>
@@ -115,7 +115,7 @@
 	</SettingsOptionArea>
 
 	<SettingsOptionArea
-		option_id="select_cover_quality"
+		form_id="select_cover_quality"
 		label="Cover Resolution"
 		subtitle={[
 			"Select the resolutions of the downloaded covers",
@@ -139,7 +139,7 @@
 			"Select the resolution of the embedded covers",
 			"NOTE: Sizes are not fixed, but relative to the width",
 		]}
-		option_id="select_embedded_cover_resolution"
+		form_id="select_embedded_cover_resolution"
 	>
 		<Select
 			class="w-42"

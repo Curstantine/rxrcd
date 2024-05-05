@@ -21,7 +21,7 @@
 		label="Theme"
 		subtitle="Change application-wide color scheme"
 		class="mt-4"
-		option_id="color-scheme"
+		form_id="color-scheme"
 	>
 		<Select
 			id="color-scheme"

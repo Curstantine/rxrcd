@@ -1,6 +1,7 @@
 <script>
 	/** @type {string} */
-	export let option_id;
+	export let form_id;
+
 	/** @type {string} */
 	export let label;
 
@@ -12,8 +13,8 @@
 </script>
 
 <div class="{$$props.class} {layout} option_area">
-	<label for={option_id} class="grid-area-[header]">{label}</label>
-	<label for={option_id} class="grid-area-[description] text-sm text-muted-foreground">
+	<label for={form_id} class="grid-area-[header]">{label}</label>
+	<label for={form_id} class="grid-area-[description] pr-2 text-sm text-muted-foreground">
 		{#if typeof subtitle === "string"}
 			{subtitle}
 		{:else}
