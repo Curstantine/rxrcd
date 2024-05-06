@@ -10,6 +10,9 @@
 
 	/** @type {"col" | "row"}*/
 	export let layout = "row";
+
+	/** @type {string} */
+	export let option_class = "";
 </script>
 
 <div class="{$$props.class} {layout} option_area">
@@ -24,7 +27,7 @@
 		{/if}
 	</label>
 
-	<div class="option">
+	<div class="{option_class} grid-area-[option]" class:mt-2={layout === "col"}>
 		<slot />
 	</div>
 </div>
@@ -32,10 +35,6 @@
 <style>
 	.option_area {
 		--at-apply: grid py-2 items-center;
-	}
-
-	.option {
-		--at-apply: grid-area-[option];
 	}
 
 	.option_area.row {
@@ -51,9 +50,5 @@
 			"header header header"
 			"description description description"
 			"option option option";
-	}
-
-	.option_area.col .option {
-		--at-apply: mt-2;
 	}
 </style>
