@@ -1,11 +1,11 @@
-use std::{io::ErrorKind, path::Path};
+use std::{borrow::Borrow, io::ErrorKind, path::Path};
 
 use {
 	anyhow::{bail, Context, Result},
 	tracing::debug,
 };
 
-use crate::models::configuration::Configuration;
+use crate::models::configuration::{AuthConfiguration, Configuration};
 
 pub async fn initialize(config_path: &Path) -> Result<Configuration> {
 	debug!("Reading configuration file from {config_path:?}");
@@ -44,4 +44,24 @@ pub async fn initialize_blindly(config_path: &Path) -> Result<Configuration> {
 	};
 
 	Ok(config)
+}
+
+pub async fn read_auth_config(path: &Path) -> Result<Option<AuthConfiguration>> {
+	match tokio::fs::read_to_string(path).await {
+		Ok(string) => Ok(Some(toml::from_str::<AuthConfiguration>(&string)?)),
+		Err(e) if e.kind() == ErrorKind::NotFound => Ok(None),
+		Err(e) => Err(e.into()),
+	}
+}
+
+pub async fn write_auth_config<C>(path: &Path, auth_config: C) -> Result<()>
+where
+	C: Borrow<AuthConfiguration> + std::fmt::Debug + serde::Serialize,
+{
+	let data = toml::to_string_pretty(&auth_config)
+		.with_context(|| format!("Failed to TOML serialize auth_config: {auth_config:?}"))?;
+
+	tokio::fs::write(path, data).await?;
+
+	Ok(())
 }

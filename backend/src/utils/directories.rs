@@ -6,6 +6,10 @@ use tauri::api::path::download_dir;
 pub fn get_config_path(config_dir: &Path) -> PathBuf {
 	config_dir.join("config.toml")
 }
+#[inline(always)]
+pub fn get_auth_path(config_dir: &Path) -> PathBuf {
+	config_dir.join("auth.toml")
+}
 
 #[inline(always)]
 pub fn get_default_download_dir() -> PathBuf {

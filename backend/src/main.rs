@@ -11,6 +11,7 @@ use {tauri::Manager, window_shadows::set_shadow};
 use crate::models::state::{AppState, ConfigurationState, DeezerClientState};
 
 mod commands;
+mod constants;
 mod errors;
 mod models;
 mod state;
@@ -52,6 +53,7 @@ fn main() {
 			commands::album::get_artist_albums,
 			commands::artist::get_artist,
 			commands::artist::search_artists,
+			commands::user::refresh_login,
 			commands::user::login_with_arl,
 		])
 		.run(tauri::generate_context!())

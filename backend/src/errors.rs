@@ -1,18 +1,18 @@
-use serde::{Serialize, Serializer};
+use serde::Serialize;
 
 pub type CommandResult<T> = Result<T, PassiveError>;
 
-#[derive(Debug)]
-pub struct PassiveError(pub anyhow::Error);
-
-impl Serialize for PassiveError {
-	fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-		self.0.to_string().serialize(serializer)
-	}
-}
+#[derive(Debug, Serialize)]
+pub struct PassiveError(pub String);
 
 impl From<anyhow::Error> for PassiveError {
 	fn from(value: anyhow::Error) -> Self {
-		Self(value)
+		Self(value.to_string())
+	}
+}
+
+impl From<deezer::errors::Error> for PassiveError {
+	fn from(value: deezer::errors::Error) -> Self {
+		Self(value.to_string())
 	}
 }

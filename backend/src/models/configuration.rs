@@ -61,3 +61,14 @@ impl Default for Configuration {
 		}
 	}
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AuthConfiguration {
+	pub arl: String,
+}
+
+impl AuthConfiguration {
+	pub fn new(arl: String) -> Self {
+		Self { arl }
+	}
+}

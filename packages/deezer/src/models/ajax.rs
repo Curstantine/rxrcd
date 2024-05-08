@@ -29,4 +29,12 @@ impl RequestPOSTBody {
 			method,
 		}
 	}
+
+	pub fn with_api_token<S: ToString>(token: S, method: RequestPOSTMethod) -> Self {
+		Self {
+			api_version: "1.0".to_string(),
+			api_token: Some(token.to_string()),
+			method,
+		}
+	}
 }
