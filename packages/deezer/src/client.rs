@@ -1,10 +1,14 @@
-use std::sync::{Arc, Mutex};
+use std::{
+	fmt::Display,
+	sync::{Arc, Mutex},
+};
 
 use reqwest::{
 	header::{self, HeaderMap},
 	Client,
 };
 use reqwest_cookie_store::CookieStoreMutex;
+use tracing::debug;
 use url::Url;
 
 use crate::constants::{DEEZER_URL, PACKAGE_VERSION};
@@ -58,11 +62,13 @@ impl DeezerClient {
 		store.parse(&cookie_str, &Url::parse(DEEZER_URL).unwrap()).unwrap();
 	}
 
-	pub fn get<U: reqwest::IntoUrl>(&self, url: U) -> reqwest::RequestBuilder {
+	pub fn get<U: reqwest::IntoUrl + Display>(&self, url: U) -> reqwest::RequestBuilder {
+		debug!("GET request sent to {url}");
 		self.client.get(url)
 	}
 
-	pub fn post<U: reqwest::IntoUrl>(&self, url: U) -> reqwest::RequestBuilder {
+	pub fn post<U: reqwest::IntoUrl + Display>(&self, url: U) -> reqwest::RequestBuilder {
+		debug!("POST request sent to {url}");
 		self.client.post(url)
 	}
 
