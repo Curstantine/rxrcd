@@ -1,4 +1,4 @@
 export declare interface SetupReturnFlags {
-	start_auth: boolean;
-	re_run: boolean;
+	is_re_run: boolean;
+	resume_auth: boolean;
 }

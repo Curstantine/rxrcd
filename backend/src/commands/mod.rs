@@ -29,7 +29,7 @@ pub async fn setup<R: Runtime>(handle: AppHandle<R>) -> CommandResult<SetupRetur
 	let mut flags = SetupReturnFlags::default();
 
 	if app_state.initialize().is_none() {
-		flags.re_run = true;
+		flags.is_re_run = true;
 		debug!("AppState::initialize hook reran while the app is initialized. Ignoring...");
 		return Ok(flags);
 	}
@@ -45,7 +45,7 @@ pub async fn setup<R: Runtime>(handle: AppHandle<R>) -> CommandResult<SetupRetur
 		let deezer_lock = deezer_state.get().await;
 		let deezer = deezer_lock.as_ref().unwrap();
 		deezer.cookie_set_arl(&auth_config.arl);
-		flags.start_auth = true;
+		flags.resume_auth = true;
 	}
 
 	info!("Setup hook completed successfully with flags: {flags:?}");
