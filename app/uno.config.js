@@ -10,11 +10,14 @@ import {
 
 /**
  * @param {string} name
- * @returns {() => Promise<IconifyJSON>}
+ * @returns {() => Promise<import("@iconify/types").IconifyJSON>}
  */
 const importIconCollection = (name) => {
 	return () => import(`@iconify-json/${name}/icons.json`).then((i) => i.default);
 };
+
+/** @type {((arg0: import("unocss").UserConfig<import("unocss/preset-uno").Theme>) => void)} */
+const dc = defineConfig;
 
 export default defineConfig({
 	presets: [
@@ -46,6 +49,7 @@ export default defineConfig({
 			standard: "300ms",
 			emphasized: "500ms",
 		},
+		
 
 		container: {
 			center: true,

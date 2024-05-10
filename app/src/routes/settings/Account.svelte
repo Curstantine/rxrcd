@@ -2,6 +2,10 @@
 	import SettingsHeading from "@/components/SettingsHeading.svelte";
 	import SettingsOptionArea from "@/components/SettingsOptionArea.svelte";
 
+	import { initialize_state } from "@/routes/settings/Account.hooks";
+
+	const { on_login_submit } = initialize_state();
+
 	/** @type {string} */
 	let loginUsername;
 
@@ -31,25 +35,27 @@
 		</div>
 	</div>
 
-	<form name="login" class="max-w-lg">
+	<form name="login" class="max-w-lg" on:submit|preventDefault={on_login_submit}>
 		<SettingsOptionArea
 			layout="col"
 			label="Login with credentials"
-			subtitle="Login with your username and password"
-			form_id="login_username"
+			subtitle="Login with your email and password"
+			form_id="login_email"
 			option_class="flex flex-col"
 		>
 			<input
-				id="login_username"
-				type="text"
+				id="login_email"
+				type="email"
+				name="email"
 				class="mb-2 w-full input"
-				placeholder="Username"
+				placeholder="Email"
 				disabled={disabledLoginCred}
 				bind:value={loginUsername}
 			/>
 			<input
 				id="login_password"
 				type="text"
+				name="password"
 				class="w-full input"
 				placeholder="Password"
 				disabled={disabledLoginCred}
@@ -72,6 +78,7 @@
 			<input
 				id="login_arl"
 				type="text"
+				name="arl"
 				class="w-full input"
 				placeholder="ARL"
 				disabled={disabledLoginARL}
@@ -80,7 +87,9 @@
 		</SettingsOptionArea>
 
 		<div class="mt-4 max-w-lg flex justify-end">
-			<button class="w-full button-primary" disabled={!(disabledLoginCred || disabledLoginARL)}>Continue</button>
+			<button type="submit" class="w-full button-primary" disabled={!(disabledLoginCred || disabledLoginARL)}>
+				Continue
+			</button>
 		</div>
 	</form>
 </article>
