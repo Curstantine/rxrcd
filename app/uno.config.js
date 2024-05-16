@@ -16,10 +16,12 @@ const importIconCollection = (name) => {
 	return () => import(`@iconify-json/${name}/icons.json`).then((i) => i.default);
 };
 
-/** @type {((arg0: import("unocss").UserConfig<import("unocss/preset-uno").Theme>) => void)} */
-const dc = defineConfig;
+/* NOTE(Curstantine): Remove after unocss bug https://github.com/unocss/unocss/pull/3810 is fixed in mainline */
+const transitionColorAndOpacity =
+	`transition-property-[color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,opacity]`;
 
-export default defineConfig({
+/** @type {import("unocss").UserConfig<import("unocss/preset-uno").Theme>} */
+const conf = {
 	presets: [
 		presetUno({ dark: "class" }),
 		presetTypography(),
@@ -49,16 +51,14 @@ export default defineConfig({
 			standard: "300ms",
 			emphasized: "500ms",
 		},
-		
 
 		container: {
 			center: true,
 			padding: "2rem",
-			screens: {
+			maxWidth: {
 				"2xl": "1400px",
 			},
 		},
-
 		colors: {
 			border: "hsl(var(--border) / <alpha-value>)",
 			input: "hsl(var(--input) / <alpha-value>)",
@@ -108,11 +108,13 @@ export default defineConfig({
 
 		"button-layout": [
 			"inline-flex justify-center items-center gap-2 rounded-md px-4 py-1 font-medium text-sm",
-			"use-transition-standard transition-colors,opacity disabled:(opacity-50 pointer-events-none)",
+			"use-transition-standard disabled:(opacity-50 pointer-events-none)",
+			transitionColorAndOpacity,
 		].join(" "),
 		"icon-button-layout": [
 			"inline-flex justify-center items-center aspect-square rounded-md font-medium text-sm",
-			"use-transition-standard transition-colors,opacity disabled:(opacity-50 pointer-events-none)",
+			"use-transition-standard disabled:(opacity-50 pointer-events-none)",
+			transitionColorAndOpacity,
 		].join(" "),
 
 		"button-variant-ghost": "text-muted-foreground hover:(bg-secondary text-foreground)",
@@ -125,11 +127,14 @@ export default defineConfig({
 
 		input: [
 			"bg-transparent h-9 inline-flex items-center border-(1 border solid) rounded px-3 text-sm",
-			"transition-colors,opacity use-transition-standard",
+			"use-transition-standard",
+			transitionColorAndOpacity,
 			"active:outline-0 focus:(outline-0 border-ring) placeholder:text-sm focus:placeholder:opacity-0",
 			"disabled:(pointer-events-none opacity-50)",
 		].join(" "),
 
 		skeletal: "animate-pulse rounded bg-secondary use-transition-emphasized",
 	},
-});
+};
+
+export default defineConfig(conf);
