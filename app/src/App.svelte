@@ -15,11 +15,12 @@
 		const flags = await setup();
 		await initialize_theme();
 
-		if (flags.resume_auth) await resume_auth(flags.is_re_run);
 		if (!flags.is_re_run) {
 			await appWindow.show();
 			await appWindow.setFocus();
 		}
+
+		if (flags.resume_auth) await resume_auth(flags.is_re_run);
 	});
 </script>
 

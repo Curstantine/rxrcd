@@ -1,4 +1,5 @@
 import { refresh_login } from "@/bindings/user";
+import { create_snack } from "@/components/snack/snack";
 import { set_user_data } from "@/stores/user";
 import { take_if } from "@/utils/extensions";
 
@@ -26,8 +27,15 @@ export async function resume_auth(cringily_use_cache = false) {
 		}
 	}
 
+	const snack = create_snack({
+		label: "Authenticating...",
+		description: "This might take a few moments, depending on your connection!",
+		persistent: true,
+	});
+
 	const data = await refresh_login();
 	set_user_data(data);
+	snack.close();
 
 	const local = { ...data, timestamp: Date.now() };
 	localStorage.setItem(LOCAL_AUTH_DATA, JSON.stringify(local));
