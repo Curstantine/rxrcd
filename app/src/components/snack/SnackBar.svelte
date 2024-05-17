@@ -25,8 +25,8 @@
 	bind:offsetHeight={offset_height}
 	in:fly={{ y: 100, duration: 300, easing: cubicOut }}
 	out:fly={{ y: 100, duration: 300, easing: cubicIn }}
-	style:bottom="calc(1.5rem + {yCoefficient}px)"
 	class="snack"
+	style:--un-translate-y="-{yCoefficient}px"
 >
 	<span class="text-foreground font-medium">{$data.label}</span>
 	{#if $data.description}
@@ -38,6 +38,6 @@
 	.snack {
 		grid-template-columns: 1fr 1fr 2rem;
 		--at-apply: fixed right-4 max-w-lg min-h-14 min-w-xs flex flex-col transform-gpu border-(1 border solid) rounded
-			bg-background p-2 shadow transition-bottom use-transition-emphasized;
+			bg-background p-3 bottom-6 shadow transition-transform transform-gpu;
 	}
 </style>
