@@ -22,6 +22,7 @@ export async function resume_auth(cringily_use_cache = false) {
 			// @ts-expect-error We don't want the timestamp property in the user_data object.
 			delete data.timestamp;
 			set_user_data(data);
+			return;
 		}
 	}
 

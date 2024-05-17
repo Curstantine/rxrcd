@@ -58,7 +58,7 @@ impl DeezerClient {
 
 	pub fn cookie_has_arl(&self) -> bool {
 		let store = self.cookie_store.lock().unwrap();
-		store.contains(".deezer.com", "/", "arl")
+		store.contains("deezer.com", "/", "arl")
 	}
 
 	pub fn cookie_set_arl(&self, arl: &str) {

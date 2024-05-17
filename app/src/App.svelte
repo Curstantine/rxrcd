@@ -13,11 +13,13 @@
 
 	onMount(async () => {
 		const flags = await setup();
-		if (flags.resume_auth) await resume_auth(flags.is_re_run);
-
 		await initialize_theme();
-		await appWindow.show();
-		await appWindow.setFocus();
+
+		if (flags.resume_auth) await resume_auth(flags.is_re_run);
+		if (!flags.is_re_run) {
+			await appWindow.show();
+			await appWindow.setFocus();
+		}
 	});
 </script>
 
