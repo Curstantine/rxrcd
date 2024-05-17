@@ -56,6 +56,11 @@ impl DeezerClient {
 		*data = Some(api_token);
 	}
 
+	pub fn cookie_has_arl(&self) -> bool {
+		let store = self.cookie_store.lock().unwrap();
+		store.contains(".deezer.com", "/", "arl")
+	}
+
 	pub fn cookie_set_arl(&self, arl: &str) {
 		let cookie_str = format!("arl={arl}; Domain=.deezer.com");
 		let mut store = self.cookie_store.lock().unwrap();

@@ -1,4 +1,6 @@
 <script>
+	import { user_data } from "@/stores/user";
+
 	import SettingsHeading from "@/components/SettingsHeading.svelte";
 	import SettingsOptionArea from "@/components/SettingsOptionArea.svelte";
 
@@ -22,12 +24,12 @@
 <article id="account">
 	<SettingsHeading heading="Account" sub="Manage your authentication sessions and regions." />
 
-	<div class="auth-card pointer-events-none opacity-50">
+	<div class="auth-card" class:disabled={$user_data === null}>
 		<div class="grid-area-[image] h-24 w-24 self-center justify-self-center rounded-full bg-secondary"></div>
 
 		<div class="grid-area-[description] flex flex-col justify-center">
-			<span class="o">Not logged in</span>
-			<span class="text-sm text-muted-foreground">N/A</span>
+			<span class="o">{$user_data?.name ?? "Not logged in"}</span>
+			<span class="text-sm text-muted-foreground">{$user_data?.is_premium ? "Hi-Fi" : "Free"}</span>
 		</div>
 
 		<div class="grid-area-[actions]">
@@ -102,5 +104,9 @@
 			"image description description"
 			"image description description"
 			"image actions actions";
+	}
+
+	.auth-card.disabled {
+		--at-apply: pointer-events-none opacity-50;
 	}
 </style>

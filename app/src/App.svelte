@@ -13,7 +13,6 @@
 
 	onMount(async () => {
 		const flags = await setup();
-
 		if (flags.resume_auth) await resume_auth(flags.is_re_run);
 
 		await initialize_theme();

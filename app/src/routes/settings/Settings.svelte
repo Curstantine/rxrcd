@@ -8,8 +8,8 @@
 	import Account from "@/routes/settings/Account.svelte";
 	import Downloads from "@/routes/settings/Downloads.svelte";
 
-	/** @type { { wild : string }} */
-	export let params;
+	/** @type { { wild : string } | undefined} */
+	export let params = undefined;
 
 	const routes = {
 		"/account": Account,

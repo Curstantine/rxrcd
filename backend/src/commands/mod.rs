@@ -30,7 +30,14 @@ pub async fn setup<R: Runtime>(handle: AppHandle<R>) -> CommandResult<SetupRetur
 
 	if app_state.initialize().is_none() {
 		flags.is_re_run = true;
-		debug!("AppState::initialize hook reran while the app is initialized. Ignoring...");
+
+		// Note(Curstantine): Checks whether auth needs to be resumed in a HMR re-mounted state.
+		// We handle whether to actually call deezer or use the local-storage cache in the frontend.
+		let deezer_lock = deezer_state.get().await;
+		let deezer = deezer_lock.as_ref().unwrap();
+		flags.resume_auth = deezer.cookie_has_arl();
+
+		debug!("Setup hook reran while the app was initialized. Ignored with flags: {flags:?}");
 		return Ok(flags);
 	}
 
