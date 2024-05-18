@@ -67,6 +67,11 @@ impl DeezerClient {
 		store.parse(&cookie_str, &Url::parse(DEEZER_URL).unwrap()).unwrap();
 	}
 
+	pub fn clear_cookies(&self) {
+		let mut store = self.cookie_store.lock().unwrap();
+		store.clear()
+	}
+
 	pub fn get<U: reqwest::IntoUrl + Display>(&self, url: U) -> reqwest::RequestBuilder {
 		debug!("GET request sent to {url}");
 		self.client.get(url)

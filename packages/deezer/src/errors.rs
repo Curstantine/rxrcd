@@ -1,4 +1,4 @@
-use std::fmt;
+use std::fmt::{self, write};
 
 pub type DeezerResult<T> = Result<T, Error>;
 
@@ -6,6 +6,8 @@ pub type DeezerResult<T> = Result<T, Error>;
 pub enum Error {
 	HttpError(reqwest::Error),
 	UrlParse(url::ParseError),
+	NotLoggedIn,
+	AlreadyLoggedIn,
 }
 
 impl From<reqwest::Error> for Error {
@@ -25,6 +27,8 @@ impl fmt::Display for Error {
 		match self {
 			Error::HttpError(err) => write!(f, "HTTP error: {err}"),
 			Error::UrlParse(err) => write!(f, "URL parse error: {err}"),
+			Error::NotLoggedIn => write!(f, "Client is not logged in"),
+			Error::AlreadyLoggedIn => write!(f, "Client is already logged in"),
 		}
 	}
 }
