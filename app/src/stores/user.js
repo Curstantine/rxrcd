@@ -1,7 +1,15 @@
+import { LOCAL_AUTH_DATA } from "@/utils/auth";
 import { readonly, writable } from "svelte/store";
 
 /** @type {import("svelte/store").Writable<import("@/types/user").UserData | null>} */
 const user_data_ = writable(null);
 
-export const set_user_data = user_data_.set;
 export const user_data = readonly(user_data_);
+
+/** @param {import("@/types/user").UserData | null} data */
+export function set_user_data(data) {
+	user_data_.set(data);
+
+	const local = { ...data, timestamp: Date.now() };
+	localStorage.setItem(LOCAL_AUTH_DATA, JSON.stringify(local));
+}

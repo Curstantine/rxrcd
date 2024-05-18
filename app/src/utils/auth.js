@@ -5,7 +5,7 @@ import { take_if } from "@/utils/extensions";
 
 // 1000ms -> 1s -> 5m
 const STANDARD_SINCE_MS = 60000 * 5;
-const LOCAL_AUTH_DATA = "cringily-cached-auth-data";
+export const LOCAL_AUTH_DATA = "cringily-cached-auth-data";
 
 /**
  * @param {boolean} cringily_use_cache
@@ -36,7 +36,4 @@ export async function resume_auth(cringily_use_cache = false) {
 	const data = await refresh_login();
 	set_user_data(data);
 	snack.close();
-
-	const local = { ...data, timestamp: Date.now() };
-	localStorage.setItem(LOCAL_AUTH_DATA, JSON.stringify(local));
 }

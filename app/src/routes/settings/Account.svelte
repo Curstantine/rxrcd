@@ -6,19 +6,10 @@
 
 	import { initialize_state } from "@/routes/settings/Account.hooks";
 
-	const { on_login_submit } = initialize_state();
+	const { input_email, input_password, input_arl, on_login_submit } = initialize_state();
 
-	/** @type {string} */
-	let loginUsername;
-
-	/** @type {string} */
-	let loginPassword;
-
-	/** @type {string} */
-	let loginARL;
-
-	$: disabledLoginCred = loginARL?.length > 0;
-	$: disabledLoginARL = loginUsername?.length > 0 || loginPassword?.length > 0;
+	$: is_login_cred_disabled = $input_arl.length > 0;
+	$: is_login_arl_disabled = $input_email?.length > 0 || $input_password?.length > 0;
 </script>
 
 <article id="account">
@@ -48,20 +39,18 @@
 			<input
 				id="login_email"
 				type="email"
-				name="email"
 				class="mb-2 w-full input"
 				placeholder="Email"
-				disabled={disabledLoginCred}
-				bind:value={loginUsername}
+				disabled={is_login_cred_disabled}
+				bind:value={$input_email}
 			/>
 			<input
 				id="login_password"
 				type="text"
-				name="password"
 				class="w-full input"
 				placeholder="Password"
-				disabled={disabledLoginCred}
-				bind:value={loginPassword}
+				disabled={is_login_cred_disabled}
+				bind:value={$input_password}
 			/>
 		</SettingsOptionArea>
 
@@ -80,16 +69,19 @@
 			<input
 				id="login_arl"
 				type="text"
-				name="arl"
 				class="w-full input"
 				placeholder="ARL"
-				disabled={disabledLoginARL}
-				bind:value={loginARL}
+				disabled={is_login_arl_disabled}
+				bind:value={$input_arl}
 			/>
 		</SettingsOptionArea>
 
 		<div class="mt-4 max-w-lg flex justify-end">
-			<button type="submit" class="w-full button-primary" disabled={!(disabledLoginCred || disabledLoginARL)}>
+			<button
+				type="submit"
+				class="w-full button-primary"
+				disabled={!(is_login_cred_disabled || is_login_arl_disabled)}
+			>
 				Continue
 			</button>
 		</div>
