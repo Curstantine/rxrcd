@@ -1,4 +1,4 @@
-use serde::{Deserialize, Deserializer};
+use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct GetUserDataResponse {
@@ -10,12 +10,10 @@ pub struct GetUserDataResponse {
 pub struct UserData {
 	pub user: User,
 	pub country: String,
+	pub offer_name: String,
 
 	#[serde(rename(deserialize = "checkForm"))]
 	pub api_token: String,
-
-	#[serde(rename(deserialize = "OFFER_NAME"), deserialize_with = "map_plan_to_bool")]
-	pub is_premium: bool,
 }
 
 #[derive(Debug, Deserialize)]
@@ -43,9 +41,4 @@ pub struct SoundQuality {
 	pub standard: bool,
 	pub high: bool,
 	pub lossless: bool,
-}
-
-fn map_plan_to_bool<'de, D: Deserializer<'de>>(deserializer: D) -> Result<bool, D::Error> {
-	let value = String::deserialize(deserializer)?;
-	Ok(value == "Deezer Premium")
 }
