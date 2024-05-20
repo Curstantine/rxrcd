@@ -1,6 +1,10 @@
+import type { DownloadQuality } from "@/types/config";
+
 export declare interface UserData {
 	id: number;
 	name: string;
 	email: string;
-	is_premium: boolean;
+	country: string;
+	offer_name: string;
+	sound_quality: DownloadQuality[];
 }

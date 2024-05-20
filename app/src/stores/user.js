@@ -10,6 +10,8 @@ export const user_data = readonly(user_data_);
 export function set_user_data(data) {
 	user_data_.set(data);
 
+	if (data === null) return localStorage.removeItem(LOCAL_AUTH_DATA);
+
 	const local = { ...data, timestamp: Date.now() };
-	localStorage.setItem(LOCAL_AUTH_DATA, JSON.stringify(local));
+	return localStorage.setItem(LOCAL_AUTH_DATA, JSON.stringify(local));
 }

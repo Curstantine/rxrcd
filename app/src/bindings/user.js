@@ -14,3 +14,7 @@ export async function refresh_login() {
 export async function login_with_arl(arl) {
 	return await invoke("login_with_arl", { arl });
 }
+
+export async function logout() {
+	return await invoke("logout");
+}

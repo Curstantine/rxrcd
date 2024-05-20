@@ -5,6 +5,8 @@
 	import SettingsOptionArea from "@/components/SettingsOptionArea.svelte";
 
 	import { initialize_state } from "@/routes/settings/Account.hooks";
+	import { slide } from "svelte/transition";
+	import { logout } from "@/utils/auth";
 
 	const { input_email, input_password, input_arl, on_login_submit } = initialize_state();
 
@@ -15,19 +17,25 @@
 <article id="account">
 	<SettingsHeading heading="Account" sub="Manage your authentication sessions and regions." />
 
-	<div class="auth-card" class:disabled={$user_data === null}>
-		<div class="grid-area-[image] h-24 w-24 self-center justify-self-center rounded-full bg-secondary"></div>
+	{#if $user_data !== null}
+		<div in:slide={{ axis: "y", duration: 300 }} class="auth-card">
+			<div class="grid-area-[image] h-24 w-24 self-center justify-self-center rounded-full bg-secondary"></div>
 
-		<div class="grid-area-[description] flex flex-col justify-center">
-			<span class="o">{$user_data?.name ?? "Not logged in"}</span>
-			<span class="text-sm text-muted-foreground">{$user_data?.is_premium ? "Hi-Fi" : "Free"}</span>
+			<div class="grid-area-[description] flex flex-col justify-center">
+				<span class="leading-tight">{$user_data.name}</span>
+				<div class="inline text-sm text-muted-foreground">
+					<span>{$user_data.offer_name}</span> ·
+					<span>{$user_data.country}</span>
+				</div>
+			</div>
+
+			<div class="grid-area-[actions]">
+				<button class="button-primary" on:click={logout}>Logout</button>
+			</div>
 		</div>
+	{/if}
 
-		<div class="grid-area-[actions]">
-			<button class="button-primary">Logout</button>
-		</div>
-	</div>
-
+	<!-- TODO(Curstantine): Restore whatever auth we used and hide unrelated methods in an authenticated context. -->
 	<form name="login" class="max-w-lg" on:submit|preventDefault={on_login_submit}>
 		<SettingsOptionArea
 			layout="col"
@@ -96,9 +104,5 @@
 			"image description description"
 			"image description description"
 			"image actions actions";
-	}
-
-	.auth-card.disabled {
-		--at-apply: pointer-events-none opacity-50;
 	}
 </style>

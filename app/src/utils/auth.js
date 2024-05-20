@@ -1,4 +1,4 @@
-import { refresh_login } from "@/bindings/user";
+import { logout as invokeLogout, refresh_login } from "@/bindings/user";
 import { create_snack } from "@/components/snack/snack";
 import { set_user_data } from "@/stores/user";
 import { take_if } from "@/utils/extensions";
@@ -36,4 +36,17 @@ export async function resume_auth(cringily_use_cache = false) {
 	const data = await refresh_login();
 	set_user_data(data);
 	snack.close();
+}
+
+export async function logout() {
+	await invokeLogout();
+	set_user_data(null);
+
+	create_snack({
+		label: "Logged out",
+		description: "Session has been logged out and on-going processes will be cancelled",
+	});
+
+	// TODO(Curstantine):
+	// Will probably be a good place to add request aborters of some sort.
 }
