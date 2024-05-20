@@ -77,7 +77,7 @@ mod tests {
 	}
 
 	#[tokio::test]
-	async fn test_login_with_arl_clears_session() -> DeezerResult<()> {
+	async fn test_logout() -> DeezerResult<()> {
 		let arl = var("ARL").expect("ARL env needs to be set for this test to run!");
 		let arl2 = var("ARL2").expect("ARL2 env needs to be set for this test to run!");
 
@@ -85,6 +85,8 @@ mod tests {
 
 		let data = super::login_with_arl(&client, &arl).await?;
 		assert_ne!(data.results.user.id, 0);
+
+		super::logout(&client)?;
 		tokio::time::sleep(Duration::from_secs(2)).await;
 
 		let data2 = super::login_with_arl(&client, &arl2).await?;
