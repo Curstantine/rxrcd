@@ -13,7 +13,11 @@ export function initialize_state() {
 		const password = get(input_password);
 		const arl = get(input_arl);
 
-		const snack = create_snack({ label: "Authenticating...", description: "", persistent: true });
+		const snack = create_snack({
+			label: "Authenticating...",
+			description: "Signing you into deezer",
+			persistent: true,
+		});
 
 		if (email.length > 0 && password.length > 0) {
 			snack.update({

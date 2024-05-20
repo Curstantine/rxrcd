@@ -15,7 +15,7 @@
 </script>
 
 <article id="account">
-	<SettingsHeading heading="Account" sub="Manage your authentication sessions and regions." />
+	<SettingsHeading heading="Account" sub="Manage your authentication sessions and regions." class="mb-3" />
 
 	{#if $user_data !== null}
 		<div in:slide={{ axis: "y", duration: 300 }} class="auth-card">
@@ -98,7 +98,7 @@
 
 <style>
 	.auth-card {
-		--at-apply: grid border-border border-1 rounded-md p-4 gap-x-4 my-3 max-w-lg;
+		--at-apply: grid border-border border-1 rounded-md p-4 gap-x-4 mb-3 max-w-lg;
 		grid-template-columns: auto 1fr 1fr;
 		grid-template-areas:
 			"image description description"
