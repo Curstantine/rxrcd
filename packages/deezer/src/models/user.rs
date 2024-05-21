@@ -6,7 +6,7 @@ pub struct GetUserDataResponse {
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(rename_all(deserialize = "UPPERCASE"))]
+#[serde(rename_all(deserialize = "SCREAMING_SNAKE_CASE"))]
 pub struct UserData {
 	pub user: User,
 	pub country: String,
@@ -17,7 +17,7 @@ pub struct UserData {
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(rename_all(deserialize = "UPPERCASE"))]
+#[serde(rename_all(deserialize = "SCREAMING_SNAKE_CASE"))]
 pub struct User {
 	#[serde(rename(deserialize = "USER_ID"))]
 	pub id: u64,

@@ -1,4 +1,4 @@
-use std::fmt::{self, write};
+use crate::models::ajax::AjaxRequestError;
 
 pub type DeezerResult<T> = Result<T, Error>;
 
@@ -8,6 +8,7 @@ pub enum Error {
 	UrlParse(url::ParseError),
 	NotLoggedIn,
 	AlreadyLoggedIn,
+	AjaxRequestError(AjaxRequestError),
 }
 
 impl From<reqwest::Error> for Error {
@@ -22,11 +23,15 @@ impl From<url::ParseError> for Error {
 	}
 }
 
-impl fmt::Display for Error {
-	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl std::fmt::Display for Error {
+	fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
 		match self {
 			Error::HttpError(err) => write!(f, "HTTP error: {err}"),
 			Error::UrlParse(err) => write!(f, "URL parse error: {err}"),
+			Error::AjaxRequestError(err) => match err {
+				AjaxRequestError::GatewayError(x) => write!(f, "AJAX gateway error: {x}"),
+				AjaxRequestError::ValidTokenRequired(x) => write!(f, "AJAX CSRF token is invalid, returned: {x}"),
+			},
 			Error::NotLoggedIn => write!(f, "Client is not logged in"),
 			Error::AlreadyLoggedIn => write!(f, "Client is already logged in"),
 		}

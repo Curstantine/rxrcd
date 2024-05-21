@@ -1,4 +1,6 @@
-use serde::{Serialize, Serializer};
+use std::fmt::Debug;
+
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Copy, PartialEq, Serialize)]
 pub(crate) enum RequestPOSTMethod {
@@ -6,19 +8,26 @@ pub(crate) enum RequestPOSTMethod {
 	GetUserData,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct RequestGetBody<T: Debug> {
+	pub results: Option<T>,
+	#[serde(deserialize_with = "crate::serde::de_ajax_req_err")]
+	pub errors: Option<AjaxRequestError>,
+}
+
+#[derive(Debug, PartialEq, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum AjaxRequestError {
+	GatewayError(String),
+	ValidTokenRequired(String),
+}
+
 #[derive(Debug, Serialize)]
 pub(crate) struct RequestPOSTBody {
 	api_version: String,
 	method: RequestPOSTMethod,
-	#[serde(serialize_with = "serialize_none_as_str_null")]
+	#[serde(serialize_with = "crate::serde::ser_none_as_str")]
 	api_token: Option<String>,
-}
-
-fn serialize_none_as_str_null<S: Serializer>(value: &Option<String>, serializer: S) -> Result<S::Ok, S::Error> {
-	match value {
-		Some(inner) => serializer.serialize_some(inner),
-		None => serializer.serialize_str("null"),
-	}
 }
 
 impl RequestPOSTBody {
@@ -30,6 +39,7 @@ impl RequestPOSTBody {
 		}
 	}
 
+	#[allow(dead_code)]
 	pub fn with_api_token<S: ToString>(token: S, method: RequestPOSTMethod) -> Self {
 		Self {
 			api_version: "1.0".to_string(),

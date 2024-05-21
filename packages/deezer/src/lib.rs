@@ -7,3 +7,4 @@ pub mod errors;
 pub mod models;
 
 mod constants;
+mod serde;
