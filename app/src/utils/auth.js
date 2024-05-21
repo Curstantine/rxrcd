@@ -16,7 +16,7 @@ export async function resume_auth(cringily_use_cache = false) {
 	// We'll cringily cache the user data in those cases.
 	// P.S. I know we could import.meta.env.DEV, but where's the fun in that
 	if (cringily_use_cache) {
-		/** @type {import("@/types/user").UserData & { timestamp: number } | null} */
+		/** @type {import("@/types/user").User & { timestamp: number } | null} */
 		const data = take_if(localStorage.getItem(LOCAL_AUTH_DATA), JSON.parse);
 
 		if (data !== null && ((data.timestamp - Date.now()) < STANDARD_SINCE_MS)) {

@@ -1,10 +1,9 @@
-use deezer::models::user::GetUserDataResponse;
 use serde::Serialize;
 
 use super::configuration::DownloadQuality;
 
 #[derive(Debug, Serialize)]
-pub struct UserData {
+pub struct User {
 	pub id: u64,
 	pub name: String,
 	pub email: String,
@@ -14,28 +13,29 @@ pub struct UserData {
 	pub sound_quality: Vec<DownloadQuality>,
 }
 
-impl From<GetUserDataResponse> for UserData {
-	fn from(value: GetUserDataResponse) -> Self {
-		let mut sound_quality = Vec::with_capacity(4);
+impl From<deezer::models::user::UserData> for User {
+	fn from(value: deezer::models::user::UserData) -> Self {
+		let mut sound_quality = Vec::with_capacity(3);
 
-		if value.results.user.options.sound_quality.low || value.results.user.options.sound_quality.standard {
+		if value.user.options.sound_quality.low || value.user.options.sound_quality.standard {
 			sound_quality.push(DownloadQuality::Mp3_128);
 		}
 
-		if value.results.user.options.sound_quality.high {
+		if value.user.options.sound_quality.high {
 			sound_quality.push(DownloadQuality::Mp3_320);
 		}
 
-		if value.results.user.options.sound_quality.lossless {
+		if value.user.options.sound_quality.lossless {
 			sound_quality.push(DownloadQuality::Flac);
 		}
 
+		sound_quality.shrink_to_fit();
 		Self {
-			id: value.results.user.id,
-			name: value.results.user.name,
-			email: value.results.user.email,
-			country: value.results.country,
-			offer_name: value.results.offer_name,
+			id: value.user.id,
+			name: value.user.name,
+			email: value.user.email,
+			country: value.country,
+			offer_name: value.offer_name,
 			sound_quality,
 		}
 	}
