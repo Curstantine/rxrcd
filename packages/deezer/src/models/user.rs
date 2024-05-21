@@ -1,9 +1,8 @@
 use serde::Deserialize;
 
-#[derive(Debug, Deserialize)]
-pub struct GetUserDataResponse {
-	pub results: UserData,
-}
+use super::ajax::RequestGetBody;
+
+pub type GetUserDataResponse = RequestGetBody<UserData>;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all(deserialize = "SCREAMING_SNAKE_CASE"))]

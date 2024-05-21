@@ -4,22 +4,24 @@ use crate::{
 	errors::{DeezerResult, Error},
 	models::{
 		ajax::{RequestPOSTBody, RequestPOSTMethod},
-		user::GetUserDataResponse,
+		user::{GetUserDataResponse, UserData},
 	},
 };
 
 /// Refreshes a login with the ARL stored in the cookies and sets the fresh api_token to the [DeezerClient]
-pub async fn refresh_login(client: &DeezerClient) -> DeezerResult<GetUserDataResponse> {
+pub async fn refresh_login(client: &DeezerClient) -> DeezerResult<UserData> {
 	let body = RequestPOSTBody::with_defaults(RequestPOSTMethod::GetUserData);
 	let response = client.post(DEEZER_AJAX_URL).json(&body).send().await?;
 	let data = response.json::<GetUserDataResponse>().await?;
-	client.set_api_token(data.results.api_token.clone());
 
-	Ok(data)
+	let results = data.into_result()?;
+	client.set_api_token(results.api_token.clone());
+
+	Ok(results)
 }
 
 /// Logins with a provided ARL and sets the api_token to the [DeezerClient].
-pub async fn login_with_arl(client: &DeezerClient, arl: &str) -> DeezerResult<GetUserDataResponse> {
+pub async fn login_with_arl(client: &DeezerClient, arl: &str) -> DeezerResult<UserData> {
 	if client.cookie_has_arl() {
 		return Err(Error::AlreadyLoggedIn);
 	}
@@ -60,7 +62,7 @@ mod tests {
 		client.cookie_set_arl(&arl);
 
 		let data = super::refresh_login(&client).await?;
-		assert_ne!(data.results.user.id, 0);
+		assert_ne!(data.user.id, 0);
 
 		Ok(())
 	}
@@ -71,7 +73,7 @@ mod tests {
 		let client = DeezerClient::testing();
 
 		let data = super::login_with_arl(&client, &arl).await?;
-		assert_ne!(data.results.user.id, 0);
+		assert_ne!(data.user.id, 0);
 
 		Ok(())
 	}
@@ -84,14 +86,14 @@ mod tests {
 		let client = DeezerClient::testing();
 
 		let data = super::login_with_arl(&client, &arl).await?;
-		assert_ne!(data.results.user.id, 0);
+		assert_ne!(data.user.id, 0);
 
 		super::logout(&client)?;
 		tokio::time::sleep(Duration::from_secs(2)).await;
 
 		let data2 = super::login_with_arl(&client, &arl2).await?;
 		println!("{data:#?}\n{data2:#?}");
-		assert_ne!(data2.results.user.id, data.results.user.id);
+		assert_ne!(data2.user.id, data.user.id);
 
 		Ok(())
 	}
