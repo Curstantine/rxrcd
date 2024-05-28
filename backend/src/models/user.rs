@@ -1,6 +1,13 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use super::configuration::DownloadQuality;
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(tag = "type")]
+pub enum UserAuthType {
+	ARL { arl: String },
+	Credentials { email: String, password: String },
+}
 
 #[derive(Debug, Serialize)]
 pub struct User {

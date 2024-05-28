@@ -4,6 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::utils::directories;
 
+use super::user::UserAuthType;
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Configuration {
 	pub download: ConfigurationDownload,
@@ -64,11 +66,12 @@ impl Default for Configuration {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AuthConfiguration {
-	pub arl: String,
+	#[serde(flatten)]
+	pub inner: UserAuthType,
 }
 
 impl AuthConfiguration {
-	pub fn new(arl: String) -> Self {
-		Self { arl }
+	pub fn new(inner: UserAuthType) -> Self {
+		Self { inner }
 	}
 }

@@ -39,6 +39,9 @@ export function initialize_state() {
 		return snack.close();
 	};
 
+	const get_auth_state = async () => {
+	};
+
 	return {
 		input_email,
 		input_password,

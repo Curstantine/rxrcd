@@ -54,7 +54,7 @@ fn main() {
 			commands::artist::get_artist,
 			commands::artist::search_artists,
 			commands::user::refresh_login,
-			commands::user::login_with_arl,
+			commands::user::login,
 			commands::user::logout,
 		])
 		.run(tauri::generate_context!())
