@@ -6,18 +6,38 @@ use crate::{
 	models::{
 		configuration::AuthConfiguration,
 		state::DeezerClientState,
-		user::{User, UserAuthType},
+		user::{User, UserAuthState, UserAuthType},
 	},
 	utils::{configuration, directories},
 };
 
 #[tauri::command(rename_all = "snake_case")]
-#[tracing::instrument(skip(deezer_state), err(Debug))]
-pub async fn get_auth_state(deezer_state: State<'_, DeezerClientState>) -> CommandResult<UserAuthType> {
-	let deezer_guard = deezer_state.get().await;
-	let client = deezer_guard.as_ref().unwrap();
+#[tracing::instrument(skip(app_handle), err(Debug))]
+pub async fn get_auth_state<R: Runtime>(app_handle: AppHandle<R>) -> CommandResult<UserAuthState> {
+	let is_logged_in = {
+		let deezer_state = app_handle.state::<DeezerClientState>();
+		let deezer_guard = deezer_state.get().await;
+		let client = deezer_guard.as_ref().unwrap();
 
-	todo!()
+		client.is_authenticated()
+	};
+
+	let app_config_dir = app_handle
+		.path_resolver()
+		.app_config_dir()
+		.expect(constants::ERR_MSG_NO_APP_CONFIG_DIR);
+	let auth_config_path = directories::get_auth_path(&app_config_dir);
+
+	match configuration::read_auth_config(&auth_config_path).await? {
+		Some(conf) => {
+			if is_logged_in {
+				Ok(UserAuthState::LoggedIn(conf.inner))
+			} else {
+				Ok(UserAuthState::Incomplete(conf.inner))
+			}
+		}
+		_ => Ok(UserAuthState::NotLoggedIn),
+	}
 }
 
 #[tauri::command(rename_all = "snake_case")]
@@ -37,7 +57,7 @@ pub async fn login<R: Runtime>(app_handle: AppHandle<R>, data: UserAuthType) -> 
 		let client = deezer_guard.as_ref().unwrap();
 
 		match &data {
-			UserAuthType::ARL { arl } => deezer::user::login_with_arl(client, &arl).await.map(User::from)?,
+			UserAuthType::Arl { arl } => deezer::user::login_with_arl(client, arl).await.map(User::from)?,
 			_ => todo!("Credential login is not implemented in the deezer crate yet"),
 		}
 	};

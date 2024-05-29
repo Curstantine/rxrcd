@@ -5,8 +5,16 @@ use super::configuration::DownloadQuality;
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(tag = "type")]
 pub enum UserAuthType {
-	ARL { arl: String },
+	Arl { arl: String },
 	Credentials { email: String, password: String },
+}
+
+#[derive(Debug, Serialize)]
+#[serde(tag = "type", content = "data")]
+pub enum UserAuthState {
+	LoggedIn(UserAuthType),
+	Incomplete(UserAuthType),
+	NotLoggedIn,
 }
 
 #[derive(Debug, Serialize)]

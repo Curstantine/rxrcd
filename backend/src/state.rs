@@ -11,24 +11,10 @@ use tracing::debug;
 use crate::{
 	models::{
 		configuration::Configuration,
-		state::{AppState, ConfigurationState, DeezerClientState},
+		state::{ConfigurationState, DeezerClientState},
 	},
 	utils::{configuration, directories},
 };
-
-impl AppState {
-	pub fn initialize(&self) -> Option<()> {
-		let mut self_lock = self.0.lock().unwrap();
-
-		if self_lock.initialized {
-			return None;
-		}
-
-		self_lock.initialized = true;
-
-		Some(())
-	}
-}
 
 impl ConfigurationState {
 	#[inline(always)]

@@ -53,6 +53,7 @@ fn main() {
 			commands::album::get_artist_albums,
 			commands::artist::get_artist,
 			commands::artist::search_artists,
+			commands::user::get_auth_state,
 			commands::user::refresh_login,
 			commands::user::login,
 			commands::user::logout,

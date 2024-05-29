@@ -44,6 +44,18 @@ pub struct ConfigurationAppearance {
 	pub theme: String,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AuthConfiguration {
+	#[serde(flatten)]
+	pub inner: UserAuthType,
+}
+
+impl AuthConfiguration {
+	pub fn new(inner: UserAuthType) -> Self {
+		Self { inner }
+	}
+}
+
 impl Default for Configuration {
 	fn default() -> Self {
 		Self {
@@ -61,17 +73,5 @@ impl Default for Configuration {
 				theme: "system".to_string(),
 			},
 		}
-	}
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct AuthConfiguration {
-	#[serde(flatten)]
-	pub inner: UserAuthType,
-}
-
-impl AuthConfiguration {
-	pub fn new(inner: UserAuthType) -> Self {
-		Self { inner }
 	}
 }

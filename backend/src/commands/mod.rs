@@ -1,3 +1,5 @@
+use std::sync::atomic;
+
 use {
 	tauri::{AppHandle, Manager, Runtime},
 	tracing::{debug, info},
@@ -9,6 +11,7 @@ use crate::{
 	models::{
 		commands::SetupReturnFlags,
 		state::{AppState, ConfigurationState, DeezerClientState},
+		user::UserAuthType,
 	},
 	utils::{configuration, directories},
 };
@@ -28,7 +31,7 @@ pub async fn setup<R: Runtime>(handle: AppHandle<R>) -> CommandResult<SetupRetur
 
 	let mut flags = SetupReturnFlags::default();
 
-	if app_state.initialize().is_none() {
+	if app_state.initialized.load(atomic::Ordering::Relaxed) {
 		flags.is_re_run = true;
 
 		// Note(Curstantine): Checks whether auth needs to be resumed in a HMR re-mounted state.
@@ -39,6 +42,8 @@ pub async fn setup<R: Runtime>(handle: AppHandle<R>) -> CommandResult<SetupRetur
 
 		debug!("Setup hook reran while the app was initialized. Ignored with flags: {flags:?}");
 		return Ok(flags);
+	} else {
+		app_state.initialized.store(true, atomic::Ordering::Relaxed);
 	}
 
 	let app_config_dir = path_resolver
@@ -51,8 +56,14 @@ pub async fn setup<R: Runtime>(handle: AppHandle<R>) -> CommandResult<SetupRetur
 	if let Some(auth_config) = configuration::read_auth_config(&auth_config_path).await? {
 		let deezer_lock = deezer_state.get().await;
 		let deezer = deezer_lock.as_ref().unwrap();
-		deezer.cookie_set_arl(&auth_config.arl);
-		flags.resume_auth = true;
+
+		match &auth_config.inner {
+			UserAuthType::Arl { arl } => {
+				deezer.cookie_set_arl(arl);
+				flags.resume_auth = true;
+			}
+			_ => todo!("Credential auth is not supported yet"),
+		}
 	}
 
 	info!("Setup hook completed successfully with flags: {flags:?}");
