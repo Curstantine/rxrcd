@@ -1,4 +1,4 @@
-import { login_with_arl } from "@/bindings/user";
+import { login } from "@/bindings/user";
 import { create_snack } from "@/components/snack/snack";
 import { set_user_data } from "@/stores/user";
 import { get, writable } from "svelte/store";
@@ -28,8 +28,7 @@ export function initialize_state() {
 
 		if (arl.length > 0) {
 			try {
-				const user = await login_with_arl(arl.toString());
-				console.log(user);
+				const user = await login({ type: "arl", arl: arl.toString() });
 				set_user_data(user);
 			} catch (e) {
 				snack.update({ label: "Failed to authenticate with the ARL", description: e?.toString() });

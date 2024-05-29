@@ -8,11 +8,12 @@ export async function refresh_login() {
 }
 
 /**
- * @param {string} arl
+ * @template {"arl" | "credentials"} T
+ * @param {import("@/types/user").UserAuthType<T>} auth_type
  * @returns {Promise<import("@/types/user").User>}
  */
-export async function login_with_arl(arl) {
-	return await invoke("login_with_arl", { arl });
+export async function login(auth_type) {
+	return await invoke("login", auth_type);
 }
 
 export async function logout() {
