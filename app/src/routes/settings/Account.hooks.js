@@ -1,9 +1,15 @@
-import { login } from "@/bindings/user";
-import { create_snack } from "@/components/snack/snack";
+import { onMount } from "svelte";
+import { get, readonly, writable } from "svelte/store";
+
+import { get_auth_state, login } from "@/bindings/user";
 import { set_user_data } from "@/stores/user";
-import { get, writable } from "svelte/store";
+
+import { create_snack } from "@/components/snack/snack";
 
 export function initialize_state() {
+	/** @type {import("svelte/store").Writable<import("@/types/user").UserAuthState | null>} */
+	const auth_state = writable(null);
+
 	const input_email = writable("");
 	const input_password = writable("");
 	const input_arl = writable("");
@@ -28,7 +34,7 @@ export function initialize_state() {
 
 		if (arl.length > 0) {
 			try {
-				const user = await login({ type: "arl", arl: arl.toString() });
+				const user = await login({ type: "Arl", arl: arl.toString() });
 				set_user_data(user);
 			} catch (e) {
 				snack.update({ label: "Failed to authenticate with the ARL", description: e?.toString() });
@@ -38,13 +44,23 @@ export function initialize_state() {
 		return snack.close();
 	};
 
-	const get_auth_state = async () => {
-	};
+	onMount(async () => {
+		try {
+			const data = await get_auth_state();
+			auth_state.set(data);
+		} catch (e) {
+			create_snack({
+				label: "Failed to retrieve authentication state",
+				description: e?.toString(),
+			});
+		}
+	});
 
 	return {
 		input_email,
 		input_password,
 		input_arl,
+		auth_state: readonly(auth_state),
 		on_login_submit,
 	};
 }

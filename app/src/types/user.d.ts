@@ -4,12 +4,16 @@ declare interface UserAuthTypeData {
 	arl: { arl: string };
 	credentials: { email: string; password: string };
 }
-export declare type UserAuthType<T extends "arl" | "credentials"> = T extends "arl" ? { type: "arl"; arl: string }
-	: { type: "credentials"; email: string; password: string };
 
-export declare interface UserAuthState<T extends "arl" | "credentials" | unknown> {
-	type: "logged_in" | "incomplete" | "not_logged_in";
-	data: UserAuthType<T>;
+export declare type UserAuthType = { type: "Arl"; arl: string } | {
+	type: "Credentials";
+	email: string;
+	password: string;
+};
+
+export declare interface UserAuthState {
+	type: "LoggedIn" | "Incomplete" | "NotLoggedIn";
+	data?: UserAuthType;
 }
 
 export declare interface User {
