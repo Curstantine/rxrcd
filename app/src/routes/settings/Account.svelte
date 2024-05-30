@@ -8,7 +8,7 @@
 	import { slide } from "svelte/transition";
 	import { logout } from "@/utils/auth";
 
-	const { input_email, input_password, input_arl, on_login_submit } = initialize_state();
+	const { auth_state, input_email, input_password, input_arl, on_login_submit } = initialize_state();
 
 	$: is_login_cred_disabled = $input_arl.length > 0;
 	$: is_login_arl_disabled = $input_email?.length > 0 || $input_password?.length > 0;
@@ -36,64 +36,66 @@
 	{/if}
 
 	<!-- TODO(Curstantine): Restore whatever auth we used and hide unrelated methods in an authenticated context. -->
-	<form name="login" class="max-w-lg" on:submit|preventDefault={on_login_submit}>
-		<SettingsOptionArea
-			layout="col"
-			label="Login with credentials"
-			subtitle="Login with your email and password"
-			form_id="login_email"
-			option_class="flex flex-col"
-		>
-			<input
-				id="login_email"
-				type="email"
-				class="mb-2 w-full input"
-				placeholder="Email"
-				disabled={is_login_cred_disabled}
-				bind:value={$input_email}
-			/>
-			<input
-				id="login_password"
-				type="text"
-				class="w-full input"
-				placeholder="Password"
-				disabled={is_login_cred_disabled}
-				bind:value={$input_password}
-			/>
-		</SettingsOptionArea>
-
-		<div class="h-6 flex items-center gap-2 -mb-2">
-			<div class="h-[1px] flex-1 bg-border"></div>
-			<span class="text-sm">or</span>
-			<div class="h-[1px] flex-1 bg-border"></div>
-		</div>
-
-		<SettingsOptionArea
-			layout="col"
-			label="Login with ARL"
-			subtitle="You can also login from the ARL token available in your session cookies"
-			form_id="login_arl"
-		>
-			<input
-				id="login_arl"
-				type="text"
-				class="w-full input"
-				placeholder="ARL"
-				disabled={is_login_arl_disabled}
-				bind:value={$input_arl}
-			/>
-		</SettingsOptionArea>
-
-		<div class="mt-4 max-w-lg flex justify-end">
-			<button
-				type="submit"
-				class="w-full button-primary"
-				disabled={!(is_login_cred_disabled || is_login_arl_disabled)}
+	{#if $auth_state === null || $auth_state.type === "NotLoggedIn"}
+		<form name="login" class="max-w-lg" on:submit|preventDefault={on_login_submit}>
+			<SettingsOptionArea
+				layout="col"
+				label="Login with credentials"
+				subtitle="Login with your email and password"
+				form_id="login_email"
+				option_class="flex flex-col"
 			>
-				Continue
-			</button>
-		</div>
-	</form>
+				<input
+					id="login_email"
+					type="email"
+					class="mb-2 w-full input"
+					placeholder="Email"
+					disabled={is_login_cred_disabled}
+					bind:value={$input_email}
+				/>
+				<input
+					id="login_password"
+					type="text"
+					class="w-full input"
+					placeholder="Password"
+					disabled={is_login_cred_disabled}
+					bind:value={$input_password}
+				/>
+			</SettingsOptionArea>
+
+			<div class="h-6 flex items-center gap-2 -mb-2">
+				<div class="h-[1px] flex-1 bg-border"></div>
+				<span class="text-sm">or</span>
+				<div class="h-[1px] flex-1 bg-border"></div>
+			</div>
+
+			<SettingsOptionArea
+				layout="col"
+				label="Login with ARL"
+				subtitle="You can also login from the ARL token available in your session cookies"
+				form_id="login_arl"
+			>
+				<input
+					id="login_arl"
+					type="text"
+					class="w-full input"
+					placeholder="ARL"
+					disabled={is_login_arl_disabled}
+					bind:value={$input_arl}
+				/>
+			</SettingsOptionArea>
+
+			<div class="mt-4 max-w-lg flex justify-end">
+				<button
+					type="submit"
+					class="w-full button-primary"
+					disabled={!(is_login_cred_disabled || is_login_arl_disabled)}
+				>
+					Continue
+				</button>
+			</div>
+		</form>
+	{/if}
 </article>
 
 <style>

@@ -1,6 +1,6 @@
 import { derived, get, readonly, writable } from "svelte/store";
 
-const TIMEOUT_MS = 5000;
+export const DEFAULT_SNACK_TIMEOUT = 5000;
 
 /**
  * @typedef {import("svelte/store").Writable<import("@/types/snack").SnackInstance>} WritableInstance
@@ -63,7 +63,7 @@ export function resume_snack_timeouts() {
 		const val = source[key];
 
 		if (val.timeout !== undefined) {
-			val.timeout = window.setTimeout(() => close_snack(key), TIMEOUT_MS);
+			val.timeout = window.setTimeout(() => close_snack(key), DEFAULT_SNACK_TIMEOUT);
 		}
 	}
 }
@@ -96,7 +96,7 @@ export function create_snack(instance) {
 	let timeout;
 
 	if (!instance.persistent) {
-		timeout = window.setTimeout(() => close_snack(id), TIMEOUT_MS);
+		timeout = window.setTimeout(() => close_snack(id), DEFAULT_SNACK_TIMEOUT);
 	}
 
 	data.update((stack) => {
