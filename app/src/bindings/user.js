@@ -15,11 +15,11 @@ export async function refresh_login() {
 }
 
 /**
- * @param {import("@/types/user").UserAuthType} auth_type
+ * @param {import("@/types/user").UserAuthType} data
  * @returns {Promise<import("@/types/user").User>}
  */
-export async function login(auth_type) {
-	return await invoke("login", auth_type);
+export async function login(data) {
+	return await invoke("login", { data });
 }
 
 export async function logout() {
