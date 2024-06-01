@@ -1,14 +1,15 @@
 <script>
+	import { slide } from "svelte/transition";
+
 	import { user_data } from "@/stores/user";
 
 	import SettingsHeading from "@/components/SettingsHeading.svelte";
 	import SettingsOptionArea from "@/components/SettingsOptionArea.svelte";
+	import CopyWrapper from "@/components/InputCopyable.svelte";
 
 	import { initialize_state } from "@/routes/settings/Account.hooks";
-	import { slide } from "svelte/transition";
-	import { logout } from "@/utils/auth";
 
-	const { auth_state, input_email, input_password, input_arl, on_login_submit } = initialize_state();
+	const { auth_state, input_email, input_password, input_arl, on_login_submit, on_logout } = initialize_state();
 
 	$: is_login_cred_disabled = $input_arl.length > 0;
 	$: is_login_arl_disabled = $input_email?.length > 0 || $input_password?.length > 0;
@@ -30,14 +31,13 @@
 			</div>
 
 			<div class="grid-area-[actions]">
-				<button class="button-primary" on:click={logout}>Logout</button>
+				<button class="button-primary" on:click={on_logout}>Logout</button>
 			</div>
 		</div>
 	{/if}
 
-	<!-- TODO(Curstantine): Restore whatever auth we used and hide unrelated methods in an authenticated context. -->
-	{#if $auth_state === null || $auth_state.type === "NotLoggedIn"}
-		<form name="login" class="max-w-lg" on:submit|preventDefault={on_login_submit}>
+	<form name="login" class="max-w-lg" on:submit|preventDefault={on_login_submit}>
+		{#if $auth_state === null || $auth_state.type === "NotLoggedIn" || $auth_state.data?.type === "Credentials"}
 			<SettingsOptionArea
 				layout="col"
 				label="Login with credentials"
@@ -45,46 +45,85 @@
 				form_id="login_email"
 				option_class="flex flex-col"
 			>
-				<input
-					id="login_email"
-					type="email"
-					class="mb-2 w-full input"
-					placeholder="Email"
-					disabled={is_login_cred_disabled}
-					bind:value={$input_email}
-				/>
-				<input
-					id="login_password"
-					type="text"
-					class="w-full input"
-					placeholder="Password"
-					disabled={is_login_cred_disabled}
-					bind:value={$input_password}
-				/>
+				{#if $auth_state !== null && $auth_state.type === "LoggedIn" && $auth_state.data?.type === "Credentials"}
+					<CopyWrapper grammar="email" value={$auth_state.data.email}>
+						<input
+							id="login_email"
+							type="email"
+							readonly
+							class="w-full input pr-10"
+							bind:value={$auth_state.data.email}
+						/>
+					</CopyWrapper>
+					<CopyWrapper grammar="password" value={$auth_state.data.password}>
+						<input
+							id="login_password"
+							type="password"
+							readonly
+							class="w-full input pr-10"
+							bind:value={$auth_state.data.password}
+						/>
+					</CopyWrapper>
+				{:else}
+					<input
+						id="login_email"
+						type="email"
+						class="mb-2 w-full input"
+						placeholder="Email"
+						disabled={is_login_cred_disabled}
+						bind:value={$input_email}
+					/>
+					<input
+						id="login_password"
+						type="password"
+						class="w-full input"
+						placeholder="Password"
+						disabled={is_login_cred_disabled}
+						bind:value={$input_password}
+					/>
+				{/if}
 			</SettingsOptionArea>
+		{/if}
 
+		{#if $auth_state === null || $auth_state.type === "NotLoggedIn"}
 			<div class="h-6 flex items-center gap-2 -mb-2">
 				<div class="h-[1px] flex-1 bg-border"></div>
 				<span class="text-sm">or</span>
 				<div class="h-[1px] flex-1 bg-border"></div>
 			</div>
+		{/if}
 
+		{#if $auth_state === null || $auth_state.type === "NotLoggedIn" || $auth_state.data?.type === "Arl"}
 			<SettingsOptionArea
 				layout="col"
 				label="Login with ARL"
 				subtitle="You can also login from the ARL token available in your session cookies"
 				form_id="login_arl"
 			>
-				<input
-					id="login_arl"
-					type="text"
-					class="w-full input"
-					placeholder="ARL"
-					disabled={is_login_arl_disabled}
-					bind:value={$input_arl}
-				/>
+				{#if $auth_state !== null && $auth_state.type === "LoggedIn" && $auth_state.data?.type === "Arl"}
+					<CopyWrapper grammar="ARL" value={$auth_state.data.arl}>
+						<input
+							id="login_arl"
+							type="text"
+							readonly
+							class="w-full input pr-10"
+							bind:value={$auth_state.data.arl}
+						/>
+					</CopyWrapper>
+				{:else}
+					<input
+						id="login_arl"
+						type="text"
+						class="w-full input"
+						placeholder="ARL"
+						disabled={is_login_arl_disabled}
+						bind:value={$input_arl}
+					/>
+				{/if}
 			</SettingsOptionArea>
+		{/if}
 
+		{#if $auth_state === null || $auth_state.type === "NotLoggedIn"}
 			<div class="mt-4 max-w-lg flex justify-end">
 				<button
 					type="submit"
@@ -94,8 +133,8 @@
 					Continue
 				</button>
 			</div>
-		</form>
-	{/if}
+		{/if}
+	</form>
 </article>
 
 <style>

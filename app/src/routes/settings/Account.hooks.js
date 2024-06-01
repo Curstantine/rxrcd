@@ -3,6 +3,7 @@ import { get, readonly, writable } from "svelte/store";
 
 import { get_auth_state, login } from "@/bindings/user";
 import { set_user_data } from "@/stores/user";
+import { logout } from "@/utils/auth";
 
 import { create_snack, DEFAULT_SNACK_TIMEOUT } from "@/components/snack/snack";
 
@@ -54,7 +55,12 @@ export function initialize_state() {
 			}
 		}
 
-		return setTimeout(() => snack.close(), DEFAULT_SNACK_TIMEOUT);
+		return setTimeout(() => snack.close(), get(auth_state)?.type === "NotLoggedIn" ? DEFAULT_SNACK_TIMEOUT : 0);
+	};
+
+	const on_logout = async () => {
+		await logout();
+		await initialize_auth_state();
 	};
 
 	onMount(async () => {
@@ -67,5 +73,6 @@ export function initialize_state() {
 		input_password,
 		input_arl,
 		on_login_submit,
+		on_logout,
 	};
 }
