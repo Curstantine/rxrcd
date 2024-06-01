@@ -52,7 +52,7 @@ pub async fn setup<R: Runtime>(handle: AppHandle<R>) -> CommandResult<SetupRetur
 	config_state.initialize(&app_config_dir).await?;
 	deezer_state.initialize().await?;
 
-	let auth_config_path = directories::get_auth_path(&app_config_dir);
+	let auth_config_path = directories::get_auth_config_path(&app_config_dir);
 	if let Some(auth_config) = configuration::read_auth_config(&auth_config_path).await? {
 		let deezer_lock = deezer_state.get().await;
 		let deezer = deezer_lock.as_ref().unwrap();

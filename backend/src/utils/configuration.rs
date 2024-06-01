@@ -54,6 +54,10 @@ pub async fn read_auth_config(path: &Path) -> Result<Option<AuthConfiguration>> 
 	}
 }
 
+pub async fn remove_auth_config(path: &Path) -> Result<()> {
+	tokio::fs::remove_file(path).await.map_err(|e| e.into())
+}
+
 pub async fn write_auth_config<C>(path: &Path, auth_config: C) -> Result<()>
 where
 	C: Borrow<AuthConfiguration> + std::fmt::Debug + serde::Serialize,

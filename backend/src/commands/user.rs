@@ -1,7 +1,6 @@
 use tauri::{AppHandle, Manager, Runtime, State};
 
 use crate::{
-	constants,
 	errors::{CommandResult, PassiveError},
 	models::{
 		configuration::AuthConfiguration,
@@ -22,20 +21,10 @@ pub async fn get_auth_state<R: Runtime>(app_handle: AppHandle<R>) -> CommandResu
 		client.is_authenticated()
 	};
 
-	let app_config_dir = app_handle
-		.path_resolver()
-		.app_config_dir()
-		.expect(constants::ERR_MSG_NO_APP_CONFIG_DIR);
-	let auth_config_path = directories::get_auth_path(&app_config_dir);
-
+	let auth_config_path = directories::resolved::get_auth_config_path(app_handle.path_resolver());
 	match configuration::read_auth_config(&auth_config_path).await? {
-		Some(conf) => {
-			if is_logged_in {
-				Ok(UserAuthState::LoggedIn(conf.inner))
-			} else {
-				Ok(UserAuthState::Incomplete(conf.inner))
-			}
-		}
+		Some(conf) if is_logged_in => Ok(UserAuthState::LoggedIn(conf.inner)),
+		Some(conf) => Ok(UserAuthState::Incomplete(conf.inner)),
 		_ => Ok(UserAuthState::NotLoggedIn),
 	}
 }
@@ -62,22 +51,24 @@ pub async fn login<R: Runtime>(app_handle: AppHandle<R>, data: UserAuthType) -> 
 		}
 	};
 
-	let app_config_dir = app_handle
-		.path_resolver()
-		.app_config_dir()
-		.expect(constants::ERR_MSG_NO_APP_CONFIG_DIR);
-
-	let auth_config_path = directories::get_auth_path(&app_config_dir);
+	let auth_config_path = directories::resolved::get_auth_config_path(app_handle.path_resolver());
 	configuration::write_auth_config(&auth_config_path, AuthConfiguration::new(data)).await?;
 
 	Ok(login)
 }
 
 #[tauri::command(rename_all = "snake_case")]
-#[tracing::instrument(skip(deezer_state), err(Debug))]
-pub async fn logout(deezer_state: State<'_, DeezerClientState>) -> CommandResult<()> {
-	let deezer_guard = deezer_state.get().await;
-	let client = deezer_guard.as_ref().unwrap();
+#[tracing::instrument(skip(app_handle), err(Debug))]
+pub async fn logout<R: Runtime>(app_handle: AppHandle<R>) -> CommandResult<()> {
+	{
+		let deezer_state = app_handle.state::<DeezerClientState>();
+		let deezer_guard = deezer_state.get().await;
+		let client = deezer_guard.as_ref().unwrap();
+		deezer::user::logout(client).map_err(PassiveError::from)?;
+	}
 
-	deezer::user::logout(client).map_err(PassiveError::from)
+	let auth_config_path = directories::resolved::get_auth_config_path(app_handle.path_resolver());
+	configuration::remove_auth_config(&auth_config_path).await?;
+
+	Ok(())
 }
