@@ -18,10 +18,10 @@
 	<SettingsHeading heading="Appearance" sub="Tweak rxrcd's look and feel" />
 
 	<SettingsOptionArea
+		form_id="color-scheme"
 		label="Theme"
 		subtitle="Change application-wide color scheme"
 		class="mt-4"
-		form_id="color-scheme"
 	>
 		<Select
 			id="color-scheme"

@@ -8,6 +8,7 @@
 	import CopyWrapper from "@/components/InputCopyable.svelte";
 
 	import { initialize_state } from "@/routes/settings/Account.hooks";
+	import Select from "@/components/Select.svelte";
 
 	const { auth_state, input_email, input_password, input_arl, on_login_submit, on_logout } = initialize_state();
 
@@ -135,6 +136,23 @@
 			</div>
 		{/if}
 	</form>
+
+	<SettingsOptionArea
+		form_id="change_language"
+		label="Language"
+		subtitle={[
+			"Change the language of the retrieved from deezer.",
+			"Note: This might not correctly represent some entries in their correct localization",
+		]}
+		class="mt-2"
+	>
+		<Select
+			id="change_language"
+			label="Default"
+			actions={[{ label: "Default", value: "default", sub: "(English)" }]}
+			on_change={() => {}}
+		/>
+	</SettingsOptionArea>
 </article>
 
 <style>

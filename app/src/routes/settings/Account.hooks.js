@@ -7,6 +7,14 @@ import { logout } from "@/utils/auth";
 
 import { create_snack, DEFAULT_SNACK_TIMEOUT } from "@/components/snack/snack";
 
+/**
+ * @constant
+ */
+export const language_labels = {
+	En: "English",
+	Ja: "Japanese",
+};
+
 export function initialize_state() {
 	/** @type {import("svelte/store").Writable<import("@/types/user").UserAuthState | null>} */
 	const auth_state = writable(null);
