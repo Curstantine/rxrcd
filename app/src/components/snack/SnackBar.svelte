@@ -36,7 +36,6 @@
 
 <style>
 	.snack {
-		grid-template-columns: 1fr 1fr 2rem;
 		--at-apply: fixed right-4 max-w-lg min-h-14 min-w-xs flex flex-col transform-gpu border-(1 border solid) rounded
 			bg-background p-3 bottom-6 shadow transition-transform transform-gpu;
 	}
