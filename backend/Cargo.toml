@@ -43,6 +43,7 @@ features = [
 	"window-unmaximize",
 	"window-unminimize",
 	"dialog-open",
+	"clipboard-write-text",
 ]
 
 [target.'cfg(any(windows, target_os = "macos"))'.dependencies]

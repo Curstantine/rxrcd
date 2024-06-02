@@ -42,6 +42,9 @@
 			"protocol": {
 				"asset": true,
 				"assetScope": ["$APPDATA/**"]
+			},
+			"clipboard": {
+				"writeText": true
 			}
 		},
 		"bundle": {

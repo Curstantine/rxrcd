@@ -97,7 +97,7 @@
 			<SettingsOptionArea
 				layout="col"
 				label="Login with ARL"
-				subtitle="You can also login from the ARL token available in your session cookies"
+				subtitle="Login from the ARL token available in your session cookies"
 				form_id="login_arl"
 			>
 				{#if $auth_state !== null && $auth_state.type === "LoggedIn" && $auth_state.data?.type === "Arl"}
