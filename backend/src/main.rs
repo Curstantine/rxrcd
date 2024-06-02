@@ -43,6 +43,8 @@ fn main() {
 		.manage(DeezerClientState::default())
 		.invoke_handler(tauri::generate_handler![
 			commands::setup,
+			commands::config::config_get_account,
+			commands::config::config_set_account,
 			commands::config::config_get_appearance,
 			commands::config::config_set_appearance,
 			commands::config::config_get_download,

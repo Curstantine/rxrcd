@@ -8,8 +8,9 @@ use super::user::UserAuthType;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Configuration {
-	pub download: ConfigurationDownload,
+	pub account: ConfigurationAccount,
 	pub appearance: ConfigurationAppearance,
+	pub download: ConfigurationDownload,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
@@ -27,6 +28,40 @@ pub enum CoverQuality {
 	Xl,
 }
 
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
+pub enum DataLanguage {
+	/// Same as account
+	Default,
+
+	#[serde(rename = "en")]
+	English,
+
+	#[serde(rename = "ja")]
+	Japanese,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct ConfigurationAccount {
+	/// The language used in the Accept-Language header for deezer specific requests.
+	pub data_language: DataLanguage,
+
+	// --------------------------------------------------------------------------------------------------------
+	// TODO(Curstantine):
+	// I have no idea how to implement this, but I very much need this.
+	// I did look around on the API, but there doesn't seem to be a way to get the "country" or the "language"
+	// of an artist/album/song to guess which locale to pass to the Accept-Language header.
+	// --------------------------------------------------------------------------------------------------------
+	/// Whether to use the best-case locale for entries.
+	///
+	/// Such that, english entries use "en", japanese entries use "ja", and so forth.
+	pub use_native_locale: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct ConfigurationAppearance {
+	pub theme: String,
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ConfigurationDownload {
 	pub concurrent: u8,
@@ -37,11 +72,6 @@ pub struct ConfigurationDownload {
 	pub embed_covers: bool,
 	pub cover_resolution: CoverQuality,
 	pub cover_embed_resolution: CoverQuality,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct ConfigurationAppearance {
-	pub theme: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -59,6 +89,13 @@ impl AuthConfiguration {
 impl Default for Configuration {
 	fn default() -> Self {
 		Self {
+			account: ConfigurationAccount {
+				data_language: DataLanguage::Default,
+				use_native_locale: false,
+			},
+			appearance: ConfigurationAppearance {
+				theme: "system".to_string(),
+			},
 			download: ConfigurationDownload {
 				concurrent: 3,
 				path: directories::get_default_download_dir(),
@@ -68,9 +105,6 @@ impl Default for Configuration {
 				embed_covers: true,
 				cover_resolution: CoverQuality::Xl,
 				cover_embed_resolution: CoverQuality::Medium,
-			},
-			appearance: ConfigurationAppearance {
-				theme: "system".to_string(),
 			},
 		}
 	}

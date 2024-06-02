@@ -3,13 +3,39 @@ use tauri::State;
 use crate::{
 	errors::CommandResult,
 	models::{
-		configuration::{ConfigurationAppearance, ConfigurationDownload},
+		configuration::{ConfigurationAccount, ConfigurationAppearance, ConfigurationDownload},
 		state::ConfigurationState,
 	},
 };
 
 #[tauri::command(rename_all = "snake_case")]
-#[tracing::instrument(skip_all, err(Debug))]
+#[tracing::instrument(skip(config_state), err(Debug))]
+pub async fn config_get_account(config_state: State<'_, ConfigurationState>) -> CommandResult<ConfigurationAccount> {
+	let guard = config_state.get_data();
+	let object = guard.as_ref().unwrap();
+
+	Ok(object.account.clone())
+}
+
+#[tauri::command(rename_all = "snake_case")]
+#[tracing::instrument(skip(config_state), err(Debug))]
+pub async fn config_set_account(
+	config_state: State<'_, ConfigurationState>,
+	account: ConfigurationAccount,
+) -> CommandResult<()> {
+	{
+		let mut guard = config_state.get_data();
+		let inner = guard.as_mut().unwrap();
+		inner.account = account;
+	}
+
+	config_state.write().await?;
+
+	Ok(())
+}
+
+#[tauri::command(rename_all = "snake_case")]
+#[tracing::instrument(skip(config_state), err(Debug))]
 pub async fn config_get_appearance(
 	config_state: State<'_, ConfigurationState>,
 ) -> CommandResult<ConfigurationAppearance> {
@@ -20,7 +46,7 @@ pub async fn config_get_appearance(
 }
 
 #[tauri::command(rename_all = "snake_case")]
-#[tracing::instrument(skip_all, err(Debug))]
+#[tracing::instrument(skip(config_state), err(Debug))]
 pub async fn config_set_appearance(
 	config_state: State<'_, ConfigurationState>,
 	appearance: ConfigurationAppearance,
@@ -37,7 +63,7 @@ pub async fn config_set_appearance(
 }
 
 #[tauri::command(rename_all = "snake_case")]
-#[tracing::instrument(skip_all, err(Debug))]
+#[tracing::instrument(skip(config_state), err(Debug))]
 pub async fn config_get_download(config_state: State<'_, ConfigurationState>) -> CommandResult<ConfigurationDownload> {
 	let guard = config_state.get_data();
 	let object = guard.as_ref().unwrap();
@@ -46,7 +72,7 @@ pub async fn config_get_download(config_state: State<'_, ConfigurationState>) ->
 }
 
 #[tauri::command(rename_all = "snake_case")]
-#[tracing::instrument(skip_all, err(Debug))]
+#[tracing::instrument(skip(config_state), err(Debug))]
 pub async fn config_set_download(
 	config_state: State<'_, ConfigurationState>,
 	download: ConfigurationDownload,
@@ -62,7 +88,7 @@ pub async fn config_set_download(
 }
 
 #[tauri::command(rename_all = "snake_case")]
-#[tracing::instrument(skip_all, err(Debug))]
+#[tracing::instrument(skip(config_state), err(Debug))]
 pub async fn config_reload(config_state: State<'_, ConfigurationState>) -> CommandResult<()> {
 	config_state.reload().await?;
 
