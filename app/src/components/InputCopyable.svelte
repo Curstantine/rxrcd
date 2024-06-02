@@ -1,6 +1,7 @@
 <script>
-	import { create_snack } from "@/components/snack/snack";
 	import { clipboard } from "@tauri-apps/api";
+
+	import { create_snack } from "@/components/snack/snack";
 
 	export let grammar;
 	export let value;
@@ -18,7 +19,7 @@
 <div class="relative">
 	<slot />
 
-	<button class="clip icon-button" on:click={push_to_clipboard}>
+	<button class="clip icon-button" on:click|preventDefault={push_to_clipboard}>
 		<div class="i-symbols-content-copy-outline-rounded size-4"></div>
 	</button>
 </div>
