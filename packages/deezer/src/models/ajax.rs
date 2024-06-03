@@ -3,7 +3,7 @@ use std::fmt::Debug;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize)]
-pub struct RequestGetBody<T: Debug> {
+pub struct ResponseBody<T: Debug> {
 	pub results: Option<T>,
 	#[serde(deserialize_with = "crate::serde::de_ajax_req_err")]
 	pub error: Option<AjaxRequestError>,
@@ -30,8 +30,8 @@ pub(crate) struct RequestPOSTBody {
 	api_token: Option<String>,
 }
 
-impl<T: Debug> RequestGetBody<T> {
-	/// Maps Self into a [Result] type that contains either [Self::results] or [Self:error]
+impl<T: Debug> ResponseBody<T> {
+	/// Maps Self into a [Result] type that contains either [Self::results] or [Self::error]
 	///
 	/// Note: This panics if both results and error are none.
 	pub fn into_result(self) -> Result<T, AjaxRequestError> {

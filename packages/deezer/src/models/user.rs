@@ -1,8 +1,8 @@
 use serde::Deserialize;
 
-use super::ajax::RequestGetBody;
+use super::ajax::ResponseBody;
 
-pub type GetUserDataResponse = RequestGetBody<UserData>;
+pub type GetUserDataResponse = ResponseBody<UserData>;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all(deserialize = "SCREAMING_SNAKE_CASE"))]
