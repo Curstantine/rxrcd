@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use deezer::models::Language;
 use serde::{Deserialize, Serialize};
 
 use crate::utils::directories;
@@ -32,12 +33,7 @@ pub enum CoverQuality {
 pub enum DataLanguage {
 	/// Same as account
 	Default,
-
-	#[serde(rename = "en")]
-	English,
-
-	#[serde(rename = "ja")]
-	Japanese,
+	Defined(Language),
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -83,6 +79,15 @@ pub struct AuthConfiguration {
 impl AuthConfiguration {
 	pub fn new(inner: UserAuthType) -> Self {
 		Self { inner }
+	}
+}
+
+impl DataLanguage {
+	pub fn into_deezer_language(self, account_language: Option<Language>) -> Language {
+		match self {
+			DataLanguage::Default => account_language.unwrap_or(Language::English),
+			Self::Defined(lang) => lang,
+		}
 	}
 }
 

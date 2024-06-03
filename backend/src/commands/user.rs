@@ -3,7 +3,7 @@ use tauri::{AppHandle, Manager, Runtime, State};
 use crate::{
 	errors::{CommandResult, PassiveError},
 	models::{
-		configuration::AuthConfiguration,
+		configuration::{AuthConfiguration, DataLanguage},
 		state::DeezerClientState,
 		user::{User, UserAuthState, UserAuthType},
 	},
@@ -35,6 +35,25 @@ pub async fn refresh_login(deezer_state: State<'_, DeezerClientState>) -> Comman
 	let deezer_guard = deezer_state.get().await;
 	let client = deezer_guard.as_ref().unwrap();
 	Ok(deezer::user::refresh_login(client).await.map(User::from)?)
+}
+
+#[tauri::command(rename_all = "snake_case")]
+#[tracing::instrument(skip(deezer_state), err(Debug))]
+pub async fn change_data_language(
+	deezer_state: State<'_, DeezerClientState>,
+	language: DataLanguage,
+) -> CommandResult<()> {
+	let deezer_guard = deezer_state.get().await;
+	let client = deezer_guard.as_ref().unwrap();
+
+	let user_data_lock = client.get_user_data();
+	let user_data = user_data_lock.as_ref();
+	let user_language = user_data.map(|x| x.user.setting.global.language);
+	let data_language = language.into_deezer_language(user_language);
+
+	client.set_language(Some(data_language));
+
+	Ok(())
 }
 
 #[tauri::command(rename_all = "snake_case")]

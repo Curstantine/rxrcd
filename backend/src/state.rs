@@ -73,7 +73,7 @@ impl DeezerClientState {
 	}
 
 	pub async fn initialize(&self) -> Result<()> {
-		let client = DeezerClient::with_client_name("rxrcd", env!("CARGO_PKG_VERSION"));
+		let client = DeezerClient::new("rxrcd", env!("CARGO_PKG_VERSION"));
 		let mut lock = self.0.lock().await;
 		*lock = Some(client);
 

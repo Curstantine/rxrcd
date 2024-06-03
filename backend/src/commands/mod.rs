@@ -49,6 +49,7 @@ pub async fn setup<R: Runtime>(handle: AppHandle<R>) -> CommandResult<SetupRetur
 	let app_config_dir = path_resolver
 		.app_config_dir()
 		.expect(constants::ERR_MSG_NO_APP_CONFIG_DIR);
+
 	config_state.initialize(&app_config_dir).await?;
 	deezer_state.initialize().await?;
 
