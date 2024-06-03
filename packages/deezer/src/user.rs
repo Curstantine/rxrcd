@@ -14,8 +14,10 @@ pub async fn refresh_login(client: &DeezerClient) -> DeezerResult<UserData> {
 	let response = client.post(DEEZER_AJAX_URL).json(&body).send().await?;
 	let data = response.json::<GetUserDataResponse>().await?;
 
+	// TODO(Curstantine):
+	// Figure out if we can hold this result without cloning using a lifetime bound to the mutex.
 	let results = data.into_result()?;
-	client.set_api_token(results.api_token.clone());
+	client.set_user_data(Some(results.clone()));
 
 	Ok(results)
 }
@@ -44,7 +46,7 @@ pub fn logout(client: &DeezerClient) -> DeezerResult<()> {
 	}
 
 	client.clear_cookies();
-	*client.api_token.lock().unwrap() = None;
+	*client.user_data.lock().unwrap() = None;
 
 	Ok(())
 }

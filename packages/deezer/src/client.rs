@@ -1,6 +1,6 @@
 use std::{
 	fmt::Display,
-	sync::{Arc, Mutex},
+	sync::{Arc, Mutex, MutexGuard},
 };
 
 use reqwest::{
@@ -11,17 +11,21 @@ use reqwest_cookie_store::CookieStoreMutex;
 use tracing::debug;
 use url::Url;
 
-use crate::constants::{DEEZER_URL, PACKAGE_VERSION};
+use crate::{
+	constants::{DEEZER_URL, PACKAGE_VERSION},
+	models::{user::UserData, Language},
+};
 
 #[derive(Debug)]
 pub struct DeezerClient {
 	pub(crate) client: Client,
 	pub(crate) cookie_store: Arc<CookieStoreMutex>,
-	pub(crate) api_token: Mutex<Option<String>>,
+	pub(crate) language: Mutex<Option<Language>>,
+	pub(crate) user_data: Mutex<Option<UserData>>,
 }
 
 impl DeezerClient {
-	pub fn with_client_name(client_name: &'static str, client_version: &str) -> Self {
+	pub fn new(client_name: &'static str, client_version: &str) -> Self {
 		let mut headers = HeaderMap::new();
 		headers.insert(
 			header::USER_AGENT,
@@ -42,18 +46,28 @@ impl DeezerClient {
 		Self {
 			client,
 			cookie_store,
-			api_token: Mutex::default(),
+			language: Mutex::default(),
+			user_data: Mutex::default(),
 		}
 	}
 
 	pub fn is_authenticated(&self) -> bool {
-		let data = self.api_token.lock().unwrap();
+		let data = self.user_data.lock().unwrap();
 		data.is_some()
 	}
 
-	pub fn set_api_token(&self, api_token: String) {
-		let mut data = self.api_token.lock().unwrap();
-		*data = Some(api_token);
+	pub fn get_user_data(&self) -> MutexGuard<'_, Option<UserData>> {
+		self.user_data.lock().unwrap()
+	}
+
+	pub fn set_user_data(&self, user_data: Option<UserData>) {
+		let mut data = self.user_data.lock().unwrap();
+		*data = user_data;
+	}
+
+	pub fn set_language(&self, language: Option<Language>) {
+		let mut data = self.language.lock().unwrap();
+		*data = language;
 	}
 
 	pub fn cookie_has_arl(&self) -> bool {
@@ -74,16 +88,28 @@ impl DeezerClient {
 
 	pub fn get<U: reqwest::IntoUrl + Display>(&self, url: U) -> reqwest::RequestBuilder {
 		debug!("GET request sent to {url}");
-		self.client.get(url)
+		self.client.get(url).header(
+			header::ACCEPT_LANGUAGE,
+			self.language
+				.lock()
+				.unwrap()
+				.map_or_else(|| Language::English.to_header_value(), |e| e.to_header_value()),
+		)
 	}
 
 	pub fn post<U: reqwest::IntoUrl + Display>(&self, url: U) -> reqwest::RequestBuilder {
 		debug!("POST request sent to {url}");
-		self.client.post(url)
+		self.client.post(url).header(
+			header::ACCEPT_LANGUAGE,
+			self.language
+				.lock()
+				.unwrap()
+				.map_or_else(|| Language::English.to_header_value(), |e| e.to_header_value()),
+		)
 	}
 
 	#[cfg(test)]
 	pub fn testing() -> Self {
-		DeezerClient::with_client_name("rxrcd-deezer", "testing")
+		DeezerClient::new("rxrcd-deezer", "testing")
 	}
 }
