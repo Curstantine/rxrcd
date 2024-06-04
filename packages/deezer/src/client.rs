@@ -1,7 +1,4 @@
-use std::{
-	fmt::Display,
-	sync::{Arc, Mutex, MutexGuard},
-};
+use std::{fmt::Display, sync::Arc};
 
 use reqwest::{
 	header::{self, HeaderMap},
@@ -20,8 +17,8 @@ use crate::{
 pub struct DeezerClient {
 	pub(crate) client: Client,
 	pub(crate) cookie_store: Arc<CookieStoreMutex>,
-	pub(crate) language: Mutex<Option<Language>>,
-	pub(crate) user_data: Mutex<Option<UserData>>,
+	pub(crate) language: Option<Language>,
+	pub user_data: Option<UserData>,
 }
 
 impl DeezerClient {
@@ -46,28 +43,21 @@ impl DeezerClient {
 		Self {
 			client,
 			cookie_store,
-			language: Mutex::default(),
-			user_data: Mutex::default(),
+			language: Option::default(),
+			user_data: Option::default(),
 		}
 	}
 
 	pub fn is_authenticated(&self) -> bool {
-		let data = self.user_data.lock().unwrap();
-		data.is_some()
+		self.user_data.is_some()
 	}
 
-	pub fn get_user_data(&self) -> MutexGuard<'_, Option<UserData>> {
-		self.user_data.lock().unwrap()
+	pub fn set_user_data(&mut self, user_data: Option<UserData>) {
+		self.user_data = user_data;
 	}
 
-	pub fn set_user_data(&self, user_data: Option<UserData>) {
-		let mut data = self.user_data.lock().unwrap();
-		*data = user_data;
-	}
-
-	pub fn set_language(&self, language: Option<Language>) {
-		let mut data = self.language.lock().unwrap();
-		*data = language;
+	pub fn set_language(&mut self, language: Option<Language>) {
+		self.language = language;
 	}
 
 	pub fn cookie_has_arl(&self) -> bool {
@@ -91,8 +81,6 @@ impl DeezerClient {
 		self.client.get(url).header(
 			header::ACCEPT_LANGUAGE,
 			self.language
-				.lock()
-				.unwrap()
 				.map_or_else(|| Language::English.to_header_value(), |e| e.to_header_value()),
 		)
 	}
@@ -102,8 +90,6 @@ impl DeezerClient {
 		self.client.post(url).header(
 			header::ACCEPT_LANGUAGE,
 			self.language
-				.lock()
-				.unwrap()
 				.map_or_else(|| Language::English.to_header_value(), |e| e.to_header_value()),
 		)
 	}
