@@ -38,25 +38,6 @@ pub async fn refresh_login(deezer_state: State<'_, DeezerClientState>) -> Comman
 }
 
 #[tauri::command(rename_all = "snake_case")]
-#[tracing::instrument(skip(deezer_state), err(Debug))]
-pub async fn change_data_language(
-	deezer_state: State<'_, DeezerClientState>,
-	language: DataLanguage,
-) -> CommandResult<()> {
-	let deezer_guard = deezer_state.get().await;
-	let client = deezer_guard.as_ref().unwrap();
-
-	let user_data_lock = client.get_user_data();
-	let user_data = user_data_lock.as_ref();
-	let user_language = user_data.map(|x| x.user.setting.global.language);
-	let data_language = language.into_deezer_language(user_language);
-
-	client.set_language(Some(data_language));
-
-	Ok(())
-}
-
-#[tauri::command(rename_all = "snake_case")]
 #[tracing::instrument(skip(app_handle), err(Debug))]
 pub async fn login<R: Runtime>(app_handle: AppHandle<R>, data: UserAuthType) -> CommandResult<User> {
 	let login = {
@@ -88,6 +69,30 @@ pub async fn logout<R: Runtime>(app_handle: AppHandle<R>) -> CommandResult<()> {
 
 	let auth_config_path = directories::resolved::get_auth_config_path(app_handle.path_resolver());
 	configuration::remove_auth_config(&auth_config_path).await?;
+
+	Ok(())
+}
+
+/// Changes the data language used in the deezer specific requests.
+///
+/// Note: This is not the same changing data_language through [crate::commands::config::config_set_account].
+/// This function will NOT update any configuration file, and is expected to use after setting the configuration
+/// to sync the changes with the [deezer::client::DeezerClient]
+#[tauri::command(rename_all = "snake_case")]
+#[tracing::instrument(skip(deezer_state), err(Debug))]
+pub async fn change_data_language(
+	deezer_state: State<'_, DeezerClientState>,
+	language: DataLanguage,
+) -> CommandResult<()> {
+	let deezer_guard = deezer_state.get().await;
+	let client = deezer_guard.as_ref().unwrap();
+
+	let user_data_lock = client.get_user_data();
+	let user_data = user_data_lock.as_ref();
+	let user_language = user_data.map(|x| x.user.setting.global.language);
+	let data_language = language.into_deezer_language(user_language);
+
+	client.set_language(Some(data_language));
 
 	Ok(())
 }

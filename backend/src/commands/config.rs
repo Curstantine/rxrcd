@@ -91,6 +91,5 @@ pub async fn config_set_download(
 #[tracing::instrument(skip(config_state), err(Debug))]
 pub async fn config_reload(config_state: State<'_, ConfigurationState>) -> CommandResult<()> {
 	config_state.reload().await?;
-
 	Ok(())
 }

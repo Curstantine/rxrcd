@@ -32,6 +32,7 @@ pub async fn login_with_arl(client: &DeezerClient, arl: &str) -> DeezerResult<Us
 	refresh_login(client).await
 }
 
+#[allow(unused_variables)]
 pub async fn login_with_credentials(client: &DeezerClient, username: &str, password: &str) -> DeezerResult<()> {
 	if client.cookie_has_arl() {
 		return Err(Error::AlreadyLoggedIn);

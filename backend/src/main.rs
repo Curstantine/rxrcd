@@ -33,7 +33,8 @@ fn main() {
 			Ok(())
 		})
 		.on_window_event(|e| {
-			// To alleviate the resize perf bugs mentioned in https://github.com/tauri-apps/tauri/issues/6322
+			// Note(Curstantine):
+			// To temporarily fix the resize perf bugs mentioned in https://github.com/tauri-apps/tauri/issues/6322
 			if let WindowEvent::Resized(_) = e.event() {
 				thread::sleep(Duration::from_nanos(1));
 			}
@@ -43,6 +44,7 @@ fn main() {
 		.manage(DeezerClientState::default())
 		.invoke_handler(tauri::generate_handler![
 			commands::setup,
+			// commands/config
 			commands::config::config_get_account,
 			commands::config::config_set_account,
 			commands::config::config_get_appearance,
@@ -50,15 +52,19 @@ fn main() {
 			commands::config::config_get_download,
 			commands::config::config_set_download,
 			commands::config::config_reload,
+			// commands/album
 			commands::album::get_album,
 			commands::album::search_albums,
 			commands::album::get_artist_albums,
+			// commands/artist
 			commands::artist::get_artist,
 			commands::artist::search_artists,
+			// commands/user
 			commands::user::get_auth_state,
 			commands::user::refresh_login,
 			commands::user::login,
 			commands::user::logout,
+			commands::user::change_data_language,
 		])
 		.run(tauri::generate_context!())
 		.expect("error while running tauri application");
