@@ -2,6 +2,10 @@ use serde::{de::Visitor, Deserializer, Serializer};
 
 use crate::models::Language;
 
+// Note(Curstantine):
+// The package doesn't currently rely on serializing the language code, but we might need to use this in the future.
+// Can't use lint reason either because reason is still experimental.
+#[allow(dead_code)]
 pub fn serialize<S: Serializer>(value: &Language, serializer: S) -> Result<S::Ok, S::Error> {
 	serializer.serialize_str(value.as_language_code())
 }

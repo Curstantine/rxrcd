@@ -75,9 +75,9 @@ pub async fn logout<R: Runtime>(app_handle: AppHandle<R>) -> CommandResult<()> {
 
 /// Changes the data language used in the deezer specific requests.
 ///
-/// Note: This is not the same changing data_language through [crate::commands::config::config_set_account].
+/// Note: This is not the same as changing data_language through [`crate::commands::config::config_set_account`].
 /// This function will NOT update any configuration file, and is expected to use after setting the configuration
-/// to sync the changes with the [deezer::client::DeezerClient]
+/// to sync the changes with the [`deezer::client::DeezerClient`]
 #[tauri::command(rename_all = "snake_case")]
 #[tracing::instrument(skip(deezer_state), err(Debug))]
 pub async fn change_data_language(
