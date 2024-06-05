@@ -25,3 +25,14 @@ export async function login(data) {
 export async function logout() {
 	return await invoke("logout");
 }
+
+/**
+ * Changes the data language used in the deezer specific requests.
+ *
+ * Note: Use this along {@link config_set_account},
+ * as this method does not mutate the configuration file.
+ * @param {import("@/types/config").DataLanguage} language
+ */
+export async function change_data_language(language) {
+	return await invoke("change_data_language", { language });
+}

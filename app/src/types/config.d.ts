@@ -3,6 +3,12 @@ export declare interface Configuration {
 	download: ConfigurationDownload;
 }
 
+export declare type DataLanguage = "Default" | "English" | "Japanese" | "BrazilianPortuguese";
+export declare interface ConfigurationAccount {
+	data_language: DataLanguage;
+	use_native_locale: boolean;
+}
+
 export declare type Theme = "system" | "light" | "dark";
 export declare interface ConfigurationAppearance {
 	theme: Theme;

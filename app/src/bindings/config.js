@@ -1,6 +1,21 @@
 import { invoke } from "@tauri-apps/api";
 
 /**
+ * @returns {Promise<import("@/types/config").ConfigurationAccount>}
+ */
+export async function config_get_account() {
+	return await invoke("config_get_account");
+}
+
+/**
+ * @param {import("@/types/config").ConfigurationAccount} account
+ * @returns {Promise<void>}
+ */
+export async function config_set_account(account) {
+	return await invoke("config_set_appearance", { account });
+}
+
+/**
  * @returns {Promise<import("@/types/config").ConfigurationAppearance>}
  */
 export async function config_get_appearance() {
