@@ -53,5 +53,6 @@ pub struct UserSetting {
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all(deserialize = "snake_case"))]
 pub struct UserSettingGlobal {
+	#[serde(with = "crate::serde::language_code")]
 	pub language: Language,
 }

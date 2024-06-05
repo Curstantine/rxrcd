@@ -7,7 +7,9 @@ use serde::{
 
 use crate::models::ajax::AjaxRequestError;
 
-/// Deserializes an [AjaxRequestError] value that might either be an empty array
+pub mod language_code;
+
+/// Deserializes an [`AjaxRequestError`] value that might either be an empty array
 pub fn de_ajax_req_err<'de, D: Deserializer<'de>>(value: D) -> Result<Option<AjaxRequestError>, D::Error> {
 	value.deserialize_any(OptionAjaxNullishVisitor::<AjaxRequestError>(PhantomData))
 }
