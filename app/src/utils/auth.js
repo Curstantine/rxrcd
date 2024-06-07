@@ -1,4 +1,4 @@
-import { logout as invokeLogout, refresh_login } from "@/bindings/user";
+import { logout as invoke_logout, refresh_login } from "@/bindings/user";
 import { create_snack } from "@/components/snack/snack";
 import { set_user_data } from "@/stores/user";
 import { take_if } from "@/utils/extensions";
@@ -33,13 +33,18 @@ export async function resume_auth(cringily_use_cache = false) {
 		persistent: true,
 	});
 
-	const data = await refresh_login();
-	set_user_data(data);
-	snack.close();
+	try {
+		const data = await refresh_login();
+		set_user_data(data);
+		snack.close();
+	} catch (e) {
+		snack.update({ label: "Failed to authenticate", description: e?.toString() });
+		snack.close_after();
+	}
 }
 
 export async function logout() {
-	await invokeLogout();
+	await invoke_logout();
 	set_user_data(null);
 
 	create_snack({
