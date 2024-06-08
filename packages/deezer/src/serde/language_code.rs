@@ -34,7 +34,7 @@ mod test {
 	use serde::{Deserialize, Serialize};
 	use serde_json::json;
 
-	use crate::models::Language;
+	use crate::{constants, models::Language};
 
 	#[test]
 	fn from_language_code() {
@@ -90,5 +90,17 @@ mod test {
 
 		assert!(val.is_ok(), "{:#?}", val.unwrap_err());
 		assert_eq!(val.unwrap(), Test::new(Language::BrazilianPortuguese));
+	}
+
+	#[test]
+	fn serde_deserialization_empty() {
+		let json_val = r#"{ "language": "" }"#;
+		let val = serde_json::from_str::<Test>(json_val);
+
+		assert!(val.is_err());
+
+		let error = val.unwrap_err();
+		assert!(error.is_data());
+		assert!(error.to_string().contains(constants::ERROR_SERDE_EMPTY_LANG_CODE));
 	}
 }

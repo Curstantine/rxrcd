@@ -1,6 +1,8 @@
+use std::error::Error as StdError;
+
 use crate::{
 	client::DeezerClient,
-	constants::DEEZER_AJAX_URL,
+	constants::{self, DEEZER_AJAX_URL},
 	errors::{DeezerResult, Error},
 	models::{
 		ajax::{RequestPOSTBody, RequestPOSTMethod},
@@ -12,7 +14,19 @@ use crate::{
 pub async fn refresh_login(client: &mut DeezerClient) -> DeezerResult<UserData> {
 	let body = RequestPOSTBody::with_defaults(RequestPOSTMethod::GetUserData);
 	let response = client.post(DEEZER_AJAX_URL).json(&body).send().await?;
-	let data = response.json::<GetUserDataResponse>().await?;
+	let data = response.json::<GetUserDataResponse>().await.map_err(|x| {
+		if x.is_decode() {
+			let source = x.source().unwrap();
+			let downcast = source.downcast_ref::<serde_json::Error>().unwrap();
+			// TODO(Curstantine):
+			// What the fuck have I done?? I just need to check the auth id lmfao
+			if downcast.is_data() && downcast.to_string().contains(constants::ERROR_SERDE_EMPTY_LANG_CODE) {
+				return Error::InvalidArl;
+			}
+		}
+
+		Error::from(x)
+	})?;
 
 	// TODO(Curstantine):
 	// Figure out if we can hold this result without cloning using a lifetime bound to the mutex.
@@ -56,7 +70,10 @@ pub fn logout(client: &mut DeezerClient) -> DeezerResult<()> {
 mod tests {
 	use std::{env::var, time::Duration};
 
-	use crate::{client::DeezerClient, errors::DeezerResult};
+	use crate::{
+		client::DeezerClient,
+		errors::{DeezerResult, Error},
+	};
 
 	#[tokio::test]
 	async fn test_refresh_login() -> DeezerResult<()> {
@@ -77,6 +94,19 @@ mod tests {
 
 		let data = super::login_with_arl(&mut client, &arl).await?;
 		assert_ne!(data.user.id, 0);
+
+		Ok(())
+	}
+
+	#[tokio::test]
+	async fn login_with_broken_arl() -> DeezerResult<()> {
+		let mut client = DeezerClient::testing();
+		let data = super::login_with_arl(&mut client, "broken_str_that_is_not_an_arl").await;
+
+		println!("{data:#?}");
+
+		assert!(data.is_err());
+		assert_eq!(data.unwrap_err(), Error::InvalidArl);
 
 		Ok(())
 	}
