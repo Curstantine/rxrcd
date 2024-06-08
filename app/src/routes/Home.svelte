@@ -53,7 +53,7 @@
 					setTimeout(() => instance.update({ label: `Progress (${i}/20)` }), i * 2000);
 				}
 
-				setTimeout(() => instance.close(), 40000);
+				instance.close_after();
 			}}
 		>
 			Snack progression message

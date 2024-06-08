@@ -6,7 +6,7 @@ import { change_data_language as invoke_change_data_language, get_auth_state, lo
 import { set_user_data } from "@/stores/user";
 import { logout } from "@/utils/auth";
 
-import { create_snack, DEFAULT_SNACK_TIMEOUT } from "@/components/snack/snack";
+import { create_snack } from "@/components/snack/snack";
 
 /**
  * @type {Record<import("@/types/config").DataLanguage, string>}
@@ -83,7 +83,7 @@ export function initialize_state() {
 			}
 		}
 
-		return setTimeout(() => snack.close(), get(auth_state)?.type === "NotLoggedIn" ? DEFAULT_SNACK_TIMEOUT : 0);
+		return snack.close_after(get(auth_state)?.type === "NotLoggedIn" ? undefined : 0);
 	}
 
 	async function on_logout() {
