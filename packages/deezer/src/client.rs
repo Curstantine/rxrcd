@@ -1,7 +1,7 @@
 use std::{fmt::Display, sync::Arc};
 
 use reqwest::{
-	header::{self, HeaderMap},
+	header::{self, HeaderMap, HeaderValue},
 	Client,
 };
 use reqwest_cookie_store::CookieStoreMutex;
@@ -78,20 +78,26 @@ impl DeezerClient {
 
 	pub fn get<U: reqwest::IntoUrl + Display>(&self, url: U) -> reqwest::RequestBuilder {
 		debug!("GET request sent to {url}");
-		self.client.get(url).header(
-			header::ACCEPT_LANGUAGE,
-			self.language
-				.map_or_else(|| Language::English.to_header_value(), |e| e.to_header_value()),
-		)
+		let request = self.client.get(url);
+		let mut headers = HeaderMap::<HeaderValue>::with_capacity(1);
+
+		if let Some(lang) = &self.language {
+			headers.append(header::ACCEPT_LANGUAGE, lang.to_header_value());
+		}
+
+		request.headers(headers)
 	}
 
 	pub fn post<U: reqwest::IntoUrl + Display>(&self, url: U) -> reqwest::RequestBuilder {
 		debug!("POST request sent to {url}");
-		self.client.post(url).header(
-			header::ACCEPT_LANGUAGE,
-			self.language
-				.map_or_else(|| Language::English.to_header_value(), |e| e.to_header_value()),
-		)
+		let request = self.client.post(url);
+		let mut headers = HeaderMap::<HeaderValue>::with_capacity(1);
+
+		if let Some(lang) = &self.language {
+			headers.append(header::ACCEPT_LANGUAGE, lang.to_header_value());
+		}
+
+		request.headers(headers)
 	}
 
 	#[cfg(test)]
