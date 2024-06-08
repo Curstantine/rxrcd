@@ -9,12 +9,12 @@ export const DEFAULT_SNACK_TIMEOUT = 5000;
  *
  * @type {import("svelte/store").Writable<InstanceMap>}
  */
-const data = writable({});
+const instances = writable({});
 
 /**
  * @type {import("svelte/store").Readable<ReadableInstance[]>}
  */
-export const snacks = derived(data, (source) => {
+export const snacks = derived(instances, (source) => {
 	const keys = Object.getOwnPropertySymbols(source);
 
 	/** @type {ReadableInstance[]} */
@@ -33,14 +33,14 @@ export const snacks = derived(data, (source) => {
  * @param {symbol} id
  */
 function close_snack(id) {
-	data.update((stack) => {
+	instances.update((stack) => {
 		delete stack[id];
 		return stack;
 	});
 }
 
 export function pause_snack_timeouts() {
-	const source = get(data);
+	const source = get(instances);
 	const keys = Object.getOwnPropertySymbols(source);
 
 	for (let i = 0; i < keys.length; i++) {
@@ -55,7 +55,7 @@ export function pause_snack_timeouts() {
 }
 
 export function resume_snack_timeouts() {
-	const source = get(data);
+	const source = get(instances);
 	const keys = Object.getOwnPropertySymbols(source);
 
 	for (let i = 0; i < keys.length; i++) {
@@ -73,7 +73,7 @@ export function resume_snack_timeouts() {
  */
 export function create_snack(instance) {
 	const id = Symbol();
-	const writableInstance = writable(instance);
+	const writable_instance = writable(instance);
 
 	/** @type {import("@/types/snack").SnackInstanceUpdater} */
 	function update({ label, description = instance.description }) {
@@ -81,7 +81,7 @@ export function create_snack(instance) {
 			throw new Error("Updatable notifications should be persistent");
 		}
 
-		writableInstance.update((value) => {
+		writable_instance.update((value) => {
 			value.label = label;
 			value.description = description;
 			return value;
@@ -96,13 +96,20 @@ export function create_snack(instance) {
 	let timeout;
 
 	if (!instance.persistent) {
-		timeout = window.setTimeout(() => close_snack(id), DEFAULT_SNACK_TIMEOUT);
+		timeout = window.setTimeout(close, DEFAULT_SNACK_TIMEOUT);
 	}
 
-	data.update((stack) => {
-		stack[id] = { inner: writableInstance, timeout };
+	instances.update((stack) => {
+		stack[id] = { inner: writable_instance, timeout };
 		return stack;
 	});
 
-	return { update, close };
+	function close_after(duration = DEFAULT_SNACK_TIMEOUT) {
+		if (timeout === -1) throw new Error("DO NOT try to mutate this instance, it's marked as paused. ");
+		if (timeout !== undefined) throw new Error("A timeout for this snack instance is already running");
+
+		timeout = window.setTimeout(close, duration);
+	}
+
+	return { update, close, close_after };
 }

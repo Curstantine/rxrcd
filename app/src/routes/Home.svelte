@@ -5,7 +5,7 @@
 <div class="flex flex-1 flex-col gap-2 overflow-y-auto px-2 px-4 py-2">
 	<span>hai home :3</span>
 
-	<div class="inline-flex gap-4">
+	<div class="inline-flex flex-wrap gap-4">
 		<button
 			class="w-fit button-primary"
 			on:click={() => {
@@ -57,6 +57,21 @@
 			}}
 		>
 			Snack progression message
+		</button>
+
+		<button
+			class="w-fit button-primary"
+			on:click={() => {
+				const session = create_snack({
+					persistent: true,
+					label: "Hai :3",
+					description: "Hello from home snack button summoner! :D",
+				});
+
+				session.close_after();
+			}}
+		>
+			Close after snack
 		</button>
 	</div>
 </div>
