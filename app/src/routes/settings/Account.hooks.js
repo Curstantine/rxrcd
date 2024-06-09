@@ -98,17 +98,22 @@ export function initialize_state() {
 		const conf = get(settings);
 
 		if (conf === null) {
-			return create_snack({
+			create_snack({
 				label: "Configuration state is missing!",
 				description: "Please wait while configuration is being loaded",
 			});
+			return;
 		}
 
-		conf.data_language = language;
-		await config_set_account(conf);
-		await invoke_change_data_language(language);
+		try {
+			conf.data_language = language;
+			await config_set_account(conf);
+			await invoke_change_data_language(language);
 
-		settings.set(conf);
+			settings.set(conf);
+		} catch (e) {
+			create_snack({ label: "Failed to update the data language!", description: e?.toString() });
+		}
 	}
 
 	return {

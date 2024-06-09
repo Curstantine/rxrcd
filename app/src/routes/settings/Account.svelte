@@ -7,10 +7,19 @@
 	import SettingsOptionArea from "@/components/SettingsOptionArea.svelte";
 	import CopyWrapper from "@/components/InputCopyable.svelte";
 
-	import { initialize_state } from "@/routes/settings/Account.hooks";
+	import { data_language_actions, initialize_state } from "@/routes/settings/Account.hooks";
 	import Select from "@/components/Select.svelte";
 
-	const { auth_state, input_email, input_password, input_arl, on_login_submit, on_logout } = initialize_state();
+	const {
+		auth_state,
+		settings,
+		input_email,
+		input_password,
+		input_arl,
+		on_login_submit,
+		on_logout,
+		change_data_language,
+	} = initialize_state();
 
 	$: is_login_cred_disabled = $input_arl.length > 0;
 	$: is_login_arl_disabled = $input_email?.length > 0 || $input_password?.length > 0;
@@ -147,10 +156,13 @@
 		class="mt-2"
 	>
 		<Select
+			class="w-42"
 			id="change_language"
-			label="Default"
-			actions={[{ label: "Default", value: "default", sub: "(English)" }]}
-			on_change={() => {}}
+			label={$settings?.data_language ?? "N/A"}
+			actions={data_language_actions}
+			disabled={$auth_state === null || $auth_state.type === "NotLoggedIn"}
+			on_change={async (val) =>
+				await change_data_language(/**@type {import("@/types/config").DataLanguage}*/ (val))}
 		/>
 	</SettingsOptionArea>
 </article>
