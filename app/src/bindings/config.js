@@ -12,7 +12,7 @@ export async function config_get_account() {
  * @returns {Promise<void>}
  */
 export async function config_set_account(account) {
-	return await invoke("config_set_appearance", { account });
+	return await invoke("config_set_account", { account });
 }
 
 /**
