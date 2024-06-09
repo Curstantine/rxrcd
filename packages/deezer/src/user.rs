@@ -46,9 +46,14 @@ pub async fn login_with_arl(client: &mut DeezerClient, arl: &str) -> DeezerResul
 	}
 
 	client.cookie_set_arl(arl);
-	refresh_login(client).await.map_err(|err| match err {
-		Error::InvalidCredentials => Error::InvalidArl,
-		_ => err,
+	refresh_login(client).await.map_err(|err| {
+		client.clear_cookies();
+
+		if err == Error::InvalidCredentials {
+			Error::InvalidArl
+		} else {
+			err
+		}
 	})
 }
 
