@@ -21,6 +21,11 @@ pub fn ser_none_as_str<S: Serializer>(value: &Option<String>, serializer: S) -> 
 	}
 }
 
+/// Guards the deserialization of [`User`] (or field that digests a [`u64`]) with a minimum value of 1.
+pub fn de_user_id<'de, D: Deserializer<'de>>(value: D) -> Result<u64, D::Error> {
+	value.deserialize_u64(RangedU64Visitor(Some(1), None))
+}
+
 /// Serde visitor to map empty units, sequences and other falsy values to None.
 ///
 /// Deezer's ajax handler uses PHP, and PHP-based backends have this type mismatch issue.
@@ -59,11 +64,37 @@ impl<'de, T: Deserialize<'de>> Visitor<'de> for OptionAjaxNullishVisitor<T> {
 	}
 }
 
+struct RangedU64Visitor(Option<u64>, Option<u64>);
+
+impl<'de> Visitor<'de> for RangedU64Visitor {
+	type Value = u64;
+
+	fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
+		write!(
+			formatter,
+			"an unsigned 64 bit integer with min: {} and max: {}",
+			self.0.unwrap_or(u64::MIN),
+			self.1.unwrap_or(u64::MAX)
+		)
+	}
+
+	fn visit_u64<E: serde::de::Error>(self, v: u64) -> Result<Self::Value, E> {
+		let min_caught = self.0.is_none() || matches!(self.0, Some(min) if v >= min);
+		let max_caught = self.1.is_none() || matches!(self.1, Some(max) if v <= max);
+
+		if !min_caught | !max_caught {
+			return Err(E::invalid_value(serde::de::Unexpected::Unsigned(v), &self));
+		}
+
+		Ok(v)
+	}
+}
+
 #[cfg(test)]
 mod test {
 	use serde::Deserialize;
 
-	use crate::models::ajax::AjaxRequestError;
+	use crate::{constants, models::ajax::AjaxRequestError};
 
 	#[test]
 	fn test_de_ajax_req_err() {
@@ -96,5 +127,27 @@ mod test {
 			valued_unwrapped.error.unwrap(),
 			AjaxRequestError::GatewayError("Sample error ahead".to_string())
 		)
+	}
+
+	#[test]
+	fn de_user_id() {
+		#[derive(Debug, Deserialize)]
+		struct Test {
+			#[serde(deserialize_with = "crate::serde::de_user_id")]
+			id: u64,
+		}
+
+		let json_zeroed = r#"{ "id": 0 }"#;
+		let zeroed = serde_json::from_str::<Test>(json_zeroed);
+		assert!(zeroed.is_err());
+
+		let error = zeroed.unwrap_err();
+		assert!(error.is_data());
+		assert!(error.to_string().contains(constants::ERROR_SERDE_INVALID_ID));
+
+		let json_good = r#"{ "id": 1 }"#;
+		let good = serde_json::from_str::<Test>(json_good);
+		assert!(good.is_ok(), "{good:#?}");
+		assert_eq!(good.unwrap().id, 1);
 	}
 }

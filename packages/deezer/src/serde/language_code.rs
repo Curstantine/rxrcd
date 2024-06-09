@@ -4,7 +4,7 @@ use crate::models::Language;
 
 // Note(Curstantine):
 // The package doesn't currently rely on serializing the language code, but we might need to use this in the future.
-// Can't use lint reason either because reason is still experimental.
+// Can't use lint reason either because reason attribute is still experimental.
 #[allow(dead_code)]
 pub fn serialize<S: Serializer>(value: &Language, serializer: S) -> Result<S::Ok, S::Error> {
 	serializer.serialize_str(value.as_language_code())
@@ -34,7 +34,7 @@ mod test {
 	use serde::{Deserialize, Serialize};
 	use serde_json::json;
 
-	use crate::{constants, models::Language};
+	use crate::models::Language;
 
 	#[test]
 	fn from_language_code() {
@@ -90,17 +90,5 @@ mod test {
 
 		assert!(val.is_ok(), "{:#?}", val.unwrap_err());
 		assert_eq!(val.unwrap(), Test::new(Language::BrazilianPortuguese));
-	}
-
-	#[test]
-	fn serde_deserialization_empty() {
-		let json_val = r#"{ "language": "" }"#;
-		let val = serde_json::from_str::<Test>(json_val);
-
-		assert!(val.is_err());
-
-		let error = val.unwrap_err();
-		assert!(error.is_data());
-		assert!(error.to_string().contains(constants::ERROR_SERDE_EMPTY_LANG_CODE));
 	}
 }

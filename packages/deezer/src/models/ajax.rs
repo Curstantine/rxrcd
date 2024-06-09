@@ -9,7 +9,7 @@ pub struct ResponseBody<T: Debug> {
 	pub error: Option<AjaxRequestError>,
 }
 
-#[derive(Debug, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum AjaxRequestError {
 	GatewayError(String),

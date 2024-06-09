@@ -18,10 +18,13 @@ pub async fn refresh_login(client: &mut DeezerClient) -> DeezerResult<UserData> 
 		if x.is_decode() {
 			let source = x.source().unwrap();
 			let downcast = source.downcast_ref::<serde_json::Error>().unwrap();
-			// TODO(Curstantine):
-			// What the fuck have I done?? I just need to check the auth id lmfao
-			if downcast.is_data() && downcast.to_string().contains(constants::ERROR_SERDE_EMPTY_LANG_CODE) {
-				return Error::InvalidArl;
+
+			// Note(Curstantine):
+			// Deezer returns the default anon user data whenever authentication fails without any warning whatsoever.
+			// We guard this at deserialization time by a using custom visitor,
+			// which throws the constants::ERROR_SERDE_INVALID_ID error message.
+			if downcast.is_data() && downcast.to_string().contains(constants::ERROR_SERDE_INVALID_ID) {
+				return Error::InvalidCredentials;
 			}
 		}
 
@@ -43,7 +46,10 @@ pub async fn login_with_arl(client: &mut DeezerClient, arl: &str) -> DeezerResul
 	}
 
 	client.cookie_set_arl(arl);
-	refresh_login(client).await
+	refresh_login(client).await.map_err(|err| match err {
+		Error::InvalidCredentials => Error::InvalidArl,
+		_ => err,
+	})
 }
 
 #[allow(unused_variables)]
@@ -99,16 +105,12 @@ mod tests {
 	}
 
 	#[tokio::test]
-	async fn login_with_broken_arl() -> DeezerResult<()> {
+	async fn login_with_broken_arl() {
 		let mut client = DeezerClient::testing();
 		let data = super::login_with_arl(&mut client, "broken_str_that_is_not_an_arl").await;
 
-		println!("{data:#?}");
-
 		assert!(data.is_err());
 		assert_eq!(data.unwrap_err(), Error::InvalidArl);
-
-		Ok(())
 	}
 
 	#[tokio::test]
@@ -125,7 +127,6 @@ mod tests {
 		tokio::time::sleep(Duration::from_secs(2)).await;
 
 		let data2 = super::login_with_arl(&mut client, &arl2).await?;
-		println!("{data:#?}\n{data2:#?}");
 		assert_ne!(data2.user.id, data.user.id);
 
 		Ok(())

@@ -18,7 +18,7 @@ pub struct UserData {
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all(deserialize = "SCREAMING_SNAKE_CASE"))]
 pub struct User {
-	#[serde(rename(deserialize = "USER_ID"))]
+	#[serde(rename(deserialize = "USER_ID"), deserialize_with = "crate::serde::de_user_id")]
 	pub id: u64,
 
 	#[serde(rename(deserialize = "BLOG_NAME"))]
