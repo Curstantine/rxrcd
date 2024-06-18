@@ -30,6 +30,7 @@ pub enum CoverQuality {
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
+#[serde(untagged)]
 pub enum DataLanguage {
 	/// Same as account
 	Default,
@@ -112,5 +113,45 @@ impl Default for Configuration {
 				cover_embed_resolution: CoverQuality::Medium,
 			},
 		}
+	}
+}
+
+#[cfg(test)]
+mod test {
+	use deezer::models::Language;
+	use serde::{Deserialize, Serialize};
+
+	use super::DataLanguage;
+
+	#[derive(Debug, Serialize, Deserialize)]
+	struct DataLanguageTest {
+		pub inner: DataLanguage,
+	}
+
+	#[test]
+	fn data_language_tagged_ser() {
+		let lang = DataLanguageTest {
+			inner: DataLanguage::Defined(Language::English),
+		};
+
+		let json_repl = serde_json::to_string(&lang);
+		assert!(json_repl.is_ok(), "{:#?}", json_repl.unwrap_err());
+		assert_eq!(json_repl.unwrap(), r#"{"inner":"English"}"#);
+
+		let lang = DataLanguageTest {
+			inner: DataLanguage::Default,
+		};
+		let json_repl = serde_json::to_string(&lang);
+		assert!(json_repl.is_ok(), "{:#?}", json_repl.unwrap_err());
+		assert_eq!(json_repl.unwrap(), r#"{"inner":"Default"}"#);
+	}
+
+	#[test]
+	fn data_language_tagged_de() {
+		let json_str = r#"{"inner":""}"#;
+		let json = serde_json::from_str::<DataLanguageTest>(json_str);
+
+		assert!(json.is_ok(), "{:#?}", json.unwrap_err());
+		assert_eq!(json.unwrap().inner, DataLanguage::Default);
 	}
 }
