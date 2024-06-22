@@ -66,3 +66,53 @@ impl<T> RequestPOSTBody<T> {
 		self
 	}
 }
+
+#[cfg(test)]
+mod test {
+	use serde::Serialize;
+
+	use super::{RequestPOSTBody, RequestPOSTMethod};
+
+	#[derive(Debug, Serialize)]
+	struct BodyData {
+		#[serde(rename = "ALB_ID")]
+		album_id: u64,
+	}
+
+	impl BodyData {
+		fn new(album_id: u64) -> Self {
+			Self { album_id }
+		}
+	}
+
+	#[test]
+	fn post_req_body_data_ser() {
+		const API_TOKEN: &str = "241--213";
+		const ALBUM_ID: u64 = 10012;
+
+		let body = RequestPOSTBody::new(RequestPOSTMethod::GetListByAlbum)
+			.set_api_token(API_TOKEN)
+			.set_data(BodyData::new(ALBUM_ID));
+		let body_str = serde_json::to_string(&body);
+
+		assert!(body_str.is_ok(), "{:#?}", body_str.unwrap_err());
+		assert_eq!(
+			body_str.unwrap(),
+			format!(
+				r#"{{"api_version":"1.0","method":"song.getListByAlbum","api_token":"{API_TOKEN}","ALB_ID":{ALBUM_ID}}}"#,
+			)
+		);
+	}
+
+	#[test]
+	fn post_req_body_data_none_ser() {
+		let body = RequestPOSTBody::<()>::new(RequestPOSTMethod::GetUserData);
+		let body_str = serde_json::to_string(&body);
+
+		assert!(body_str.is_ok(), "{:#?}", body_str.unwrap_err());
+		assert_eq!(
+			body_str.unwrap(),
+			r#"{"api_version":"1.0","method":"deezer.getUserData","api_token":"null"}"#
+		);
+	}
+}
