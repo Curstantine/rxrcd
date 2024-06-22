@@ -76,6 +76,10 @@ impl DeezerClient {
 		store.clear()
 	}
 
+	pub fn api_token(&self) -> Option<String> {
+		self.user_data.as_ref().map(|x| x.api_token.clone())
+	}
+
 	pub fn get<U: reqwest::IntoUrl + Display>(&self, url: U) -> reqwest::RequestBuilder {
 		debug!("GET request sent to {url}");
 		let request = self.client.get(url);

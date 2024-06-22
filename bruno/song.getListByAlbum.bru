@@ -1,0 +1,22 @@
+meta {
+  name: song.getListByAlbum
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{AJAX_URL}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "api_version": "1.0",
+    "api_token": "{{csrf_token}}",
+    "input": "3",
+    "method": "song.getListByAlbum",
+    "ALB_ID": 118560252,
+    "nb": -1
+  }
+}

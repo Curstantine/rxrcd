@@ -20,14 +20,20 @@ pub enum AjaxRequestError {
 pub(crate) enum RequestPOSTMethod {
 	#[serde(rename = "deezer.getUserData")]
 	GetUserData,
+
+	#[serde(rename = "song.getListByAlbum")]
+	GetListByAlbum,
 }
 
 #[derive(Debug, Serialize)]
-pub(crate) struct RequestPOSTBody {
+pub(crate) struct RequestPOSTBody<T> {
 	api_version: String,
 	method: RequestPOSTMethod,
 	#[serde(serialize_with = "crate::serde::ser_none_as_str")]
 	api_token: Option<String>,
+
+	#[serde(flatten)]
+	data: Option<T>,
 }
 
 impl<T: Debug> ResponseBody<T> {
@@ -40,21 +46,23 @@ impl<T: Debug> ResponseBody<T> {
 	}
 }
 
-impl RequestPOSTBody {
-	pub fn with_defaults(method: RequestPOSTMethod) -> Self {
+impl<T> RequestPOSTBody<T> {
+	pub fn new(method: RequestPOSTMethod) -> Self {
 		Self {
 			api_version: "1.0".to_string(),
 			api_token: None,
 			method,
+			data: None,
 		}
 	}
 
-	#[allow(dead_code)]
-	pub fn with_api_token<S: ToString>(token: S, method: RequestPOSTMethod) -> Self {
-		Self {
-			api_version: "1.0".to_string(),
-			api_token: Some(token.to_string()),
-			method,
-		}
+	pub fn set_api_token<S: ToString>(mut self, token: S) -> Self {
+		self.api_token = Some(token.to_string());
+		self
+	}
+
+	pub fn set_data(mut self, data: T) -> Self {
+		self.data = Some(data);
+		self
 	}
 }

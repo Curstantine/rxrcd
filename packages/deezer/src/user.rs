@@ -12,7 +12,7 @@ use crate::{
 
 /// Refreshes a login with the ARL stored in the cookies and sets the fresh api_token to the [DeezerClient]
 pub async fn refresh_login(client: &mut DeezerClient) -> DeezerResult<UserData> {
-	let body = RequestPOSTBody::with_defaults(RequestPOSTMethod::GetUserData);
+	let body = RequestPOSTBody::<()>::new(RequestPOSTMethod::GetUserData);
 	let response = client.post(DEEZER_AJAX_URL).json(&body).send().await?;
 	let data = response.json::<GetUserDataResponse>().await.map_err(|x| {
 		if x.is_decode() {

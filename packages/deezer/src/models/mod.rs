@@ -15,7 +15,8 @@ pub mod user;
 pub enum Language {
 	English,
 	Japanese,
-	BrazilianPortuguese,
+	Arabic,
+	// BrazilianPortuguese,
 }
 
 impl Language {
@@ -23,7 +24,8 @@ impl Language {
 		match value {
 			"en" => Some(Language::English),
 			"ja" => Some(Language::Japanese),
-			"br" => Some(Language::BrazilianPortuguese),
+			"ar" => Some(Language::Arabic),
+			// "br" => Some(Language::BrazilianPortuguese),
 			_ => None,
 		}
 	}
@@ -32,7 +34,8 @@ impl Language {
 		match self {
 			Language::English => "en",
 			Language::Japanese => "ja",
-			Language::BrazilianPortuguese => "br",
+			Language::Arabic => "ar",
+			// Language::BrazilianPortuguese => "br",
 		}
 	}
 

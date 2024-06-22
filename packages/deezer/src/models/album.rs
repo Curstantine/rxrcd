@@ -57,3 +57,15 @@ pub struct ArtistRelAlbum {
 	pub record_type: AlbumRecordType,
 	pub explicit_lyrics: bool,
 }
+
+#[derive(Debug, Serialize)]
+pub struct GetListByAlbumData {
+	#[serde(rename = "ALB_ID")]
+	pub album_id: u64,
+}
+
+impl GetListByAlbumData {
+	pub fn new(album_id: u64) -> Self {
+		Self { album_id }
+	}
+}

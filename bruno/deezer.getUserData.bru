@@ -1,0 +1,20 @@
+meta {
+  name: deezer.getUserData
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{AJAX_URL}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "api_version": "1.0",
+    "api_token": "null",
+    "input": "3",
+    "method": "deezer.getUserData"
+  }
+}

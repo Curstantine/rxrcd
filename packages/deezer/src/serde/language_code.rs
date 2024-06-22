@@ -48,8 +48,8 @@ mod test {
 
 	#[test]
 	fn as_language_code() {
-		let val = Language::BrazilianPortuguese;
-		assert_eq!(val.as_language_code(), "br");
+		let val = Language::Arabic;
+		assert_eq!(val.as_language_code(), "ar");
 	}
 
 	#[test]
@@ -85,10 +85,10 @@ mod test {
 
 	#[test]
 	fn serde_deserialization() {
-		let json_val = r#"{ "language": "br" }"#;
+		let json_val = r#"{ "language": "ar" }"#;
 		let val = serde_json::from_str::<Test>(json_val);
 
 		assert!(val.is_ok(), "{:#?}", val.unwrap_err());
-		assert_eq!(val.unwrap(), Test::new(Language::BrazilianPortuguese));
+		assert_eq!(val.unwrap(), Test::new(Language::Arabic));
 	}
 }

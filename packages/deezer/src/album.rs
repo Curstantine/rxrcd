@@ -1,9 +1,10 @@
 use crate::{
 	client::DeezerClient,
-	constants::DEEZER_API_URL,
-	errors::DeezerResult,
+	constants::{DEEZER_AJAX_URL, DEEZER_API_URL},
+	errors::{DeezerResult, Error},
 	models::{
-		album::{Album, AlbumSearch, ArtistAlbumList},
+		ajax::{RequestPOSTBody, RequestPOSTMethod},
+		album::{Album, AlbumSearch, ArtistAlbumList, GetListByAlbumData},
 		search::SearchOptions,
 	},
 };
@@ -14,6 +15,16 @@ pub async fn get_album(client: &DeezerClient, id: u64) -> DeezerResult<Album> {
 	let body = req.json::<Album>().await?;
 
 	Ok(body)
+}
+
+pub async fn get_album_track_list(client: &DeezerClient, id: u64) -> DeezerResult<()> {
+	let api_token = client.api_token().ok_or(Error::NotLoggedIn)?;
+	let body = RequestPOSTBody::new(RequestPOSTMethod::GetListByAlbum)
+		.set_api_token(api_token)
+		.set_data(GetListByAlbumData::new(id));
+	let response = client.get(DEEZER_AJAX_URL).json(&body).send().await?;
+
+	todo!()
 }
 
 #[tracing::instrument(skip(client))]
