@@ -1,0 +1,22 @@
+meta {
+  name: deezer.pageAlbum
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{AJAX_URL}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "api_version": "1.0",
+    "api_token": "{{csrf_token}}",
+    "input": "3",
+    "method": "deezer.pageAlbum",
+    "ALB_ID": 593786642,
+    "lang": "en"
+  }
+}

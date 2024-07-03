@@ -1,0 +1,21 @@
+meta {
+  name: song.getListData
+  type: http
+  seq: 4
+}
+
+post {
+  url: 
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "api_version": "1.0",
+    "api_token": "{{csrf_token}}",
+    "input": "3",
+    "method": "song.getListData",
+    "SNG_IDS": [2823532602, 2823532592]
+  }
+}
