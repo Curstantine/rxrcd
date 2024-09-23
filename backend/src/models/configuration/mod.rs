@@ -1,11 +1,14 @@
 use std::path::PathBuf;
 
+use data_language::DataLanguage;
 use deezer::models::Language;
 use serde::{Deserialize, Serialize};
 
 use crate::utils::directories;
 
 use super::user::UserAuthType;
+
+pub mod data_language;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Configuration {
@@ -27,14 +30,6 @@ pub enum CoverQuality {
 	Medium,
 	Big,
 	Xl,
-}
-
-#[derive(Debug, Serialize, Deserialize, PartialEq, Clone, Copy)]
-#[serde(untagged)]
-pub enum DataLanguage {
-	/// Same as account
-	Default,
-	Defined(Language),
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -86,7 +81,7 @@ impl AuthConfiguration {
 impl DataLanguage {
 	pub fn into_deezer_language(self, account_language: Option<Language>) -> Language {
 		match self {
-			DataLanguage::Default => account_language.unwrap_or(Language::English),
+			DataLanguage::Account => account_language.unwrap_or(Language::English),
 			Self::Defined(lang) => lang,
 		}
 	}
@@ -96,7 +91,7 @@ impl Default for Configuration {
 	fn default() -> Self {
 		Self {
 			account: ConfigurationAccount {
-				data_language: DataLanguage::Default,
+				data_language: DataLanguage::Account,
 				use_native_locale: false,
 			},
 			appearance: ConfigurationAppearance {
@@ -113,45 +108,5 @@ impl Default for Configuration {
 				cover_embed_resolution: CoverQuality::Medium,
 			},
 		}
-	}
-}
-
-#[cfg(test)]
-mod test {
-	use deezer::models::Language;
-	use serde::{Deserialize, Serialize};
-
-	use super::DataLanguage;
-
-	#[derive(Debug, Serialize, Deserialize)]
-	struct DataLanguageTest {
-		pub inner: DataLanguage,
-	}
-
-	#[test]
-	fn data_language_tagged_ser() {
-		let lang = DataLanguageTest {
-			inner: DataLanguage::Defined(Language::English),
-		};
-
-		let json_repl = serde_json::to_string(&lang);
-		assert!(json_repl.is_ok(), "{:#?}", json_repl.unwrap_err());
-		assert_eq!(json_repl.unwrap(), r#"{"inner":"English"}"#);
-
-		let lang = DataLanguageTest {
-			inner: DataLanguage::Default,
-		};
-		let json_repl = serde_json::to_string(&lang);
-		assert!(json_repl.is_ok(), "{:#?}", json_repl.unwrap_err());
-		assert_eq!(json_repl.unwrap(), r#"{"inner":"Default"}"#);
-	}
-
-	#[test]
-	fn data_language_tagged_de() {
-		let json_str = r#"{"inner":""}"#;
-		let json = serde_json::from_str::<DataLanguageTest>(json_str);
-
-		assert!(json.is_ok(), "{:#?}", json.unwrap_err());
-		assert_eq!(json.unwrap().inner, DataLanguage::Default);
 	}
 }

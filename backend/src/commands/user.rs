@@ -3,7 +3,7 @@ use tauri::{AppHandle, Manager, Runtime, State};
 use crate::{
 	errors::{CommandResult, PassiveError},
 	models::{
-		configuration::{AuthConfiguration, DataLanguage},
+		configuration::{data_language::DataLanguage, AuthConfiguration},
 		state::DeezerClientState,
 		user::{User, UserAuthState, UserAuthType},
 	},
