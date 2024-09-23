@@ -14,6 +14,7 @@ pub async fn initialize(config_path: &Path) -> Result<Configuration> {
 		Ok(string) => toml::from_str::<Configuration>(&string)?,
 		Err(e) if e.kind() == ErrorKind::NotFound => {
 			let config = Configuration::default();
+			let str_str = toml::to_string(&config).unwrap();
 			let config_str = toml::to_string_pretty(&config)?;
 			let parent = config_path.parent().unwrap();
 
